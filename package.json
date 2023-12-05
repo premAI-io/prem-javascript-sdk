@@ -1,0 +1,58 @@
+{
+  "name": "@premai/prem",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "typings": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "tsup": {
+    "entry": [
+      "src/index.ts"
+    ],
+    "splitting": false,
+    "sourcemap": true,
+    "format": [
+      "cjs",
+      "esm"
+    ],
+    "clean": true,
+    "dts": true,
+    "treeshake": true
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "prepare": "tsup",
+    "size": "size-limit",
+    "analyze": "size-limit --why",
+    "dev": "tsup --watch",
+    "test": "ts-node ./test/test.ts"
+  },
+  "author": "Prem",
+  "sideEffects": false,
+  "devDependencies": {
+    "@size-limit/preset-small-lib": "^8.2.4",
+    "@types/fs-extra": "^11.0.1",
+    "eslint": "^8.55.0",
+    "openapi-types": "^12.1.0",
+    "size-limit": "^8.2.4",
+    "ts-node": "^10.9.1",
+    "tslib": "^2.5.0",
+    "tsup": "^7.1.0",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "axios": "^1.6.2"
+  }
+}
