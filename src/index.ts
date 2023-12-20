@@ -1,17 +1,48 @@
-import APIResource from "./APIResource"
+import axios, { Axios, AxiosError, AxiosRequestConfig, AxiosResponse, CreateAxiosDefaults } from "axios"
 
-export type Confg = {
-  baseUrl?: string,
-  apiKey: string
-}
+import EmbeddingModule from "$modules/embeddings"
+import ChatCompletionModule from "$modules/chat/completions"
+import DataPointModule from "$modules/datapoints"
+import { PremBaseConfig } from "$types/index"
 
 export default class Prem {
-  config: Confg & { baseUrl: string }
-  chat: APIResource
+  config: PremBaseConfig & { baseUrl: string }
+  axios: Axios
 
-  constructor(config: Confg) {
+  embeddings: EmbeddingModule
+  datapoints: DataPointModule
+  chat: {
+    completions: ChatCompletionModule
+  }
+
+  constructor(config: PremBaseConfig, axiosConfig?: CreateAxiosDefaults) {
     this.config = Object.assign({ baseUrl: "https://app.prem.ninja" }, config)
-    this.chat = new APIResource(this)
+
+    this.axios = axios.create(axiosConfig)
+
+    this.axios.defaults.baseURL = this.config.baseUrl
+    this.axios.defaults.headers.common["Authorization"] = `Bearer ${this.config.apiKey}`
+
+    this.embeddings = new EmbeddingModule(this)
+    this.datapoints = new DataPointModule(this)
+    this.chat = {
+      completions: new ChatCompletionModule(this)
+    }
+  }
+
+  call = async<T>(request: AxiosRequestConfig): Promise<T> => {
+    try {
+      const { data } = await this.axios.request<T>(request)
+      return data
+    } catch (e) {
+      const error = e as AxiosError
+      const { response } = error
+
+      if (response?.data) {
+        throw response.data
+      }
+
+      throw error
+    }
   }
 }
-
