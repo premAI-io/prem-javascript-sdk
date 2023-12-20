@@ -1,19 +1,8 @@
 {
   "include": [
-    "src",
-    "types"
-  ],
-  "exclude": [
-    "test"
+    ".",
   ],
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "$types/*": ["src/types/*"],
-      "$components/*": ["src/components/*"],
-      "$modules/*": ["src/modules/*"],
-      "$utils/*": ["src/utils/*"],
-    },
     "module": "ES6",
     "lib": [
       "dom",

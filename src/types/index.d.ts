@@ -6,29 +6,57 @@ export type PremBaseConfig = {
   apiKey: string
 }
 
-export type FunctionCall<T, U> = (args: T, config?: AxiosRequestConfig) => Promise<U>
+// CHAT COMPLETION - CREATE
 
 export type CreateChatCompletionRequest = api.ChatCompletionInput
 export type CreateChatCompletionResponse = api.ChatCompletionResponse
 
+export type ChatCompletionStreamingCompletionMessage = {
+  event: "completion"
+  data: {
+    id: string,
+    model: string,
+    object: string,
+    created: number,
+    choices: {
+      finish_reason: string | null,
+      delta: {
+        content: string,
+        role: string | null
+      }
+    }[]
+  }
+}
+
+export type ChatCompletionStreamingDoneMessage = {
+  event: "done",
+  data: null
+}
+
+export type ChatCompletionStreamingMessage = ChatCompletionStreamingMessageCompletion | ChatCompletionStreamingDoneMessage
+
+// EMBEDDING - CREATE
+
 export type CreateEmbeddingRequest = api.EmbeddingsInput
 export type CreateEmbeddingResponse = api.EmbeddingsResponse
 
-// update = new UpdateDataPointRoute(this._client).call
-// delete = new DeleteDataPointRoute(this._client).call
-
+// DATAPOINT - CREATE
 export type CreateDataPointRequest = Omit<api.DataPoint, "id" | "created_at" | "updated_at">
 export type CreateDataPointResponse = api.DataPoint
 
-export type RetrieveDataPointRequest = { id: number }
+// DATAPOINT - RETRIEVE
 export type RetrieveDataPointResponse = api.DataPoint
 
-export type ListDataPointRequest = {}
+// DATAPOINT - LIST
 export type ListDataPointResponse = api.DataPoint[]
 
-export type UpdateDataPointRequest = { id: number } & api.PatchedDataPoint
+// DATAPOINT - UPDATE
 export type UpdateDataPointResponse = api.DataPoint
+export type UpdateDataPointRequest = {
+  input?: string
+  output?: string
+  positive?: boolean
+  trace?: string
+}
 
-export type DeleteDataPointRequest = { id: number }
-export type DeleteDataPointResponse = undefined
 

@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-pip install @premai/prem
+npm install @premai/prem-sdk
 ```
 
 ## Usage
@@ -34,10 +34,23 @@ const messages = [
 const response = await client.completions.create({
   project_id,
   messages,
-  model
+  model,
+  stream: false
 })
 
 console.log(response)
+
+// Create completion with stream
+const response = await client.completions.create({
+  project_id,
+  messages,
+  model,
+  stream: true
+})
+
+for await (const chunk of response) {
+  console.log(chunk)
+}
 ```
 
 ### Embeddings
@@ -50,7 +63,7 @@ const input = "What is a transformer?"
 const model = "text-embedding-ada-002"
 
 // Create embeddings
-response = await client.embeddings.create({
+const response = await client.embeddings.create({
   project_id,
   input,
   model
@@ -95,7 +108,8 @@ await client.datapoints.delete({
 // List all data points
 const datapoints = await client.datapoints.list({ project_id: 1 })
 console.log("Total number of datapoints:", datapoints.length)
-for const datapoint of datapoints:
-    console.log("Deleted data point with ID:", datapoint.id)
-    await client.datapoints.delete({ datapoint_id: datapoint.id })
+for (const datapoint of datapoints) {
+  console.log("Deleted data point with ID:", datapoint.id)
+  await client.datapoints.delete({ datapoint_id: datapoint.id })
+}
 ```

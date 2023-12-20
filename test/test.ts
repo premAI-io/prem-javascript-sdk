@@ -1,4 +1,4 @@
-const Prem = require("../.")
+import Prem from "@premai/prem"
 
 const prem = new Prem({
     apiKey: "API_KEY",
@@ -6,13 +6,21 @@ const prem = new Prem({
 })
 
 void(async() => {
-  const res = await prem.chat.completions.create({
+  const response = await prem.chat.completions.create({
     project_id: 2,
     messages: [{
       role: "user",
       content: "Hello, how are you?"
-    }]
+    }],
+    stream: true
   })
 
-  console.log(res.choices[0].message)
+  for await (const chunk of response) {
+    console.log("RECEIVED CHUNK")
+    console.log(chunk)
+  }
+
 })()
+  .catch((err): void => {
+    console.error("ERROR:", err)
+  })
