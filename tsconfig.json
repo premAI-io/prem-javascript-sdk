@@ -4,6 +4,11 @@
     "types"
   ],
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "$types/*": ["src/types/*"],
+      "$components/*": ["src/components/*"]
+    },
     "module": "ES6",
     "lib": [
       "dom",

@@ -1,17 +1,31 @@
-import APIResource from "./APIResource"
+import axios, { Axios } from "axios"
 
-export type Confg = {
-  baseUrl?: string,
-  apiKey: string
-}
+import EmbeddingResource from "./resources/embeddings"
+import ChatCompletionResource from "./resources/chat/completions"
+import DataPointResource from "./resources/datapoints"
+import { PremBaseConfig } from "./types"
 
 export default class Prem {
-  config: Confg & { baseUrl: string }
-  chat: APIResource
+  config: PremBaseConfig & { baseUrl: string }
+  axios: Axios
 
-  constructor(config: Confg) {
+  embeddings: EmbeddingResource
+  datapoints: DataPointResource
+  chat: {
+    completions: ChatCompletionResource
+  }
+
+  constructor(config: PremBaseConfig) {
     this.config = Object.assign({ baseUrl: "https://app.prem.ninja" }, config)
-    this.chat = new APIResource(this)
+    this.axios = axios.create()
+
+    this.axios.defaults.baseURL = this.config.baseUrl
+    this.axios.defaults.headers.common["Authorization"] = `Bearer ${this.config.apiKey}`
+
+    this.embeddings = new EmbeddingResource(this)
+    this.datapoints = new DataPointResource(this)
+    this.chat = {
+      completions: new ChatCompletionResource(this)
+    }
   }
 }
-
