@@ -8,10 +8,10 @@ npm install @premai/prem-sdk
 
 ## Usage
 ### Getting Started
-To use the Prem Python SDK, you need to obtain an API key from the Prem platform. You can then create a `Prem` instance to make requests to the API.
+To use the Prem Javascript SDK, you need to obtain an API key from the Prem platform. You can then create a `Prem` instance to make requests to the API.
 
 ```typescript
-import Prem from '@premai/prem';
+import Prem from '@premai/prem-sdk';
 
 const client = Prem({
   apiKey: "YOUR_API_KEY"
@@ -49,7 +49,9 @@ const response = await client.completions.create({
 })
 
 for await (const chunk of response) {
-  console.log(chunk)
+  if (chunk.choices[0].delta.content) {
+    process.stdout.write(chunk.choices[0].delta.content)
+  }
 }
 ```
 
@@ -84,32 +86,26 @@ const input = "What is a transformer?"
 let dataPoint
 for (let i = 0; i < 10; i++) {
   dataPoint = await client.datapoints.create({
-    project_id,
     input,
     positive: true
   })
 }
 
 // Update the last data point
-const patchedDataPoint = await client.datapoints.update({
-  datapoint_id: dataPoint.id,
-  positive: false
-})
+const patchedDataPoint = await client.datapoints.update(dataPoint.id, { positive: false })
 
 // Retrieve the updated data point
-const dataPoint = await client.datapoints.retrieve({ datapoint_id: dataPoint.id })
+const dataPoint = await client.datapoints.retrieve(dataPoint.id)
 console.log(dataPoint)
 
 // Delete data point
-await client.datapoints.delete({
-  datapoint_id: dataPoint.id
-})
+await client.datapoints.delete(dataPoint.id)
 
 // List all data points
-const datapoints = await client.datapoints.list({ project_id: 1 })
+const datapoints = await client.datapoints.list()
 console.log("Total number of datapoints:", datapoints.length)
 for (const datapoint of datapoints) {
   console.log("Deleted data point with ID:", datapoint.id)
-  await client.datapoints.delete({ datapoint_id: datapoint.id })
+  await client.datapoints.delete(datapoint.id)
 }
 ```

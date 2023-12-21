@@ -5,28 +5,16 @@ import { parseEventString, eventEmitterToAsyncIterable } from "$utils/index"
 import type {
   CreateChatCompletionRequest,
   CreateChatCompletionResponse,
-  ChatCompletionStreamingCompletionMessage
+  ChatCompletionStreamingCompletionData
 } from "$types/index"
 
-type A = (
-  args: CreateChatCompletionRequest & { stream: true },
-  options?: AxiosRequestConfig
-) => Promise<AsyncIterable<ChatCompletionStreamingCompletionMessage>>
-
-type B = (
-  args: CreateChatCompletionRequest & { stream: false },
-  options?: AxiosRequestConfig
-) => Promise<CreateChatCompletionResponse>
-
-type ConditionalType<T extends CreateChatCompletionRequest> = T["stream"] extends true ? AsyncIterable<ChatCompletionStreamingCompletionMessage> : CreateChatCompletionResponse
-
+type CreateChatCompletionOut<T> = T extends true ? AsyncIterable<ChatCompletionStreamingCompletionData> : CreateChatCompletionResponse
+type CreateChatCompletionRequestGeneric<T extends boolean> = Omit<CreateChatCompletionRequest, "stream"> & { stream: T }
 export default class ChatCompletionResource extends APIModule {
-  create = async(
-    args: CreateChatCompletionRequest,
+  create = async<T extends boolean>(
+    args: CreateChatCompletionRequestGeneric<T>,
     options?: AxiosRequestConfig
-  ): Promise<
-    AsyncIterable<ChatCompletionStreamingCompletionMessage> | CreateChatCompletionResponse
-  > => {
+  ): Promise<CreateChatCompletionOut<T>> => {
     const baseOptions = {
       method: "POST",
       data: args,
@@ -34,7 +22,7 @@ export default class ChatCompletionResource extends APIModule {
       ...options
     }
 
-    if (args.stream === true) {
+    if (args.stream) {
       const rawStream = await this.client.call<EventEmitter>({
         ...baseOptions,
         responseType: "stream",
@@ -44,7 +32,7 @@ export default class ChatCompletionResource extends APIModule {
 
       rawStream.on("data", (chunk: Buffer) => {
         const { data, event } = parseEventString(chunk.toString());
-        if (event === "completion") {
+        if (event === "completion" && data !== null) {
           parsedEventEmitter.emit("data", data)
         } else if (event === "done") {
           parsedEventEmitter.emit("end")
@@ -55,10 +43,10 @@ export default class ChatCompletionResource extends APIModule {
         parsedEventEmitter.emit("end")
       })
 
-      const iterable = eventEmitterToAsyncIterable<ChatCompletionStreamingCompletionMessage>(parsedEventEmitter)
-      return iterable
+      const iterable = eventEmitterToAsyncIterable<ChatCompletionStreamingCompletionData>(parsedEventEmitter)
+      return iterable as CreateChatCompletionOut<T>
     } else {
-      return this.client.call(baseOptions)
+      return this.client.call<CreateChatCompletionResponse>(baseOptions) as Promise<CreateChatCompletionOut<T>>
     }
   }
 }

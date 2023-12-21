@@ -10,6 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@premai/prem": "file:.."
+    "@premai/prem-sdk": "file:.."
   }
 }
