@@ -1,4 +1,4 @@
-import Prem from "@premai/prem"
+import Prem from "@premai/prem-sdk"
 
 const prem = new Prem({
     apiKey: "API_KEY",
@@ -16,11 +16,14 @@ void(async() => {
   })
 
   for await (const chunk of response) {
-    console.log("RECEIVED CHUNK")
-    console.log(chunk)
+    if (chunk.choices[0].delta.content) {
+      process.stdout.write(chunk.choices[0].delta.content)
+    }
   }
 
 })()
   .catch((err): void => {
     console.error("ERROR:", err)
   })
+
+

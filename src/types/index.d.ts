@@ -11,29 +11,27 @@ export type PremBaseConfig = {
 export type CreateChatCompletionRequest = api.ChatCompletionInput
 export type CreateChatCompletionResponse = api.ChatCompletionResponse
 
-export type ChatCompletionStreamingCompletionMessage = {
-  event: "completion"
-  data: {
-    id: string,
-    model: string,
-    object: string,
-    created: number,
-    choices: {
-      finish_reason: string | null,
-      delta: {
-        content: string,
-        role: string | null
-      }
-    }[]
-  }
+export type ChatCompletionStreamingCompletionData = {
+  id: string,
+  model: string,
+  object: string,
+  created: number,
+  choices: {
+    finish_reason: string | null,
+    delta: {
+      content: string,
+      role: string | null
+    }
+  }[]
 }
 
-export type ChatCompletionStreamingDoneMessage = {
+export type ChatCompletionStreamingMessage = {
+  event: "completion",
+  data: ChatCompletionStreamingCompletionData
+} | {
   event: "done",
   data: null
 }
-
-export type ChatCompletionStreamingMessage = ChatCompletionStreamingMessageCompletion | ChatCompletionStreamingDoneMessage
 
 // EMBEDDING - CREATE
 
