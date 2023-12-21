@@ -80,14 +80,17 @@ The `datapoints` module allows you to manage data points, including creating, up
 
 ```typescript
 const project_id = 1
-const input = "What is a transformer?"
+const input = "How are you?"
+const output = "I'm doing well, thanks for asking!"
 
 // Create 10 data points
 let dataPoint
 for (let i = 0; i < 10; i++) {
   dataPoint = await client.datapoints.create({
     input,
-    positive: true
+    output,
+    positive: true,
+    project_id
   })
 }
 
@@ -105,7 +108,7 @@ await client.datapoints.delete(dataPoint.id)
 const datapoints = await client.datapoints.list()
 console.log("Total number of datapoints:", datapoints.length)
 for (const datapoint of datapoints) {
-  console.log("Deleted data point with ID:", datapoint.id)
+  console.log("Deleting data point with ID:", datapoint.id)
   await client.datapoints.delete(datapoint.id)
 }
 ```

@@ -39,7 +39,7 @@ export type CreateEmbeddingRequest = api.EmbeddingsInput
 export type CreateEmbeddingResponse = api.EmbeddingsResponse
 
 // DATAPOINT - CREATE
-export type CreateDataPointRequest = Omit<api.DataPoint, "id" | "created_at" | "updated_at">
+export type CreateDataPointRequest = api.InputDataPoint & ({ trace: string, project?: undefined } | { trace?: undefined, project: number })
 export type CreateDataPointResponse = api.DataPoint
 
 // DATAPOINT - RETRIEVE
@@ -58,3 +58,18 @@ export type UpdateDataPointRequest = {
 }
 
 
+// ERRORS
+
+export type ProviderInternalServerError = api.ProviderInternalServerError
+export type APIResponseValidationError = api.APIResponseValidationError
+export type ProviderAPIStatusError = api.ProviderAPIStatusError
+export type ProviderAPITimeoutError = api.ProviderAPITimeoutError
+export type ProviderAPIConnectionError = api.ProviderAPIConnectionError
+export type CatchAllError = api.CatchAllError
+export type AuthenticationError = api.AuthenticationError
+export type ConflictError = api.ConflictError
+export type InternalServerError = api.InternalServerError
+export type ModelNotFoundError = api.ModelNotFoundError
+export type NotFoundError = api.NotFoundError
+export type PermissionDeniedError = api.PermissionDeniedError
+export type ValidationError = api.ValidationError

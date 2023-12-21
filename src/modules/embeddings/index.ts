@@ -7,7 +7,7 @@ export default class EmbeddingModule extends APIModule {
     return this.client.call({
       method: "POST",
       data: args,
-      url: "/api/projects/data-points",
+      url: "/v1/embeddings",
       ...options
     })
   }
