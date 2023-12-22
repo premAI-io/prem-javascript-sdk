@@ -53,6 +53,8 @@ for await (const chunk of response) {
     process.stdout.write(chunk.choices[0].delta.content)
   }
 }
+
+console.log("\nTrace ID": response.trace_id)
 ```
 
 ### Embeddings
@@ -80,14 +82,26 @@ The `datapoints` module allows you to manage data points, including creating, up
 
 ```typescript
 const project_id = 1
-const input = "What is a transformer?"
+const input = "How are you?"
+const output = "I'm doing well, thanks for asking!"
+
+// Create data point linked to trace
+const dataPoint = await client.datapoints.create({
+  input,
+  output,
+  positive: true,
+  project_id,
+  trace_id: "YOUR_TRACE_ID"
+})
 
 // Create 10 data points
 let dataPoint
 for (let i = 0; i < 10; i++) {
   dataPoint = await client.datapoints.create({
     input,
-    positive: true
+    output,
+    positive: true,
+    project_id
   })
 }
 
@@ -105,7 +119,7 @@ await client.datapoints.delete(dataPoint.id)
 const datapoints = await client.datapoints.list()
 console.log("Total number of datapoints:", datapoints.length)
 for (const datapoint of datapoints) {
-  console.log("Deleted data point with ID:", datapoint.id)
+  console.log("Deleting data point with ID:", datapoint.id)
   await client.datapoints.delete(datapoint.id)
 }
 ```

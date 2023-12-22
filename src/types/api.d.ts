@@ -1,4 +1,4 @@
-/* My Banner Comment */export type APIResponseValidationError = {
+export type APIResponseValidationError = {
   message: string
   code: APIResponseValidationErrorCodeEnum
   [k: string]: unknown
@@ -183,7 +183,7 @@ export type EmbeddingsInput = {
    * The ID of the project to use.
    */
   project_id: number
-  model?: string
+  model: string
   encoding_format?: EncodingFormatEnum & string
   /**
    * Embedding Input
@@ -221,6 +221,15 @@ export type EmbeddingsResponse = {
  * * `base64` - base64
  */
 export type EncodingFormatEnum = "float" | "base64"
+
+export type InputDataPoint = {
+  project: number
+  trace?: string | null
+  input: string
+  output: string
+  positive: boolean
+  [k: string]: unknown
+}
 
 export type InternalServerError =
   | ProviderInternalServerError
@@ -346,11 +355,25 @@ export type RateLimitError = {
  */
 export type RateLimitErrorCodeEnum = "RateLimitError"
 
-export type ResponseChoice = {
+export type  ResponseChoice = {
   /**
    * The generated message in the chat completion choice.
    */
-  message: string
+  message: {
+    /**
+     * The role of the sender (e.g., 'user' or 'system').
+     *
+     * * `user` - user
+     * * `system` - system
+     */
+    role: RoleEnum
+    /**
+     * The content of the message.
+     */
+    content: string,
+    tool_calls?: unknown[]
+    [k: string]: unknown
+  }
   /**
    * The reason the chat completion finished, e.g., 'stop' or 'length'.
    */

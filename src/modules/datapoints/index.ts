@@ -12,8 +12,11 @@ export default class DataPointResource extends APIModule {
   create = (args: CreateDataPointRequest, options?: AxiosRequestConfig): Promise<CreateDataPointResponse> => {
     return this.client.call({
       method: "POST",
-      data: args,
-      url: "/api/projects/data-points",
+      data: {
+        trace: null,
+        ...args
+      },
+      url: "/api/projects/data-points/",
       ...options
     })
   }
@@ -21,7 +24,7 @@ export default class DataPointResource extends APIModule {
   retrieve = (id: number, options?: AxiosRequestConfig): Promise<RetrieveDataPointResponse> => {
     return this.client.call({
       method: "GET",
-      url: `/api/projects/data-points/${id}`,
+      url: `/api/projects/data-points/${id}/`,
       ...options
     })
   }
@@ -29,7 +32,7 @@ export default class DataPointResource extends APIModule {
   list = (options?: AxiosRequestConfig): Promise<RetrieveDataPointResponse[]> => {
     return this.client.call({
       method: "GET",
-      url: "/api/projects/data-points",
+      url: "/api/projects/data-points/",
       ...options
     })
   }
@@ -38,7 +41,7 @@ export default class DataPointResource extends APIModule {
     return this.client.call({
       method: "PATCH",
       data: updates,
-      url: `/api/projects/data-points/${id}`,
+      url: `/api/projects/data-points/${id}/`,
       ...options
     })
   }
@@ -46,7 +49,7 @@ export default class DataPointResource extends APIModule {
   delete = (id: number, options?: AxiosRequestConfig): Promise<void> => {
     return this.client.call({
       method: "DELETE",
-      url: `/api/projects/data-points/${id}`,
+      url: `/api/projects/data-points/${id}/`,
       ...options
     })
   }
