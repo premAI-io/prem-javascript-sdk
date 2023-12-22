@@ -3,16 +3,19 @@ import { EventEmitter } from "events";
 export function parseEventString(evt: string) {
   const eventRegex = /event:\s*(.+)/;
   const dataRegex = /data:\s*(.+)/;
+  const traceIdRegex = /trace_id:\s*(.+)/;
 
   const eventMatch = evt.match(eventRegex);
   const dataMatch = evt.match(dataRegex);
+  const traceIdMatch = evt.match(traceIdRegex);
 
   const event = eventMatch ? eventMatch[1].trim() : null;
   let data = dataMatch ? dataMatch[1].trim() : null;
+  const traceId = traceIdMatch ? traceIdMatch[1].trim() : null;
 
   if (data) {
     if (data === "[DONE]") {
-      data = null;
+      data = traceId;
     } else {
       data = JSON.parse(data);
     }
@@ -21,7 +24,7 @@ export function parseEventString(evt: string) {
   return { event, data };
 }
 
-export function eventEmitterToAsyncIterable<T>(eventEmitter: EventEmitter): AsyncIterable<T> {
+export function eventEmitterToAsyncIterable<T>(eventEmitter: EventEmitter): AsyncIterable<T> & { trace_id: string | null } {
   const queue: any[] = [];
   let resolveQueue: any[] = [];
 
@@ -41,10 +44,8 @@ export function eventEmitterToAsyncIterable<T>(eventEmitter: EventEmitter): Asyn
     resolveQueue = [];
   }
 
-  eventEmitter.on("data", enqueue);
-  eventEmitter.once("end", end);
-
-  return {
+  const out: AsyncIterable<T> & { trace_id: string | null } = {
+    trace_id: null,
     async *[Symbol.asyncIterator]() {
       while (true) {
         if (queue.length > 0) {
@@ -59,4 +60,12 @@ export function eventEmitterToAsyncIterable<T>(eventEmitter: EventEmitter): Asyn
       }
     }
   };
+
+  eventEmitter.on("data", enqueue);
+  eventEmitter.once("end", end);
+  eventEmitter.once("trace", (traceId: string) => {
+    out.trace_id = traceId;
+  })
+
+  return out
 }

@@ -1,45 +1,20 @@
 import Prem from "@premai/prem-sdk"
+import { expect } from "chai"
 
 if (!process.env.API_KEY) {
   throw new Error("API_KEY environment variable is not set")
 }
 
-const project_id = +(process.env.PROJECT_ID || "2")
+if (!process.env.PROJECT_ID) {
+  throw new Error("PROJECT_ID environment variable is not set")
+}
+
+const project_id = +(process.env.PROJECT_ID)
 
 const prem = new Prem({
     apiKey: process.env.API_KEY,
     baseUrl: "http://localhost:8000"
 })
-
-const asyncChatCompletion = async() => {
-  const response = await prem.chat.completions.create({
-    project_id,
-    messages: [{
-      role: "user",
-      content: "Hello, how are you?"
-    }],
-    stream: true
-  })
-
-  for await (const chunk of response) {
-    if (chunk.choices[0].delta.content) {
-      process.stdout.write(chunk.choices[0].delta.content)
-    }
-  }
-}
-
-const syncChatCompletion = async() => {
-  const response = await prem.chat.completions.create({
-    project_id,
-    messages: [{
-      role: "user",
-      content: "Hello, how are you?"
-    }],
-    stream: false
-  })
-
-  console.log(response)
-}
 
 const _createDataPoint = async() => {
   const response = await prem.datapoints.create({
@@ -51,85 +26,100 @@ const _createDataPoint = async() => {
   return response
 }
 
-const createDataPoint = async() => {
-  const response = await _createDataPoint()
-  console.log(response)
-}
+describe("Prem SDK", () => {
+  beforeEach((done) => setTimeout(done, 1000))
 
-const retrieveDataPoint = async() => {
-  const datapoint = await _createDataPoint()
-  const response = await prem.datapoints.retrieve(datapoint.id)
-  console.log(response)
-}
+  describe("Chat completion", () => {
+    it("Chat completion sync", async() => {
+      const response = await prem.chat.completions.create({
+        project_id,
+        messages: [{
+          role: "user",
+          content: "Hello, how are you?"
+        }],
+        stream: false
+      })
 
-const listDataPoints = async() => {
-  const response = await prem.datapoints.list()
-  console.log(response)
-}
+      expect(response.choices[0].message.content).to.be.a("string")
+    })
 
-const deleteDataPoint = async() => {
-  const datapoint = await _createDataPoint()
-  await prem.datapoints.delete(datapoint.id)
+    it("Chat completion async", async() => {
+      const response = await prem.chat.completions.create({
+        project_id,
+        messages: [{
+          role: "user",
+          content: "Hello, how are you?"
+        }],
+        stream: true
+      })
 
-  let retrieved = false
-  try {
-    await prem.datapoints.retrieve(datapoint.id)
-    retrieved = true
-  } catch (_) {}
+      for await (const chunk of response) {
+        expect(chunk).to.be.an("object")
+        expect(chunk.choices).to.be.an("array")
+        expect(chunk.choices[0]).is.an("object")
 
-  if (retrieved) {
-    throw new Error("Data point was not deleted")
-  }
+        const choice = chunk.choices[0]
 
-  console.log("Data point deleted")
-}
+        if (choice.finish_reason === null) {
+          expect(chunk?.choices[0]?.delta?.content).to.be.a("string")
+        }
+      }
 
-const updateDataPoint = async() => {
-  const datapoint = await _createDataPoint()
-  const response = await prem.datapoints.update(datapoint.id, {
-    output: "I'm doing well, thanks for asking. How are you?"
+      expect(response.trace_id).to.be.a("string")
+    })
   })
 
-  console.log(response)
-}
+  describe("Data points", () => {
+    it("Create data point", async() => {
+      const response = await _createDataPoint()
+      expect(response.id).to.be.a("number")
+    })
 
-const createEmbedding = async() => {
-  const response = await prem.embeddings.create({
-    input: ["Hello, how are you?"],
-    project_id,
-    model: "text-embedding-ada-002"
+    it("Retrieve data point", async() => {
+      const datapoint = await _createDataPoint()
+      const response = await prem.datapoints.retrieve(datapoint.id)
+      expect(response.id).to.be.a("number")
+    })
+
+    it("List data points", async() => {
+      const response = await prem.datapoints.list()
+      expect(response).to.be.an("array")
+    })
+
+    it("Delete data point", async() => {
+      const datapoint = await _createDataPoint()
+      await prem.datapoints.delete(datapoint.id)
+
+      let retrieved = false
+      try {
+        await prem.datapoints.retrieve(datapoint.id)
+        retrieved = true
+      } catch (_) {}
+
+      if (retrieved) {
+        throw new Error("Data point was not deleted")
+      }
+    })
+
+    it("Update data point", async() => {
+      const datapoint = await _createDataPoint()
+      const response = await prem.datapoints.update(datapoint.id, {
+        output: "I'm doing well, thanks for asking. How are you?"
+      })
+
+      expect(response.id).to.be.a("number")
+    })
   })
 
-  console.log(response)
-}
+  describe("Embeddings", () => {
+    it("Create embedding", async() => {
+      const response = await prem.embeddings.create({
+        input: ["Hello, how are you?"],
+        project_id,
+        model: "text-embedding-ada-002"
+      })
 
-void(async() => {
-  console.log("Async chat completion:")
-  await asyncChatCompletion()
-
-  console.log("\nSync chat completion:")
-  await syncChatCompletion()
-
-  console.log("\nCreate data point:")
-  await createDataPoint()
-
-  console.log("\nRetrieve data point:")
-  await retrieveDataPoint()
-
-  console.log("\nList data points:")
-  await listDataPoints()
-
-  console.log("\nDelete data point:")
-  await deleteDataPoint()
-
-  console.log("\nUpdate data point:")
-  await updateDataPoint()
-
-  console.log("\nCreate embedding:")
-  await createEmbedding()
-})()
-  .catch((err): void => {
-    console.error("ERROR:", err)
+      expect(response.data).to.be.an("array")
+    })
   })
-
-
+})

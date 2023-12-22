@@ -8,7 +8,7 @@ import type {
   ChatCompletionStreamingCompletionData
 } from "$types/index"
 
-type CreateChatCompletionOut<T> = T extends true ? AsyncIterable<ChatCompletionStreamingCompletionData> : CreateChatCompletionResponse
+type CreateChatCompletionOut<T> = T extends true ? AsyncIterable<ChatCompletionStreamingCompletionData> & { trace_id: string | null } : CreateChatCompletionResponse
 type CreateChatCompletionRequestGeneric<T extends boolean> = Omit<CreateChatCompletionRequest, "stream"> & { stream: T }
 export default class ChatCompletionResource extends APIModule {
   create = async<T extends boolean>(
@@ -35,6 +35,7 @@ export default class ChatCompletionResource extends APIModule {
         if (event === "completion" && data !== null) {
           parsedEventEmitter.emit("data", data)
         } else if (event === "done") {
+          parsedEventEmitter.emit("trace", data)
           parsedEventEmitter.emit("end")
         }
       })

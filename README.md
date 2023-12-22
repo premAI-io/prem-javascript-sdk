@@ -53,6 +53,8 @@ for await (const chunk of response) {
     process.stdout.write(chunk.choices[0].delta.content)
   }
 }
+
+console.log("\nTrace ID": response.trace_id)
 ```
 
 ### Embeddings

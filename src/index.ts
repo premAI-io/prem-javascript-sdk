@@ -16,7 +16,7 @@ export default class Prem {
   }
 
   constructor(config: PremBaseConfig, axiosConfig?: CreateAxiosDefaults) {
-    this.config = Object.assign({ baseUrl: "https://app.prem.ninja" }, config)
+    this.config = Object.assign({ baseUrl: "https://app.premai.io" }, config)
 
     this.axios = axios.create(axiosConfig)
 

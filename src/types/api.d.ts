@@ -357,7 +357,21 @@ export type  ResponseChoice = {
   /**
    * The generated message in the chat completion choice.
    */
-  message: string
+  message: {
+    /**
+     * The role of the sender (e.g., 'user' or 'system').
+     *
+     * * `user` - user
+     * * `system` - system
+     */
+    role: RoleEnum
+    /**
+     * The content of the message.
+     */
+    content: string,
+    tool_calls?: unknown[]
+    [k: string]: unknown
+  }
   /**
    * The reason the chat completion finished, e.g., 'stop' or 'length'.
    */

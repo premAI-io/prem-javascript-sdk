@@ -30,7 +30,7 @@ export type ChatCompletionStreamingMessage = {
   data: ChatCompletionStreamingCompletionData
 } | {
   event: "done",
-  data: null
+  data: string // trace id
 }
 
 // EMBEDDING - CREATE
