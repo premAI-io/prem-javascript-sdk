@@ -9,14 +9,14 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "@premai/prem-sdk": "file:.."
-  },
   "devDependencies": {
     "@types/chai": "^4.3.11",
     "@types/mocha": "^10.0.6",
-    "tsx": "^4.7.0",
     "chai": "^4.3.10",
-    "mocha": "^10.2.0"
+    "mocha": "^10.2.0",
+    "tsx": "^4.7.0"
+  },
+  "dependencies": {
+    "@premai/prem-sdk": "file:.."
   }
 }

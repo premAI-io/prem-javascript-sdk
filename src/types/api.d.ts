@@ -223,6 +223,8 @@ export type EmbeddingsResponse = {
 export type EncodingFormatEnum = "float" | "base64"
 
 export type InputDataPoint = {
+  project: number
+  trace?: string | null
   input: string
   output: string
   positive: boolean

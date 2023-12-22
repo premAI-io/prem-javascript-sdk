@@ -23,6 +23,7 @@ const _createDataPoint = async() => {
     output: "I'm doing well, thanks for asking.",
     project: project_id
   })
+
   return response
 }
 
