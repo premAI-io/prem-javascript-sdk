@@ -104,29 +104,29 @@ const createEmbedding = async() => {
 }
 
 void(async() => {
-  // console.log("Async chat completion:")
-  // await asyncChatCompletion()
+  console.log("Async chat completion:")
+  await asyncChatCompletion()
 
-  // console.log("\nSync chat completion:")
-  // await syncChatCompletion()
+  console.log("\nSync chat completion:")
+  await syncChatCompletion()
 
-  // console.log("\nCreate data point:")
-  // await createDataPoint()
+  console.log("\nCreate data point:")
+  await createDataPoint()
 
-  // console.log("\nRetrieve data point:")
-  // await retrieveDataPoint()
+  console.log("\nRetrieve data point:")
+  await retrieveDataPoint()
 
-  // console.log("\nList data points:")
-  // await listDataPoints()
+  console.log("\nList data points:")
+  await listDataPoints()
 
-  // console.log("\nDelete data point:")
-  // await deleteDataPoint()
+  console.log("\nDelete data point:")
+  await deleteDataPoint()
 
-  // console.log("\nUpdate data point:")
-  // await updateDataPoint()
+  console.log("\nUpdate data point:")
+  await updateDataPoint()
 
-  // console.log("\nCreate embedding:")
-  // await createEmbedding()
+  console.log("\nCreate embedding:")
+  await createEmbedding()
 })()
   .catch((err): void => {
     console.error("ERROR:", err)
