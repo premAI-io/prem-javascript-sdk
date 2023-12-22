@@ -39,7 +39,7 @@ export type CreateEmbeddingRequest = api.EmbeddingsInput
 export type CreateEmbeddingResponse = api.EmbeddingsResponse
 
 // DATAPOINT - CREATE
-export type CreateDataPointRequest = api.InputDataPoint & ({ trace: string, project?: undefined } | { trace?: undefined, project: number })
+export type CreateDataPointRequest = api.InputDataPoint
 export type CreateDataPointResponse = api.DataPoint
 
 // DATAPOINT - RETRIEVE

@@ -12,7 +12,10 @@ export default class DataPointResource extends APIModule {
   create = (args: CreateDataPointRequest, options?: AxiosRequestConfig): Promise<CreateDataPointResponse> => {
     return this.client.call({
       method: "POST",
-      data: args,
+      data: {
+        trace: null,
+        ...args
+      },
       url: "/api/projects/data-points/",
       ...options
     })

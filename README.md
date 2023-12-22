@@ -85,6 +85,15 @@ const project_id = 1
 const input = "How are you?"
 const output = "I'm doing well, thanks for asking!"
 
+// Create data point linked to trace
+const dataPoint = await client.datapoints.create({
+  input,
+  output,
+  positive: true,
+  project_id,
+  trace_id: "YOUR_TRACE_ID"
+})
+
 // Create 10 data points
 let dataPoint
 for (let i = 0; i < 10; i++) {
