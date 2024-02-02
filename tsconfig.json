@@ -13,6 +13,7 @@
       "$components/*": ["src/components/*"],
       "$modules/*": ["src/modules/*"],
       "$utils/*": ["src/utils/*"],
+      "$src/*": ["src/*"],
     },
     "module": "ES6",
     "lib": [

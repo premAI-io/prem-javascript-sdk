@@ -1,56 +1,17 @@
 import { APIModule } from "$components/index"
-import type {
-  CreateDataPointRequest,
-  CreateDataPointResponse,
-  RetrieveDataPointResponse,
-  UpdateDataPointRequest,
-  UpdateDataPointResponse
-} from "$types/index"
-import { AxiosRequestConfig } from "axios"
 
-export default class DataPointResource extends APIModule {
-  create = (args: CreateDataPointRequest, options?: AxiosRequestConfig): Promise<CreateDataPointResponse> => {
-    return this.client.call({
-      method: "POST",
-      data: {
-        trace: null,
-        ...args
-      },
-      url: "/api/projects/data-points/",
-      ...options
-    })
-  }
+import api_projects_data_points_list from "./operations/api_projects_data_points_list"
+import api_projects_data_points_create from "./operations/api_projects_data_points_create"
+import api_projects_data_points_retrieve from "./operations/api_projects_data_points_retrieve"
+import api_projects_data_points_update from "./operations/api_projects_data_points_update"
+import api_projects_data_points_partial_update from "./operations/api_projects_data_points_partial_update"
+import api_projects_data_points_destroy from "./operations/api_projects_data_points_destroy"
 
-  retrieve = (id: number, options?: AxiosRequestConfig): Promise<RetrieveDataPointResponse> => {
-    return this.client.call({
-      method: "GET",
-      url: `/api/projects/data-points/${id}/`,
-      ...options
-    })
-  }
-
-  list = (options?: AxiosRequestConfig): Promise<RetrieveDataPointResponse[]> => {
-    return this.client.call({
-      method: "GET",
-      url: "/api/projects/data-points/",
-      ...options
-    })
-  }
-
-  update = (id: number, updates: UpdateDataPointRequest, options?: AxiosRequestConfig): Promise<UpdateDataPointResponse> => {
-    return this.client.call({
-      method: "PATCH",
-      data: updates,
-      url: `/api/projects/data-points/${id}/`,
-      ...options
-    })
-  }
-
-  delete = (id: number, options?: AxiosRequestConfig): Promise<void> => {
-    return this.client.call({
-      method: "DELETE",
-      url: `/api/projects/data-points/${id}/`,
-      ...options
-    })
-  }
+export default class extends APIModule {
+    list = api_projects_data_points_list(this.client)
+	create = api_projects_data_points_create(this.client)
+	retrieve = api_projects_data_points_retrieve(this.client)
+	update = api_projects_data_points_update(this.client)
+	patch = api_projects_data_points_partial_update(this.client)
+	delete = api_projects_data_points_destroy(this.client)
 }

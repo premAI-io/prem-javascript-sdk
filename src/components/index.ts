@@ -1,5 +1,4 @@
-import { AxiosRequestConfig } from "axios"
-import Prem from "src"
+import Prem from "../index"
 
 export class APIModule {
   protected client: Prem
