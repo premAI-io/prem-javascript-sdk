@@ -13,14 +13,14 @@ To use the Prem Javascript SDK, you need to obtain an API key from the Prem plat
 ```typescript
 import Prem from '@premai/prem-sdk';
 
-const client = Prem({
+const client = new Prem({
   apiKey: "YOUR_API_KEY"
 })
 ```
 
 ### Completions
 
-The `completions` module allows you to generate completions based on user input. Here's an example:
+The `chat.completions` module allows you to generate completions based on user input. Here's an example:
 
 ```typescript
 const project_id = 1
@@ -31,7 +31,7 @@ const messages = [
 ]
 
 // Create completion
-const response = await client.completions.create({
+const response = await client.chat.completions.create({
   project_id,
   messages,
   model,
@@ -41,7 +41,7 @@ const response = await client.completions.create({
 console.log(response)
 
 // Create completion with stream
-const response = await client.completions.create({
+const response = await client.chat.completions.create({
   project_id,
   messages,
   model,
