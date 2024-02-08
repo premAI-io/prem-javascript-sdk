@@ -1,4 +1,4 @@
-import * as api from "./api"
+import * as components from "./apiComponents"
 import type { AxiosRequestConfig } from "axios"
 
 export type PremBaseConfig = {
@@ -8,8 +8,8 @@ export type PremBaseConfig = {
 
 // CHAT COMPLETION - CREATE
 
-export type CreateChatCompletionRequest = api.ChatCompletionInput
-export type CreateChatCompletionResponse = api.ChatCompletionResponse
+export type CreateChatCompletionRequest = components.ChatCompletionInput
+export type CreateChatCompletionResponse = components.ChatCompletionResponse
 
 export type ChatCompletionStreamingCompletionData = {
   id: string,
@@ -35,21 +35,21 @@ export type ChatCompletionStreamingMessage = {
 
 // EMBEDDING - CREATE
 
-export type CreateEmbeddingRequest = api.EmbeddingsInput
-export type CreateEmbeddingResponse = api.EmbeddingsResponse
+export type CreateEmbeddingRequest = components.EmbeddingsInput
+export type CreateEmbeddingResponse = components.EmbeddingsResponse
 
 // DATAPOINT - CREATE
-export type CreateDataPointRequest = api.InputDataPoint
-export type CreateDataPointResponse = api.DataPoint
+export type CreateDataPointRequest = components.InputDataPoint
+export type CreateDataPointResponse = components.DataPoint
 
 // DATAPOINT - RETRIEVE
-export type RetrieveDataPointResponse = api.DataPoint
+export type RetrieveDataPointResponse = components.DataPoint
 
 // DATAPOINT - LIST
-export type ListDataPointResponse = api.DataPoint[]
+export type ListDataPointResponse = components.DataPoint[]
 
 // DATAPOINT - UPDATE
-export type UpdateDataPointResponse = api.DataPoint
+export type UpdateDataPointResponse = components.DataPoint
 export type UpdateDataPointRequest = {
   input?: string
   output?: string
@@ -60,16 +60,16 @@ export type UpdateDataPointRequest = {
 
 // ERRORS
 
-export type ProviderInternalServerError = api.ProviderInternalServerError
-export type APIResponseValidationError = api.APIResponseValidationError
-export type ProviderAPIStatusError = api.ProviderAPIStatusError
-export type ProviderAPITimeoutError = api.ProviderAPITimeoutError
-export type ProviderAPIConnectionError = api.ProviderAPIConnectionError
-export type CatchAllError = api.CatchAllError
-export type AuthenticationError = api.AuthenticationError
-export type ConflictError = api.ConflictError
-export type InternalServerError = api.InternalServerError
-export type ModelNotFoundError = api.ModelNotFoundError
-export type NotFoundError = api.NotFoundError
-export type PermissionDeniedError = api.PermissionDeniedError
-export type ValidationError = api.ValidationError
+export type ProviderInternalServerError = components.ProviderInternalServerError
+export type APIResponseValidationError = components.APIResponseValidationError
+export type ProviderAPIStatusError = components.ProviderAPIStatusError
+export type ProviderAPITimeoutError = components.ProviderAPITimeoutError
+export type ProviderAPIConnectionError = components.ProviderAPIConnectionError
+export type CatchAllError = components.CatchAllError
+export type AuthenticationError = components.AuthenticationError
+export type ConflictError = components.ConflictError
+export type InternalServerError = components.InternalServerError
+export type ModelNotFoundError = components.ModelNotFoundError
+export type NotFoundError = components.NotFoundError
+export type PermissionDeniedError = components.PermissionDeniedError
+export type ValidationError = components.ValidationError
