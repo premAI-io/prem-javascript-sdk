@@ -1,6 +1,6 @@
 {
   "name": "@premai/prem-sdk",
-  "version": "0.0.1-test",
+  "version": "0.0.1-test2",
   "license": "MIT",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
