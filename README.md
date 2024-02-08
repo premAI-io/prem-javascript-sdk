@@ -1,4 +1,4 @@
-# @premai/prem
+# @premai/prem-sdk
 
 ## Installation
 
@@ -19,7 +19,7 @@ const client = Prem({
   apiKey: "YOUR_API_KEY"
 })
 
-const project_id = PROJECT_ID
+project_id = PROJECT_ID
 ```
 
 ### Completions
@@ -59,3 +59,4 @@ for await (const chunk of responseAsync) {
 
 console.log("\nTrace ID", responseAsync.trace_id)
 ```
+
