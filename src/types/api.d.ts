@@ -119,12 +119,13 @@ export interface components {
       /** @description A list of messages comprising the conversation so far. */
       messages: ({
           /**
-           * @description The role of the sender (e.g., 'user' or 'system').
+           * @description The role of the sender (e.g., 'user', 'assistant' or 'system').
            *
            * * `user` - user
            * * `system` - system
+           * * `assistant` - assistant
            */
-          role: "user" | "system";
+          role: "user" | "system" | "assistant";
           /** @description The content of the message. */
           content: string;
         })[];
@@ -384,12 +385,13 @@ export interface components {
     };
     Message: {
       /**
-       * @description The role of the sender (e.g., 'user' or 'system').
+       * @description The role of the sender (e.g., 'user', 'assistant' or 'system').
        *
        * * `user` - user
        * * `system` - system
+       * * `assistant` - assistant
        */
-      role: "user" | "system";
+      role: "user" | "system" | "assistant";
       /** @description The content of the message. */
       content: string;
     };
@@ -553,9 +555,10 @@ export interface components {
     /**
      * @description * `user` - user
      * * `system` - system
+     * * `assistant` - assistant
      * @enum {string}
      */
-    RoleEnum: "user" | "system";
+    RoleEnum: "user" | "system" | "assistant";
     Trace: {
       /** Format: uuid */
       id: string;
@@ -1169,12 +1172,13 @@ export interface operations {
           /** @description A list of messages comprising the conversation so far. */
           messages: ({
               /**
-               * @description The role of the sender (e.g., 'user' or 'system').
+               * @description The role of the sender (e.g., 'user', 'assistant' or 'system').
                *
                * * `user` - user
                * * `system` - system
+               * * `assistant` - assistant
                */
-              role: "user" | "system";
+              role: "user" | "system" | "assistant";
               /** @description The content of the message. */
               content: string;
             })[];
@@ -1231,12 +1235,13 @@ export interface operations {
           /** @description A list of messages comprising the conversation so far. */
           messages: ({
               /**
-               * @description The role of the sender (e.g., 'user' or 'system').
+               * @description The role of the sender (e.g., 'user', 'assistant' or 'system').
                *
                * * `user` - user
                * * `system` - system
+               * * `assistant` - assistant
                */
-              role: "user" | "system";
+              role: "user" | "system" | "assistant";
               /** @description The content of the message. */
               content: string;
             })[];
@@ -1293,12 +1298,13 @@ export interface operations {
           /** @description A list of messages comprising the conversation so far. */
           messages: ({
               /**
-               * @description The role of the sender (e.g., 'user' or 'system').
+               * @description The role of the sender (e.g., 'user', 'assistant' or 'system').
                *
                * * `user` - user
                * * `system` - system
+               * * `assistant` - assistant
                */
-              role: "user" | "system";
+              role: "user" | "system" | "assistant";
               /** @description The content of the message. */
               content: string;
             })[];

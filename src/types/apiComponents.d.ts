@@ -64,12 +64,13 @@ export type ChatCompletionInput = {
    */
   messages: {
     /**
-     * The role of the sender (e.g., 'user' or 'system').
+     * The role of the sender (e.g., 'user', 'assistant' or 'system').
      *
      * * `user` - user
      * * `system` - system
+     * * `assistant` - assistant
      */
-    role: "user" | "system"
+    role: "user" | "system" | "assistant"
     /**
      * The content of the message.
      */
@@ -438,12 +439,13 @@ export type LeaderboardResponse = {
 
 export type Message = {
   /**
-   * The role of the sender (e.g., 'user' or 'system').
+   * The role of the sender (e.g., 'user', 'assistant' or 'system').
    *
    * * `user` - user
    * * `system` - system
+   * * `assistant` - assistant
    */
-  role: "user" | "system"
+  role: "user" | "system" | "assistant"
   /**
    * The content of the message.
    */
@@ -647,8 +649,9 @@ export type RetrieveFineTuningResponse = {
 /**
  * * `user` - user
  * * `system` - system
+ * * `assistant` - assistant
  */
-export type RoleEnum = "user" | "system"
+export type RoleEnum = "user" | "system" | "assistant"
 
 export type Trace = {
   id: string
