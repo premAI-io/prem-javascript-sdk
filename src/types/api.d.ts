@@ -10,46 +10,22 @@ type XOR<T, U> = (T | U) extends object ? (Without<T, U> & U) | (Without<U, T> &
 type OneOf<T extends any[]> = T extends [infer Only] ? Only : T extends [infer A, infer B, ...infer Rest] ? OneOf<[XOR<A, B>, ...Rest]> : never;
 
 export interface paths {
-  "/api/playgrounds/image/{sharable_playground_uuid}": {
-    get: operations["api_playgrounds_image_retrieve"];
-  };
-  "/api/playgrounds/ot-info/{sharable_playground_uuid}": {
-    get: operations["api_playgrounds_ot_info_retrieve"];
-  };
-  "/api/projects/data-points/": {
-    get: operations["api_projects_data_points_list"];
-    post: operations["api_projects_data_points_create"];
-  };
-  "/api/projects/data-points/{id}/": {
-    get: operations["api_projects_data_points_retrieve"];
-    put: operations["api_projects_data_points_update"];
-    delete: operations["api_projects_data_points_destroy"];
-    patch: operations["api_projects_data_points_partial_update"];
-  };
-  "/api/projects/traces/": {
-    post: operations["api_projects_traces_create"];
-  };
-  "/api/providers/": {
-    get: operations["api_providers_retrieve"];
-  };
-  "/api/providers/leaderboard": {
-    get: operations["api_providers_leaderboard_retrieve"];
-  };
-  "/api/schema/": {
-    /**
-     * @description OpenApi3 schema for this API. Format can be selected via content negotiation.
-     *
-     * - YAML: application/vnd.oai.openapi
-     * - JSON: application/vnd.oai.openapi+json
-     */
-    get: operations["api_schema_retrieve"];
-  };
   "/auth-token/": {
     post: operations["auth_token_create"];
   };
   "/v1/chat/completions": {
     /** @description Creates a model response for the given chat conversation. */
     post: operations["v1_chat_completions_create"];
+  };
+  "/v1/data-points/": {
+    get: operations["v1_data_points_list"];
+    post: operations["v1_data_points_create"];
+  };
+  "/v1/data-points/{id}/": {
+    get: operations["v1_data_points_retrieve"];
+    put: operations["v1_data_points_update"];
+    delete: operations["v1_data_points_destroy"];
+    patch: operations["v1_data_points_partial_update"];
   };
   "/v1/embeddings": {
     /** @description Creates embeddings for the given input. */
@@ -235,7 +211,8 @@ export interface components {
     EmbeddingsInput: {
       /** @description The ID of the project to use. */
       project_id: number;
-      model?: string;
+      /** @description The model to generate the embeddings. */
+      model: string;
       /** @default float */
       encoding_format?: "float" | "base64";
       /** @description Embedding Input */
@@ -353,35 +330,6 @@ export interface components {
        * @enum {string}
        */
       code: "CatchAllError";
-    };
-    LeaderboardItem: {
-      provider: string;
-      provider_slug: string;
-      provider_name: string;
-      /** Format: double */
-      avg_final_score: number;
-      /** Format: double */
-      avg_tokens_per_second: number;
-      /** Format: double */
-      avg_uptime: number;
-      avg_uptime_score: number;
-      avg_tokens_score: number;
-    };
-    LeaderboardResponse: {
-      days: number;
-      leaderboard: {
-          provider: string;
-          provider_slug: string;
-          provider_name: string;
-          /** Format: double */
-          avg_final_score: number;
-          /** Format: double */
-          avg_tokens_per_second: number;
-          /** Format: double */
-          avg_uptime: number;
-          avg_uptime_score: number;
-          avg_tokens_score: number;
-        }[];
     };
     Message: {
       /**
@@ -559,40 +507,6 @@ export interface components {
      * @enum {string}
      */
     RoleEnum: "user" | "system" | "assistant";
-    Trace: {
-      /** Format: uuid */
-      id: string;
-      model_name: string;
-      /** Format: date-time */
-      created_at: string;
-      /** Format: date-time */
-      updated_at: string;
-      is_deleted?: boolean;
-      /** Format: date-time */
-      start_time: string;
-      /** Format: date-time */
-      end_time: string;
-      input_prompt?: string;
-      /** Format: uri */
-      input_file_prompt?: string | null;
-      input_prompt_tokens_number: number;
-      endpoint_type?: string | null;
-      /** Format: decimal */
-      privacy_score?: string | null;
-      output_text?: string;
-      output_text_tokens_number: number;
-      http_status_code?: number | null;
-      raw_request?: {
-        [key: string]: unknown;
-      } | null;
-      raw_response?: {
-        [key: string]: unknown;
-      } | null;
-      tag?: string | null;
-      error?: string | null;
-      text_to_text_model_parameters?: number | null;
-      api_key?: number | null;
-    };
     UnprocessableEntityError: {
       message: string;
       /**
@@ -654,476 +568,6 @@ export type external = Record<string, never>;
 
 export interface operations {
 
-  api_playgrounds_image_retrieve: {
-    parameters: {
-      path: {
-        sharable_playground_uuid: string;
-      };
-    };
-    responses: {
-      /** @description No response body */
-      200: {
-        content: never;
-      };
-    };
-  };
-  api_playgrounds_ot_info_retrieve: {
-    parameters: {
-      path: {
-        sharable_playground_uuid: string;
-      };
-    };
-    responses: {
-      /** @description No response body */
-      200: {
-        content: never;
-      };
-    };
-  };
-  api_projects_data_points_list: {
-    responses: {
-      200: {
-        content: {
-          "application/json": ({
-              id: number;
-              /** Format: date-time */
-              created_at: string;
-              /** Format: date-time */
-              updated_at: string;
-              input?: string | null;
-              output?: string | null;
-              positive: boolean;
-              /** Format: uuid */
-              trace?: string | null;
-            })[];
-        };
-      };
-    };
-  };
-  api_projects_data_points_create: {
-    requestBody: {
-      content: {
-        "application/json": {
-          id: number;
-          input?: string | null;
-          output?: string | null;
-          positive: boolean;
-          trace?: string | null;
-          project: number;
-        };
-        "application/x-www-form-urlencoded": {
-          id: number;
-          input?: string | null;
-          output?: string | null;
-          positive: boolean;
-          trace?: string | null;
-          project: number;
-        };
-        "multipart/form-data": {
-          id: number;
-          input?: string | null;
-          output?: string | null;
-          positive: boolean;
-          trace?: string | null;
-          project: number;
-        };
-      };
-    };
-    responses: {
-      201: {
-        content: {
-          "application/json": {
-            id: number;
-            input?: string | null;
-            output?: string | null;
-            positive: boolean;
-            trace?: string | null;
-            project: number;
-          };
-        };
-      };
-    };
-  };
-  api_projects_data_points_retrieve: {
-    parameters: {
-      path: {
-        /** @description A unique integer value identifying this data point. */
-        id: number;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": {
-            id: number;
-            /** Format: date-time */
-            created_at: string;
-            /** Format: date-time */
-            updated_at: string;
-            input?: string | null;
-            output?: string | null;
-            positive: boolean;
-            /** Format: uuid */
-            trace?: string | null;
-          };
-        };
-      };
-    };
-  };
-  api_projects_data_points_update: {
-    parameters: {
-      path: {
-        /** @description A unique integer value identifying this data point. */
-        id: number;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": {
-          id: number;
-          input?: string | null;
-          output?: string | null;
-          positive: boolean;
-          trace?: string | null;
-          project: number;
-        };
-        "application/x-www-form-urlencoded": {
-          id: number;
-          input?: string | null;
-          output?: string | null;
-          positive: boolean;
-          trace?: string | null;
-          project: number;
-        };
-        "multipart/form-data": {
-          id: number;
-          input?: string | null;
-          output?: string | null;
-          positive: boolean;
-          trace?: string | null;
-          project: number;
-        };
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": {
-            id: number;
-            input?: string | null;
-            output?: string | null;
-            positive: boolean;
-            trace?: string | null;
-            project: number;
-          };
-        };
-      };
-    };
-  };
-  api_projects_data_points_destroy: {
-    parameters: {
-      path: {
-        /** @description A unique integer value identifying this data point. */
-        id: number;
-      };
-    };
-    responses: {
-      /** @description No response body */
-      204: {
-        content: never;
-      };
-    };
-  };
-  api_projects_data_points_partial_update: {
-    parameters: {
-      path: {
-        /** @description A unique integer value identifying this data point. */
-        id: number;
-      };
-    };
-    requestBody?: {
-      content: {
-        "application/json": {
-          id?: number;
-          /** Format: date-time */
-          created_at?: string;
-          /** Format: date-time */
-          updated_at?: string;
-          input?: string | null;
-          output?: string | null;
-          positive?: boolean;
-          /** Format: uuid */
-          trace?: string | null;
-        };
-        "application/x-www-form-urlencoded": {
-          id?: number;
-          /** Format: date-time */
-          created_at?: string;
-          /** Format: date-time */
-          updated_at?: string;
-          input?: string | null;
-          output?: string | null;
-          positive?: boolean;
-          /** Format: uuid */
-          trace?: string | null;
-        };
-        "multipart/form-data": {
-          id?: number;
-          /** Format: date-time */
-          created_at?: string;
-          /** Format: date-time */
-          updated_at?: string;
-          input?: string | null;
-          output?: string | null;
-          positive?: boolean;
-          /** Format: uuid */
-          trace?: string | null;
-        };
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": {
-            id: number;
-            /** Format: date-time */
-            created_at: string;
-            /** Format: date-time */
-            updated_at: string;
-            input?: string | null;
-            output?: string | null;
-            positive: boolean;
-            /** Format: uuid */
-            trace?: string | null;
-          };
-        };
-      };
-    };
-  };
-  api_projects_traces_create: {
-    requestBody: {
-      content: {
-        "application/json": {
-          /** Format: uuid */
-          id: string;
-          model_name: string;
-          /** Format: date-time */
-          created_at: string;
-          /** Format: date-time */
-          updated_at: string;
-          is_deleted?: boolean;
-          /** Format: date-time */
-          start_time: string;
-          /** Format: date-time */
-          end_time: string;
-          input_prompt?: string;
-          /** Format: uri */
-          input_file_prompt?: string | null;
-          input_prompt_tokens_number: number;
-          endpoint_type?: string | null;
-          /** Format: decimal */
-          privacy_score?: string | null;
-          output_text?: string;
-          output_text_tokens_number: number;
-          http_status_code?: number | null;
-          raw_request?: {
-            [key: string]: unknown;
-          } | null;
-          raw_response?: {
-            [key: string]: unknown;
-          } | null;
-          tag?: string | null;
-          error?: string | null;
-          text_to_text_model_parameters?: number | null;
-          api_key?: number | null;
-        };
-        "application/x-www-form-urlencoded": {
-          /** Format: uuid */
-          id: string;
-          model_name: string;
-          /** Format: date-time */
-          created_at: string;
-          /** Format: date-time */
-          updated_at: string;
-          is_deleted?: boolean;
-          /** Format: date-time */
-          start_time: string;
-          /** Format: date-time */
-          end_time: string;
-          input_prompt?: string;
-          /** Format: uri */
-          input_file_prompt?: string | null;
-          input_prompt_tokens_number: number;
-          endpoint_type?: string | null;
-          /** Format: decimal */
-          privacy_score?: string | null;
-          output_text?: string;
-          output_text_tokens_number: number;
-          http_status_code?: number | null;
-          raw_request?: {
-            [key: string]: unknown;
-          } | null;
-          raw_response?: {
-            [key: string]: unknown;
-          } | null;
-          tag?: string | null;
-          error?: string | null;
-          text_to_text_model_parameters?: number | null;
-          api_key?: number | null;
-        };
-        "multipart/form-data": {
-          /** Format: uuid */
-          id: string;
-          model_name: string;
-          /** Format: date-time */
-          created_at: string;
-          /** Format: date-time */
-          updated_at: string;
-          is_deleted?: boolean;
-          /** Format: date-time */
-          start_time: string;
-          /** Format: date-time */
-          end_time: string;
-          input_prompt?: string;
-          /** Format: uri */
-          input_file_prompt?: string | null;
-          input_prompt_tokens_number: number;
-          endpoint_type?: string | null;
-          /** Format: decimal */
-          privacy_score?: string | null;
-          output_text?: string;
-          output_text_tokens_number: number;
-          http_status_code?: number | null;
-          raw_request?: {
-            [key: string]: unknown;
-          } | null;
-          raw_response?: {
-            [key: string]: unknown;
-          } | null;
-          tag?: string | null;
-          error?: string | null;
-          text_to_text_model_parameters?: number | null;
-          api_key?: number | null;
-        };
-      };
-    };
-    responses: {
-      201: {
-        content: {
-          "application/json": {
-            /** Format: uuid */
-            id: string;
-            model_name: string;
-            /** Format: date-time */
-            created_at: string;
-            /** Format: date-time */
-            updated_at: string;
-            is_deleted?: boolean;
-            /** Format: date-time */
-            start_time: string;
-            /** Format: date-time */
-            end_time: string;
-            input_prompt?: string;
-            /** Format: uri */
-            input_file_prompt?: string | null;
-            input_prompt_tokens_number: number;
-            endpoint_type?: string | null;
-            /** Format: decimal */
-            privacy_score?: string | null;
-            output_text?: string;
-            output_text_tokens_number: number;
-            http_status_code?: number | null;
-            raw_request?: {
-              [key: string]: unknown;
-            } | null;
-            raw_response?: {
-              [key: string]: unknown;
-            } | null;
-            tag?: string | null;
-            error?: string | null;
-            text_to_text_model_parameters?: number | null;
-            api_key?: number | null;
-          };
-        };
-      };
-    };
-  };
-  api_providers_retrieve: {
-    parameters: {
-      query?: {
-        /** @description Number of days to retrieve */
-        days?: number;
-      };
-    };
-    responses: {
-      /** @description No response body */
-      200: {
-        content: never;
-      };
-    };
-  };
-  api_providers_leaderboard_retrieve: {
-    parameters: {
-      query?: {
-        /** @description Number of days to retrieve */
-        days?: number;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": {
-            days: number;
-            leaderboard: {
-                provider: string;
-                provider_slug: string;
-                provider_name: string;
-                /** Format: double */
-                avg_final_score: number;
-                /** Format: double */
-                avg_tokens_per_second: number;
-                /** Format: double */
-                avg_uptime: number;
-                avg_uptime_score: number;
-                avg_tokens_score: number;
-              }[];
-          };
-        };
-      };
-    };
-  };
-  /**
-   * @description OpenApi3 schema for this API. Format can be selected via content negotiation.
-   *
-   * - YAML: application/vnd.oai.openapi
-   * - JSON: application/vnd.oai.openapi+json
-   */
-  api_schema_retrieve: {
-    parameters: {
-      query?: {
-        format?: "json" | "yaml";
-        lang?: "af" | "ar" | "ar-dz" | "ast" | "az" | "be" | "bg" | "bn" | "br" | "bs" | "ca" | "ckb" | "cs" | "cy" | "da" | "de" | "dsb" | "el" | "en" | "en-au" | "en-gb" | "eo" | "es" | "es-ar" | "es-co" | "es-mx" | "es-ni" | "es-ve" | "et" | "eu" | "fa" | "fi" | "fr" | "fy" | "ga" | "gd" | "gl" | "he" | "hi" | "hr" | "hsb" | "hu" | "hy" | "ia" | "id" | "ig" | "io" | "is" | "it" | "ja" | "ka" | "kab" | "kk" | "km" | "kn" | "ko" | "ky" | "lb" | "lt" | "lv" | "mk" | "ml" | "mn" | "mr" | "ms" | "my" | "nb" | "ne" | "nl" | "nn" | "os" | "pa" | "pl" | "pt" | "pt-br" | "ro" | "ru" | "sk" | "sl" | "sq" | "sr" | "sr-latn" | "sv" | "sw" | "ta" | "te" | "tg" | "th" | "tk" | "tr" | "tt" | "udm" | "uk" | "ur" | "uz" | "vi" | "zh-hans" | "zh-hant";
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/vnd.oai.openapi": {
-            [key: string]: unknown;
-          };
-          "application/yaml": {
-            [key: string]: unknown;
-          };
-          "application/vnd.oai.openapi+json": {
-            [key: string]: unknown;
-          };
-          "application/json": {
-            [key: string]: unknown;
-          };
-        };
-      };
-    };
-  };
   auth_token_create: {
     requestBody: {
       content: {
@@ -1537,6 +981,226 @@ export interface operations {
       };
     };
   };
+  v1_data_points_list: {
+    responses: {
+      200: {
+        content: {
+          "application/json": ({
+              id: number;
+              /** Format: date-time */
+              created_at: string;
+              /** Format: date-time */
+              updated_at: string;
+              input?: string | null;
+              output?: string | null;
+              positive: boolean;
+              /** Format: uuid */
+              trace?: string | null;
+            })[];
+        };
+      };
+    };
+  };
+  v1_data_points_create: {
+    requestBody: {
+      content: {
+        "application/json": {
+          id: number;
+          input?: string | null;
+          output?: string | null;
+          positive: boolean;
+          trace?: string | null;
+          project: number;
+        };
+        "application/x-www-form-urlencoded": {
+          id: number;
+          input?: string | null;
+          output?: string | null;
+          positive: boolean;
+          trace?: string | null;
+          project: number;
+        };
+        "multipart/form-data": {
+          id: number;
+          input?: string | null;
+          output?: string | null;
+          positive: boolean;
+          trace?: string | null;
+          project: number;
+        };
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": {
+            id: number;
+            input?: string | null;
+            output?: string | null;
+            positive: boolean;
+            trace?: string | null;
+            project: number;
+          };
+        };
+      };
+    };
+  };
+  v1_data_points_retrieve: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this data point. */
+        id: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": {
+            id: number;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            updated_at: string;
+            input?: string | null;
+            output?: string | null;
+            positive: boolean;
+            /** Format: uuid */
+            trace?: string | null;
+          };
+        };
+      };
+    };
+  };
+  v1_data_points_update: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this data point. */
+        id: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          id: number;
+          input?: string | null;
+          output?: string | null;
+          positive: boolean;
+          trace?: string | null;
+          project: number;
+        };
+        "application/x-www-form-urlencoded": {
+          id: number;
+          input?: string | null;
+          output?: string | null;
+          positive: boolean;
+          trace?: string | null;
+          project: number;
+        };
+        "multipart/form-data": {
+          id: number;
+          input?: string | null;
+          output?: string | null;
+          positive: boolean;
+          trace?: string | null;
+          project: number;
+        };
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": {
+            id: number;
+            input?: string | null;
+            output?: string | null;
+            positive: boolean;
+            trace?: string | null;
+            project: number;
+          };
+        };
+      };
+    };
+  };
+  v1_data_points_destroy: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this data point. */
+        id: number;
+      };
+    };
+    responses: {
+      /** @description No response body */
+      204: {
+        content: never;
+      };
+    };
+  };
+  v1_data_points_partial_update: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this data point. */
+        id: number;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": {
+          id?: number;
+          /** Format: date-time */
+          created_at?: string;
+          /** Format: date-time */
+          updated_at?: string;
+          input?: string | null;
+          output?: string | null;
+          positive?: boolean;
+          /** Format: uuid */
+          trace?: string | null;
+        };
+        "application/x-www-form-urlencoded": {
+          id?: number;
+          /** Format: date-time */
+          created_at?: string;
+          /** Format: date-time */
+          updated_at?: string;
+          input?: string | null;
+          output?: string | null;
+          positive?: boolean;
+          /** Format: uuid */
+          trace?: string | null;
+        };
+        "multipart/form-data": {
+          id?: number;
+          /** Format: date-time */
+          created_at?: string;
+          /** Format: date-time */
+          updated_at?: string;
+          input?: string | null;
+          output?: string | null;
+          positive?: boolean;
+          /** Format: uuid */
+          trace?: string | null;
+        };
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": {
+            id: number;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            updated_at: string;
+            input?: string | null;
+            output?: string | null;
+            positive: boolean;
+            /** Format: uuid */
+            trace?: string | null;
+          };
+        };
+      };
+    };
+  };
   /** @description Creates embeddings for the given input. */
   v1_embeddings_create: {
     parameters: {
@@ -1550,7 +1214,8 @@ export interface operations {
         "application/json": {
           /** @description The ID of the project to use. */
           project_id: number;
-          model?: string;
+          /** @description The model to generate the embeddings. */
+          model: string;
           /** @default float */
           encoding_format?: "float" | "base64";
           /** @description Embedding Input */
@@ -1559,7 +1224,8 @@ export interface operations {
         "application/x-www-form-urlencoded": {
           /** @description The ID of the project to use. */
           project_id: number;
-          model?: string;
+          /** @description The model to generate the embeddings. */
+          model: string;
           /** @default float */
           encoding_format?: "float" | "base64";
           /** @description Embedding Input */
@@ -1568,7 +1234,8 @@ export interface operations {
         "multipart/form-data": {
           /** @description The ID of the project to use. */
           project_id: number;
-          model?: string;
+          /** @description The model to generate the embeddings. */
+          model: string;
           /** @default float */
           encoding_format?: "float" | "base64";
           /** @description Embedding Input */

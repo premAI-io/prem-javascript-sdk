@@ -1,13 +1,9 @@
 import axios, { Axios, AxiosError, AxiosRequestConfig, CreateAxiosDefaults } from "axios"
 import { PremBaseConfig } from "$types/index"
 
-import playgroundsModule from "$modules/playgrounds"
-import datapointsModule from "$modules/datapoints"
-import tracesModule from "$modules/traces"
-import providersModule from "$modules/providers"
-import apiModule from "$modules/api"
 import authtokenModule from "$modules/auth.token"
 import chatcompletionsModule from "$modules/chat.completions"
+import datapointsModule from "$modules/datapoints"
 import embeddingsModule from "$modules/embeddings"
 import finetuningModule from "$modules/finetuning"
 
@@ -15,13 +11,9 @@ export default class Prem {
   config: PremBaseConfig & { baseUrl: string }
   axios: Axios
 
-  playgrounds = new playgroundsModule(this)
-	datapoints = new datapointsModule(this)
-	traces = new tracesModule(this)
-	providers = new providersModule(this)
-	api = new apiModule(this)
-	auth = { token: new authtokenModule(this) }
+  auth = { token: new authtokenModule(this) }
 	chat = { completions: new chatcompletionsModule(this) }
+	datapoints = new datapointsModule(this)
 	embeddings = new embeddingsModule(this)
 	finetuning = new finetuningModule(this)
 

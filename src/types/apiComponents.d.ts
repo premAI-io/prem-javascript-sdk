@@ -231,7 +231,10 @@ export type EmbeddingsInput = {
    * The ID of the project to use.
    */
   project_id: number
-  model?: string
+  /**
+   * The model to generate the embeddings.
+   */
+  model: string
   encoding_format?: ("float" | "base64") & string
   /**
    * Embedding Input
@@ -408,34 +411,6 @@ export type InternalServerError =
       code: "CatchAllError"
       [k: string]: unknown
     }
-
-export type LeaderboardItem = {
-  provider: string
-  provider_slug: string
-  provider_name: string
-  avg_final_score: number
-  avg_tokens_per_second: number
-  avg_uptime: number
-  avg_uptime_score: number
-  avg_tokens_score: number
-  [k: string]: unknown
-}
-
-export type LeaderboardResponse = {
-  days: number
-  leaderboard: {
-    provider: string
-    provider_slug: string
-    provider_name: string
-    avg_final_score: number
-    avg_tokens_per_second: number
-    avg_uptime: number
-    avg_uptime_score: number
-    avg_tokens_score: number
-    [k: string]: unknown
-  }[]
-  [k: string]: unknown
-}
 
 export type Message = {
   /**
@@ -652,35 +627,6 @@ export type RetrieveFineTuningResponse = {
  * * `assistant` - assistant
  */
 export type RoleEnum = "user" | "system" | "assistant"
-
-export type Trace = {
-  id: string
-  model_name: string
-  created_at: string
-  updated_at: string
-  is_deleted?: boolean
-  start_time: string
-  end_time: string
-  input_prompt?: string
-  input_file_prompt?: string
-  input_prompt_tokens_number: number
-  endpoint_type?: string
-  privacy_score?: string
-  output_text?: string
-  output_text_tokens_number: number
-  http_status_code?: number
-  raw_request?: {
-    [k: string]: unknown
-  }
-  raw_response?: {
-    [k: string]: unknown
-  }
-  tag?: string
-  error?: string
-  text_to_text_model_parameters?: number
-  api_key?: number
-  [k: string]: unknown
-}
 
 export type UnprocessableEntityError = {
   message: string
