@@ -19,13 +19,6 @@ export type APIResponseValidationError = {
  */
 export type APIResponseValidationErrorCodeEnum = "APIResponseValidationError"
 
-export type AuthToken = {
-  username: string
-  password: string
-  token: string
-  [k: string]: unknown
-}
-
 export type AuthenticationError = {
   message: string
   /**

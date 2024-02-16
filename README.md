@@ -34,7 +34,7 @@ const messages = [
 ]
 
 // Create completion
-const responseSync = await client.completions.create({
+const responseSync = await client.chat.completions.create({
   project_id,
   messages,
   model,
@@ -44,7 +44,7 @@ const responseSync = await client.completions.create({
 console.log(responseSync)
 
 // Create completion with stream
-const responseAsync = await client.completions.create({
+const responseAsync = await client.chat.completions.create({
   project_id,
   messages,
   model,
@@ -59,4 +59,3 @@ for await (const chunk of responseAsync) {
 
 console.log("\nTrace ID", responseAsync.trace_id)
 ```
-

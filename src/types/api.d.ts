@@ -10,9 +10,6 @@ type XOR<T, U> = (T | U) extends object ? (Without<T, U> & U) | (Without<U, T> &
 type OneOf<T extends any[]> = T extends [infer Only] ? Only : T extends [infer A, infer B, ...infer Rest] ? OneOf<[XOR<A, B>, ...Rest]> : never;
 
 export interface paths {
-  "/auth-token/": {
-    post: operations["auth_token_create"];
-  };
   "/v1/chat/completions": {
     /** @description Creates a model response for the given chat conversation. */
     post: operations["v1_chat_completions_create"];
@@ -58,11 +55,6 @@ export interface components {
      * @enum {string}
      */
     APIResponseValidationErrorCodeEnum: "APIResponseValidationError";
-    AuthToken: {
-      username: string;
-      password: string;
-      token: string;
-    };
     AuthenticationError: {
       message: string;
       /**
@@ -568,38 +560,6 @@ export type external = Record<string, never>;
 
 export interface operations {
 
-  auth_token_create: {
-    requestBody: {
-      content: {
-        "application/x-www-form-urlencoded": {
-          username: string;
-          password: string;
-          token: string;
-        };
-        "multipart/form-data": {
-          username: string;
-          password: string;
-          token: string;
-        };
-        "application/json": {
-          username: string;
-          password: string;
-          token: string;
-        };
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": {
-            username: string;
-            password: string;
-            token: string;
-          };
-        };
-      };
-    };
-  };
   /** @description Creates a model response for the given chat conversation. */
   v1_chat_completions_create: {
     parameters: {

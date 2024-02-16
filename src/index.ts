@@ -1,7 +1,6 @@
 import axios, { Axios, AxiosError, AxiosRequestConfig, CreateAxiosDefaults } from "axios"
 import { PremBaseConfig } from "$types/index"
 
-import authtokenModule from "$modules/auth.token"
 import chatcompletionsModule from "$modules/chat.completions"
 import datapointsModule from "$modules/datapoints"
 import embeddingsModule from "$modules/embeddings"
@@ -11,8 +10,7 @@ export default class Prem {
   config: PremBaseConfig & { baseUrl: string }
   axios: Axios
 
-  auth = { token: new authtokenModule(this) }
-	chat = { completions: new chatcompletionsModule(this) }
+  chat = { completions: new chatcompletionsModule(this) }
 	datapoints = new datapointsModule(this)
 	embeddings = new embeddingsModule(this)
 	finetuning = new finetuningModule(this)
