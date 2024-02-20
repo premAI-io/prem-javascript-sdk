@@ -452,6 +452,7 @@ export type ModelNotFoundErrorCodeEnum = "ModelNotFoundError"
  * * `together` - Together
  * * `fireworksai` - Fireworks AI
  * * `mistralai` - Mistral AI
+ * * `prem` - Prem AI
  */
 export type ModelProviderEnum =
   | "openai"
@@ -466,6 +467,7 @@ export type ModelProviderEnum =
   | "together"
   | "fireworksai"
   | "mistralai"
+  | "prem"
 
 /**
  * * `text2text` - Text to Text
@@ -497,6 +499,7 @@ export type Models = {
         | "together"
         | "fireworksai"
         | "mistralai"
+        | "prem"
       )
     | ""
     | null

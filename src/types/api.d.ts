@@ -369,9 +369,10 @@ export interface components {
      * * `together` - Together
      * * `fireworksai` - Fireworks AI
      * * `mistralai` - Mistral AI
+     * * `prem` - Prem AI
      * @enum {string}
      */
-    ModelProviderEnum: "openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai";
+    ModelProviderEnum: "openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem";
     /**
      * @description * `text2text` - Text to Text
      * * `text2image` - Text to Image
@@ -389,7 +390,7 @@ export interface components {
        * @enum {string}
        */
       model_type?: "text2text" | "text2image" | "text2vector";
-      model_provider?: ("openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai") | "" | null;
+      model_provider?: ("openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem") | "" | null;
     };
     NotFoundError: OneOf<[{
       message: string;
@@ -1872,7 +1873,7 @@ export interface operations {
                * @enum {string}
                */
               model_type?: "text2text" | "text2image" | "text2vector";
-              model_provider?: ("openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai") | "" | null;
+              model_provider?: ("openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem") | "" | null;
             })[];
         };
       };
@@ -1898,7 +1899,7 @@ export interface operations {
              * @enum {string}
              */
             model_type?: "text2text" | "text2image" | "text2vector";
-            model_provider?: ("openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai") | "" | null;
+            model_provider?: ("openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem") | "" | null;
           };
         };
       };
