@@ -33,6 +33,8 @@ export type AuthenticationError = {
  */
 export type AuthenticationErrorCodeEnum = "AuthenticationError"
 
+export type BlankEnum = ""
+
 export type CatchAllError = {
   message: string
   /**
@@ -57,13 +59,12 @@ export type ChatCompletionInput = {
    */
   messages: {
     /**
-     * The role of the sender (e.g., 'user', 'assistant' or 'system').
+     * The role of the sender (e.g., 'user' or 'assistant').
      *
      * * `user` - user
-     * * `system` - system
      * * `assistant` - assistant
      */
-    role: "user" | "system" | "assistant"
+    role: "user" | "assistant"
     /**
      * The content of the message.
      */
@@ -74,6 +75,10 @@ export type ChatCompletionInput = {
    * ID of the model to use. See the model endpoint compatibility table for details.
    */
   model?: string
+  /**
+   * The system prompt to use.
+   */
+  system_prompt?: string
   /**
    * Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency.
    */
@@ -407,13 +412,12 @@ export type InternalServerError =
 
 export type Message = {
   /**
-   * The role of the sender (e.g., 'user', 'assistant' or 'system').
+   * The role of the sender (e.g., 'user' or 'assistant').
    *
    * * `user` - user
-   * * `system` - system
    * * `assistant` - assistant
    */
-  role: "user" | "system" | "assistant"
+  role: "user" | "assistant"
   /**
    * The content of the message.
    */
@@ -435,6 +439,70 @@ export type ModelNotFoundError = {
  */
 export type ModelNotFoundErrorCodeEnum = "ModelNotFoundError"
 
+/**
+ * * `openai` - OpenAI
+ * * `azure` - Azure OpenAI
+ * * `cohere` - Cohere
+ * * `anthropic` - Anthropic
+ * * `cloudflare` - Cloudflare
+ * * `deepinfra` - Deep Infra
+ * * `lamini` - Lamini
+ * * `octoai` - Octo AI
+ * * `replicate` - Replicate
+ * * `together` - Together
+ * * `fireworksai` - Fireworks AI
+ * * `mistralai` - Mistral AI
+ */
+export type ModelProviderEnum =
+  | "openai"
+  | "azure"
+  | "cohere"
+  | "anthropic"
+  | "cloudflare"
+  | "deepinfra"
+  | "lamini"
+  | "octoai"
+  | "replicate"
+  | "together"
+  | "fireworksai"
+  | "mistralai"
+
+/**
+ * * `text2text` - Text to Text
+ * * `text2image` - Text to Image
+ * * `text2vector` - Text to Vector
+ */
+export type ModelTypeEnum = "text2text" | "text2image" | "text2vector"
+
+export type Models = {
+  id: number
+  slug: string
+  /**
+   * * `text2text` - Text to Text
+   * * `text2image` - Text to Image
+   * * `text2vector` - Text to Vector
+   */
+  model_type?: "text2text" | "text2image" | "text2vector"
+  model_provider?:
+    | (
+        | "openai"
+        | "azure"
+        | "cohere"
+        | "anthropic"
+        | "cloudflare"
+        | "deepinfra"
+        | "lamini"
+        | "octoai"
+        | "replicate"
+        | "together"
+        | "fireworksai"
+        | "mistralai"
+      )
+    | ""
+    | null
+  [k: string]: unknown
+}
+
 export type NotFoundError =
   | {
       message: string
@@ -452,6 +520,8 @@ export type NotFoundError =
       code: "ModelNotFoundError"
       [k: string]: unknown
     }
+
+export type NullEnum = null
 
 export type PatchedDataPoint = {
   id?: number
@@ -616,10 +686,9 @@ export type RetrieveFineTuningResponse = {
 
 /**
  * * `user` - user
- * * `system` - system
  * * `assistant` - assistant
  */
-export type RoleEnum = "user" | "system" | "assistant"
+export type RoleEnum = "user" | "assistant"
 
 export type UnprocessableEntityError = {
   message: string

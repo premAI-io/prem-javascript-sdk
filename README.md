@@ -27,17 +27,19 @@ project_id = PROJECT_ID
 The `completions` module allows you to generate completions based on user input. Here's an example:
 
 ```typescript
-const model = "gpt-3.5-turbo"
 const messages = [
-    {"role": "system", "content": "You are a helpful assistant."},
     {"role": "user", "content": "Who won the world series in 2020?"},
 ]
+const model = "gpt-3.5-turbo" // optional
+const systemPrompt = "You are a helpful assistant." // optional
+
 
 // Create completion
 const responseSync = await client.chat.completions.create({
   project_id,
   messages,
   model,
+  systemPrompt,
   stream: false
 })
 
@@ -48,6 +50,7 @@ const responseAsync = await client.chat.completions.create({
   project_id,
   messages,
   model,
+  systemPrompt,
   stream: true
 })
 

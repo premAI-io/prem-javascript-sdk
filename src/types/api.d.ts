@@ -36,6 +36,12 @@ export interface paths {
     /** @description Retrieve a finetuning job. */
     get: operations["v1_finetuning_retrieve"];
   };
+  "/v1/models/": {
+    get: operations["v1_models_list"];
+  };
+  "/v1/models/{id}/": {
+    get: operations["v1_models_retrieve"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -68,6 +74,8 @@ export interface components {
      * @enum {string}
      */
     AuthenticationErrorCodeEnum: "AuthenticationError";
+    /** @enum {unknown} */
+    BlankEnum: "";
     CatchAllError: {
       message: string;
       /**
@@ -87,18 +95,19 @@ export interface components {
       /** @description A list of messages comprising the conversation so far. */
       messages: ({
           /**
-           * @description The role of the sender (e.g., 'user', 'assistant' or 'system').
+           * @description The role of the sender (e.g., 'user' or 'assistant').
            *
            * * `user` - user
-           * * `system` - system
            * * `assistant` - assistant
            */
-          role: "user" | "system" | "assistant";
+          role: "user" | "assistant";
           /** @description The content of the message. */
           content: string;
         })[];
       /** @description ID of the model to use. See the model endpoint compatibility table for details. */
       model?: string;
+      /** @description The system prompt to use. */
+      system_prompt?: string;
       /**
        * Format: double
        * @description Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency.
@@ -325,13 +334,12 @@ export interface components {
     };
     Message: {
       /**
-       * @description The role of the sender (e.g., 'user', 'assistant' or 'system').
+       * @description The role of the sender (e.g., 'user' or 'assistant').
        *
        * * `user` - user
-       * * `system` - system
        * * `assistant` - assistant
        */
-      role: "user" | "system" | "assistant";
+      role: "user" | "assistant";
       /** @description The content of the message. */
       content: string;
     };
@@ -348,6 +356,41 @@ export interface components {
      * @enum {string}
      */
     ModelNotFoundErrorCodeEnum: "ModelNotFoundError";
+    /**
+     * @description * `openai` - OpenAI
+     * * `azure` - Azure OpenAI
+     * * `cohere` - Cohere
+     * * `anthropic` - Anthropic
+     * * `cloudflare` - Cloudflare
+     * * `deepinfra` - Deep Infra
+     * * `lamini` - Lamini
+     * * `octoai` - Octo AI
+     * * `replicate` - Replicate
+     * * `together` - Together
+     * * `fireworksai` - Fireworks AI
+     * * `mistralai` - Mistral AI
+     * @enum {string}
+     */
+    ModelProviderEnum: "openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai";
+    /**
+     * @description * `text2text` - Text to Text
+     * * `text2image` - Text to Image
+     * * `text2vector` - Text to Vector
+     * @enum {string}
+     */
+    ModelTypeEnum: "text2text" | "text2image" | "text2vector";
+    Models: {
+      id: number;
+      slug: string;
+      /**
+       * @description * `text2text` - Text to Text
+       * * `text2image` - Text to Image
+       * * `text2vector` - Text to Vector
+       * @enum {string}
+       */
+      model_type?: "text2text" | "text2image" | "text2vector";
+      model_provider?: ("openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai") | "" | null;
+    };
     NotFoundError: OneOf<[{
       message: string;
       /**
@@ -363,6 +406,8 @@ export interface components {
        */
       code: "ModelNotFoundError";
     }]>;
+    /** @enum {unknown} */
+    NullEnum: "";
     PatchedDataPoint: {
       id?: number;
       /** Format: date-time */
@@ -494,11 +539,10 @@ export interface components {
     };
     /**
      * @description * `user` - user
-     * * `system` - system
      * * `assistant` - assistant
      * @enum {string}
      */
-    RoleEnum: "user" | "system" | "assistant";
+    RoleEnum: "user" | "assistant";
     UnprocessableEntityError: {
       message: string;
       /**
@@ -576,18 +620,19 @@ export interface operations {
           /** @description A list of messages comprising the conversation so far. */
           messages: ({
               /**
-               * @description The role of the sender (e.g., 'user', 'assistant' or 'system').
+               * @description The role of the sender (e.g., 'user' or 'assistant').
                *
                * * `user` - user
-               * * `system` - system
                * * `assistant` - assistant
                */
-              role: "user" | "system" | "assistant";
+              role: "user" | "assistant";
               /** @description The content of the message. */
               content: string;
             })[];
           /** @description ID of the model to use. See the model endpoint compatibility table for details. */
           model?: string;
+          /** @description The system prompt to use. */
+          system_prompt?: string;
           /**
            * Format: double
            * @description Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency.
@@ -639,18 +684,19 @@ export interface operations {
           /** @description A list of messages comprising the conversation so far. */
           messages: ({
               /**
-               * @description The role of the sender (e.g., 'user', 'assistant' or 'system').
+               * @description The role of the sender (e.g., 'user' or 'assistant').
                *
                * * `user` - user
-               * * `system` - system
                * * `assistant` - assistant
                */
-              role: "user" | "system" | "assistant";
+              role: "user" | "assistant";
               /** @description The content of the message. */
               content: string;
             })[];
           /** @description ID of the model to use. See the model endpoint compatibility table for details. */
           model?: string;
+          /** @description The system prompt to use. */
+          system_prompt?: string;
           /**
            * Format: double
            * @description Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency.
@@ -702,18 +748,19 @@ export interface operations {
           /** @description A list of messages comprising the conversation so far. */
           messages: ({
               /**
-               * @description The role of the sender (e.g., 'user', 'assistant' or 'system').
+               * @description The role of the sender (e.g., 'user' or 'assistant').
                *
                * * `user` - user
-               * * `system` - system
                * * `assistant` - assistant
                */
-              role: "user" | "system" | "assistant";
+              role: "user" | "assistant";
               /** @description The content of the message. */
               content: string;
             })[];
           /** @description ID of the model to use. See the model endpoint compatibility table for details. */
           model?: string;
+          /** @description The system prompt to use. */
+          system_prompt?: string;
           /**
            * Format: double
            * @description Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency.
@@ -1806,6 +1853,52 @@ export interface operations {
              * @enum {string}
              */
             code: "CatchAllError";
+          };
+        };
+      };
+    };
+  };
+  v1_models_list: {
+    responses: {
+      200: {
+        content: {
+          "application/json": ({
+              id: number;
+              slug: string;
+              /**
+               * @description * `text2text` - Text to Text
+               * * `text2image` - Text to Image
+               * * `text2vector` - Text to Vector
+               * @enum {string}
+               */
+              model_type?: "text2text" | "text2image" | "text2vector";
+              model_provider?: ("openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai") | "" | null;
+            })[];
+        };
+      };
+    };
+  };
+  v1_models_retrieve: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this Model. */
+        id: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": {
+            id: number;
+            slug: string;
+            /**
+             * @description * `text2text` - Text to Text
+             * * `text2image` - Text to Image
+             * * `text2vector` - Text to Vector
+             * @enum {string}
+             */
+            model_type?: "text2text" | "text2image" | "text2vector";
+            model_provider?: ("openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai") | "" | null;
           };
         };
       };
