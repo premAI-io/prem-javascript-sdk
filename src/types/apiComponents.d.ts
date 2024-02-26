@@ -55,6 +55,10 @@ export type ChatCompletionInput = {
    */
   project_id: number
   /**
+   * The ID of the session to use. It helps to track the chat history.
+   */
+  session_id?: string
+  /**
    * A list of messages comprising the conversation so far.
    */
   messages: {
@@ -142,17 +146,30 @@ export type ChatCompletionInput = {
 
 export type ChatCompletionResponse = {
   /**
-   * A unique identifier for the chat completion. Each chunk has the same ID.
-   */
-  id: string
-  /**
    * A list of chat completion choices. Can be more than one if n is greater than 1.
    */
   choices: {
     /**
-     * The generated message in the chat completion choice.
+     * The index of the choice in the list of choices.
      */
-    message: string
+    index: number
+    /**
+     * The messages in the chat completion.
+     */
+    message: {
+      /**
+       * The role of the sender (e.g., 'user' or 'assistant').
+       *
+       * * `user` - user
+       * * `assistant` - assistant
+       */
+      role: "user" | "assistant"
+      /**
+       * The content of the message.
+       */
+      content: string
+      [k: string]: unknown
+    }
     /**
      * The reason the chat completion finished, e.g., 'stop' or 'length'.
      */
@@ -178,12 +195,16 @@ export type ChatCompletionResponse = {
   /**
    * The usage statistics for the completion.
    */
-  usage?: {
+  usage: {
+    prompt_tokens: number
     completion_tokens?: number
-    prompt_tokens?: number
-    total_tokens?: number
+    total_tokens: number
     [k: string]: unknown
   }
+  /**
+   * The trace ID of the completion.
+   */
+  trace_id: string
   [k: string]: unknown
 }
 
@@ -263,10 +284,10 @@ export type EmbeddingsResponse = {
   /**
    * The usage statistics for the completion.
    */
-  usage?: {
+  usage: {
+    prompt_tokens: number
     completion_tokens?: number
-    prompt_tokens?: number
-    total_tokens?: number
+    total_tokens: number
     [k: string]: unknown
   }
   /**
@@ -351,7 +372,6 @@ export type FineTuningSample = {
 }
 
 export type InputDataPoint = {
-  id: number
   input?: string
   output?: string
   positive: boolean
@@ -637,9 +657,26 @@ export type RateLimitErrorCodeEnum = "RateLimitError"
 
 export type ResponseChoice = {
   /**
-   * The generated message in the chat completion choice.
+   * The index of the choice in the list of choices.
    */
-  message: string
+  index: number
+  /**
+   * The messages in the chat completion.
+   */
+  message: {
+    /**
+     * The role of the sender (e.g., 'user' or 'assistant').
+     *
+     * * `user` - user
+     * * `assistant` - assistant
+     */
+    role: "user" | "assistant"
+    /**
+     * The content of the message.
+     */
+    content: string
+    [k: string]: unknown
+  }
   /**
    * The reason the chat completion finished, e.g., 'stop' or 'length'.
    */
@@ -708,9 +745,9 @@ export type UnprocessableEntityError = {
 export type UnprocessableEntityErrorCodeEnum = "UnprocessableEntityError"
 
 export type Usage = {
+  prompt_tokens: number
   completion_tokens?: number
-  prompt_tokens?: number
-  total_tokens?: number
+  total_tokens: number
   [k: string]: unknown
 }
 

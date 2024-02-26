@@ -92,6 +92,8 @@ export interface components {
     ChatCompletionInput: {
       /** @description The ID of the project to use. */
       project_id: number;
+      /** @description The ID of the session to use. It helps to track the chat history. */
+      session_id?: string;
       /** @description A list of messages comprising the conversation so far. */
       messages: ({
           /**
@@ -154,15 +156,25 @@ export interface components {
       user?: string | null;
     };
     ChatCompletionResponse: {
-      /** @description A unique identifier for the chat completion. Each chunk has the same ID. */
-      id: string;
       /** @description A list of chat completion choices. Can be more than one if n is greater than 1. */
-      choices: {
-          /** @description The generated message in the chat completion choice. */
-          message: string;
+      choices: ({
+          /** @description The index of the choice in the list of choices. */
+          index: number;
+          /** @description The messages in the chat completion. */
+          message: {
+            /**
+             * @description The role of the sender (e.g., 'user' or 'assistant').
+             *
+             * * `user` - user
+             * * `assistant` - assistant
+             */
+            role: "user" | "assistant";
+            /** @description The content of the message. */
+            content: string;
+          };
           /** @description The reason the chat completion finished, e.g., 'stop' or 'length'. */
           finish_reason: string;
-        }[];
+        })[];
       /** @description The Unix timestamp (in seconds) of when the chat completion was created. Each chunk has the same timestamp. */
       created: number;
       /** @description The model to generate the completion. */
@@ -172,11 +184,16 @@ export interface components {
       /** @description The ID of the provider that generated the completion. */
       provider_id: string;
       /** @description The usage statistics for the completion. */
-      usage?: {
+      usage: {
+        prompt_tokens: number;
         completion_tokens?: number;
-        prompt_tokens?: number;
-        total_tokens?: number;
+        total_tokens: number;
       };
+      /**
+       * Format: uuid
+       * @description The trace ID of the completion.
+       */
+      trace_id: string;
     };
     ConflictError: {
       message: string;
@@ -230,10 +247,10 @@ export interface components {
       /** @description The model to generate the embeddings. */
       model: string;
       /** @description The usage statistics for the completion. */
-      usage?: {
+      usage: {
+        prompt_tokens: number;
         completion_tokens?: number;
-        prompt_tokens?: number;
-        total_tokens?: number;
+        total_tokens: number;
       };
       /** @description The name of the provider that generated the completion. */
       provider_name: string;
@@ -282,7 +299,6 @@ export interface components {
       output: string;
     };
     InputDataPoint: {
-      id: number;
       input?: string | null;
       output?: string | null;
       positive: boolean;
@@ -513,8 +529,20 @@ export interface components {
      */
     RateLimitErrorCodeEnum: "RateLimitError";
     ResponseChoice: {
-      /** @description The generated message in the chat completion choice. */
-      message: string;
+      /** @description The index of the choice in the list of choices. */
+      index: number;
+      /** @description The messages in the chat completion. */
+      message: {
+        /**
+         * @description The role of the sender (e.g., 'user' or 'assistant').
+         *
+         * * `user` - user
+         * * `assistant` - assistant
+         */
+        role: "user" | "assistant";
+        /** @description The content of the message. */
+        content: string;
+      };
       /** @description The reason the chat completion finished, e.g., 'stop' or 'length'. */
       finish_reason: string;
     };
@@ -558,9 +586,9 @@ export interface components {
      */
     UnprocessableEntityErrorCodeEnum: "UnprocessableEntityError";
     Usage: {
+      prompt_tokens: number;
       completion_tokens?: number;
-      prompt_tokens?: number;
-      total_tokens?: number;
+      total_tokens: number;
     };
     ValidationDetail: {
       /** @description Error messages for the field. */
@@ -618,6 +646,8 @@ export interface operations {
         "application/json": {
           /** @description The ID of the project to use. */
           project_id: number;
+          /** @description The ID of the session to use. It helps to track the chat history. */
+          session_id?: string;
           /** @description A list of messages comprising the conversation so far. */
           messages: ({
               /**
@@ -682,6 +712,8 @@ export interface operations {
         "application/x-www-form-urlencoded": {
           /** @description The ID of the project to use. */
           project_id: number;
+          /** @description The ID of the session to use. It helps to track the chat history. */
+          session_id?: string;
           /** @description A list of messages comprising the conversation so far. */
           messages: ({
               /**
@@ -746,6 +778,8 @@ export interface operations {
         "multipart/form-data": {
           /** @description The ID of the project to use. */
           project_id: number;
+          /** @description The ID of the session to use. It helps to track the chat history. */
+          session_id?: string;
           /** @description A list of messages comprising the conversation so far. */
           messages: ({
               /**
@@ -813,15 +847,25 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            /** @description A unique identifier for the chat completion. Each chunk has the same ID. */
-            id: string;
             /** @description A list of chat completion choices. Can be more than one if n is greater than 1. */
-            choices: {
-                /** @description The generated message in the chat completion choice. */
-                message: string;
+            choices: ({
+                /** @description The index of the choice in the list of choices. */
+                index: number;
+                /** @description The messages in the chat completion. */
+                message: {
+                  /**
+                   * @description The role of the sender (e.g., 'user' or 'assistant').
+                   *
+                   * * `user` - user
+                   * * `assistant` - assistant
+                   */
+                  role: "user" | "assistant";
+                  /** @description The content of the message. */
+                  content: string;
+                };
                 /** @description The reason the chat completion finished, e.g., 'stop' or 'length'. */
                 finish_reason: string;
-              }[];
+              })[];
             /** @description The Unix timestamp (in seconds) of when the chat completion was created. Each chunk has the same timestamp. */
             created: number;
             /** @description The model to generate the completion. */
@@ -831,11 +875,16 @@ export interface operations {
             /** @description The ID of the provider that generated the completion. */
             provider_id: string;
             /** @description The usage statistics for the completion. */
-            usage?: {
+            usage: {
+              prompt_tokens: number;
               completion_tokens?: number;
-              prompt_tokens?: number;
-              total_tokens?: number;
+              total_tokens: number;
             };
+            /**
+             * Format: uuid
+             * @description The trace ID of the completion.
+             */
+            trace_id: string;
           };
         };
       };
@@ -1013,7 +1062,6 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": {
-          id: number;
           input?: string | null;
           output?: string | null;
           positive: boolean;
@@ -1021,7 +1069,6 @@ export interface operations {
           project: number;
         };
         "application/x-www-form-urlencoded": {
-          id: number;
           input?: string | null;
           output?: string | null;
           positive: boolean;
@@ -1029,7 +1076,6 @@ export interface operations {
           project: number;
         };
         "multipart/form-data": {
-          id: number;
           input?: string | null;
           output?: string | null;
           positive: boolean;
@@ -1042,7 +1088,6 @@ export interface operations {
       201: {
         content: {
           "application/json": {
-            id: number;
             input?: string | null;
             output?: string | null;
             positive: boolean;
@@ -1089,7 +1134,6 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": {
-          id: number;
           input?: string | null;
           output?: string | null;
           positive: boolean;
@@ -1097,7 +1141,6 @@ export interface operations {
           project: number;
         };
         "application/x-www-form-urlencoded": {
-          id: number;
           input?: string | null;
           output?: string | null;
           positive: boolean;
@@ -1105,7 +1148,6 @@ export interface operations {
           project: number;
         };
         "multipart/form-data": {
-          id: number;
           input?: string | null;
           output?: string | null;
           positive: boolean;
@@ -1118,7 +1160,6 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            id: number;
             input?: string | null;
             output?: string | null;
             positive: boolean;
@@ -1265,10 +1306,10 @@ export interface operations {
             /** @description The model to generate the embeddings. */
             model: string;
             /** @description The usage statistics for the completion. */
-            usage?: {
+            usage: {
+              prompt_tokens: number;
               completion_tokens?: number;
-              prompt_tokens?: number;
-              total_tokens?: number;
+              total_tokens: number;
             };
             /** @description The name of the provider that generated the completion. */
             provider_name: string;
