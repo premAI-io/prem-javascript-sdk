@@ -1,6 +1,8 @@
-# @premai/prem-sdk
+# Prem Javascript SDK
 
 ## Installation
+
+You can install the Prem Javascript SDK directly from npm.
 
 ```bash
 npm install @premai/prem-sdk
@@ -15,31 +17,32 @@ To use the Prem Javascript SDK, you need to obtain an API key from the Prem plat
 ```typescript
 import Prem from '@premai/prem-sdk';
 
-const client = Prem({
+const client = new Prem({
   apiKey: "YOUR_API_KEY"
 })
 
-project_id = PROJECT_ID
+const project_id = PROJECT_ID
 ```
 
-### Completions
+### Chat completion
 
-The `completions` module allows you to generate completions based on user input. Here's an example:
+The `chat.completions` module allows you to generate completions based on user input. Here's an example:
 
 ```typescript
 const messages = [
     {"role": "user", "content": "Who won the world series in 2020?"},
 ]
 const model = "gpt-3.5-turbo" // optional
-const systemPrompt = "You are a helpful assistant." // optional
-
+const system_prompt = "You are a helpful assistant." // optional
+const session_id = "my-session" // optional: a unique identifier to maintain session context, useful for tracking conversations or data across multiple requests
 
 // Create completion
 const responseSync = await client.chat.completions.create({
   project_id,
   messages,
   model,
-  systemPrompt,
+  session_id,
+  system_prompt,
   stream: false
 })
 
@@ -50,7 +53,8 @@ const responseAsync = await client.chat.completions.create({
   project_id,
   messages,
   model,
-  systemPrompt,
+  session_id,
+  system_prompt,
   stream: true
 })
 

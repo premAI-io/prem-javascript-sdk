@@ -473,6 +473,10 @@ export type ModelNotFoundErrorCodeEnum = "ModelNotFoundError"
  * * `fireworksai` - Fireworks AI
  * * `mistralai` - Mistral AI
  * * `prem` - Prem AI
+ * * `anyscale` - Anyscale
+ * * `openrouter` - Open Router
+ * * `perplexity` - Perplexity
+ * * `groq` - Groq
  */
 export type ModelProviderEnum =
   | "openai"
@@ -488,6 +492,10 @@ export type ModelProviderEnum =
   | "fireworksai"
   | "mistralai"
   | "prem"
+  | "anyscale"
+  | "openrouter"
+  | "perplexity"
+  | "groq"
 
 /**
  * * `text2text` - Text to Text
@@ -520,6 +528,10 @@ export type Models = {
         | "fireworksai"
         | "mistralai"
         | "prem"
+        | "anyscale"
+        | "openrouter"
+        | "perplexity"
+        | "groq"
       )
     | ""
     | null

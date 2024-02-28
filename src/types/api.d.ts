@@ -386,9 +386,13 @@ export interface components {
      * * `fireworksai` - Fireworks AI
      * * `mistralai` - Mistral AI
      * * `prem` - Prem AI
+     * * `anyscale` - Anyscale
+     * * `openrouter` - Open Router
+     * * `perplexity` - Perplexity
+     * * `groq` - Groq
      * @enum {string}
      */
-    ModelProviderEnum: "openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem";
+    ModelProviderEnum: "openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq";
     /**
      * @description * `text2text` - Text to Text
      * * `text2image` - Text to Image
@@ -406,7 +410,7 @@ export interface components {
        * @enum {string}
        */
       model_type?: "text2text" | "text2image" | "text2vector";
-      model_provider?: ("openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem") | "" | null;
+      model_provider?: ("openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
     };
     NotFoundError: OneOf<[{
       message: string;
@@ -635,12 +639,6 @@ export interface operations {
 
   /** @description Creates a model response for the given chat conversation. */
   v1_chat_completions_create: {
-    parameters: {
-      header: {
-        /** @description API Key for authentication */
-        Authorization: string;
-      };
-    };
     requestBody: {
       content: {
         "application/json": {
@@ -1252,12 +1250,6 @@ export interface operations {
   };
   /** @description Creates embeddings for the given input. */
   v1_embeddings_create: {
-    parameters: {
-      header: {
-        /** @description API Key for authentication */
-        Authorization: string;
-      };
-    };
     requestBody: {
       content: {
         "application/json": {
@@ -1470,12 +1462,6 @@ export interface operations {
   };
   /** @description Creates a finetuning job. */
   v1_finetuning_create: {
-    parameters: {
-      header: {
-        /** @description API Key for authentication */
-        Authorization: string;
-      };
-    };
     requestBody: {
       content: {
         "application/json": {
@@ -1717,10 +1703,6 @@ export interface operations {
   /** @description Retrieve a finetuning job. */
   v1_finetuning_retrieve: {
     parameters: {
-      header: {
-        /** @description API Key for authentication */
-        Authorization: string;
-      };
       path: {
         job_id: string;
       };
@@ -1914,7 +1896,7 @@ export interface operations {
                * @enum {string}
                */
               model_type?: "text2text" | "text2image" | "text2vector";
-              model_provider?: ("openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem") | "" | null;
+              model_provider?: ("openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
             })[];
         };
       };
@@ -1940,7 +1922,7 @@ export interface operations {
              * @enum {string}
              */
             model_type?: "text2text" | "text2image" | "text2vector";
-            model_provider?: ("openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem") | "" | null;
+            model_provider?: ("openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
           };
         };
       };
