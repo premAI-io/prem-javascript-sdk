@@ -1,12 +1,12 @@
 import { AxiosRequestConfig } from "axios"
 import Prem from "$src/index"
-import type { operations } from "$types/api"
+import type { CreateEmbeddingRequest, CreateEmbeddingResponse } from "$types/index"
 
-export default (client: Prem) => (params: operations["v1_embeddings_create"]["requestBody"]["content"]["application/json"], options?: AxiosRequestConfig): Promise<operations["v1_embeddings_create"]["responses"]["200"]["content"]["application/json"]> => {
+export default (client: Prem) => (params: CreateEmbeddingRequest, options?: AxiosRequestConfig): Promise<CreateEmbeddingResponse> => {
   return client.call({
-    method: "post",
+    method: "POST",
     url: `/v1/embeddings`,
-    ...params,
+    data: params,
     ...options
   })
 }
