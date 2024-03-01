@@ -258,7 +258,7 @@ export type EmbeddingsInput = {
   /**
    * Embedding Input
    */
-  input: (string | string[] | number[] | number[][])[]
+  input: string | string[] | number[] | number[][]
   [k: string]: unknown
 }
 

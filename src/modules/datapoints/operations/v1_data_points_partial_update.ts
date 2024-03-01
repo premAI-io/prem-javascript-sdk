@@ -6,7 +6,7 @@ export default (client: Prem) => (id: string, params: operations["v1_data_points
   return client.call({
     method: "patch",
     url: `/v1/data-points/${id}/`,
-    ...params,
+    data: params,
     ...options
   })
 }

@@ -234,7 +234,7 @@ export interface components {
       /** @default float */
       encoding_format?: "float" | "base64";
       /** @description Embedding Input */
-      input: (string | string[] | number[] | number[][])[];
+      input: string | string[] | number[] | number[][];
     };
     EmbeddingsResponse: {
       /** @description The embeddings for the input. */
@@ -1260,7 +1260,7 @@ export interface operations {
           /** @default float */
           encoding_format?: "float" | "base64";
           /** @description Embedding Input */
-          input: (string | string[] | number[] | number[][])[];
+          input: string | string[] | number[] | number[][];
         };
         "application/x-www-form-urlencoded": {
           /** @description The ID of the project to use. */
@@ -1270,7 +1270,7 @@ export interface operations {
           /** @default float */
           encoding_format?: "float" | "base64";
           /** @description Embedding Input */
-          input: (string | string[] | number[] | number[][])[];
+          input: string | string[] | number[] | number[][];
         };
         "multipart/form-data": {
           /** @description The ID of the project to use. */
@@ -1280,7 +1280,7 @@ export interface operations {
           /** @default float */
           encoding_format?: "float" | "base64";
           /** @description Embedding Input */
-          input: (string | string[] | number[] | number[][])[];
+          input: string | string[] | number[] | number[][];
         };
       };
     };

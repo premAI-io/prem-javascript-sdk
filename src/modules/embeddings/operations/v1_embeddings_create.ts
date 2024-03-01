@@ -6,7 +6,7 @@ export default (client: Prem) => (params: operations["v1_embeddings_create"]["re
   return client.call({
     method: "post",
     url: `/v1/embeddings`,
-    ...params,
+    data: params,
     ...options
   })
 }

@@ -6,7 +6,7 @@ export default (client: Prem) => (params: operations["v1_data_points_create"]["r
   return client.call({
     method: "post",
     url: `/v1/data-points/`,
-    ...params,
+    data: params,
     ...options
   })
 }
