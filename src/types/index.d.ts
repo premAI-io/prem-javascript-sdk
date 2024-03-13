@@ -25,12 +25,25 @@ export type ChatCompletionStreamingCompletionData = {
   }[]
 }
 
+export type DocumentChunk = {
+  repository_id?: number;
+  document_id?: number;
+  chunk_id?: string;
+  document_name?: string;
+  /** Format: double */
+  similarity_score?: number;
+  content?: string;
+}
+
 export type ChatCompletionStreamingMessage = {
   event: "completion",
   data: ChatCompletionStreamingCompletionData
 } | {
   event: "done",
-  data: string // trace id
+  data: {
+    traceId: string,
+    documentChunks: DocumentChunk[]
+  }
 }
 
 // EMBEDDING - CREATE

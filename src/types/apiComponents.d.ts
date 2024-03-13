@@ -59,6 +59,18 @@ export type ChatCompletionInput = {
    */
   session_id?: string
   /**
+   * Options for Retrieval Augmented Generation (RAG). Will override launched model settings
+   */
+  repositories?: {
+    /**
+     * The IDs of the repositories to use.
+     */
+    ids?: number[]
+    limit?: number
+    similarity_threshold?: number
+    [k: string]: unknown
+  }
+  /**
    * A list of messages comprising the conversation so far.
    */
   messages: {
@@ -97,10 +109,6 @@ export type ChatCompletionInput = {
    * The maximum number of tokens to generate in the chat completion.
    */
   max_tokens?: number
-  /**
-   * How many chat completion choices to generate for each input message.
-   */
-  n?: number
   /**
    * Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far.
    */
@@ -193,6 +201,18 @@ export type ChatCompletionResponse = {
    */
   provider_id: string
   /**
+   * Chunks used to improve the completion
+   */
+  document_chunks?: {
+    repository_id?: number
+    document_id?: number
+    chunk_id?: number
+    document_name?: string
+    similarity_score?: number
+    content?: string
+    [k: string]: unknown
+  }[]
+  /**
    * The usage statistics for the completion.
    */
   usage: {
@@ -232,6 +252,63 @@ export type DataPoint = {
   trace?: string
   [k: string]: unknown
 }
+
+export type DocumentChunks = {
+  repository_id?: number
+  document_id?: number
+  chunk_id?: number
+  document_name?: string
+  similarity_score?: number
+  content?: string
+  [k: string]: unknown
+}
+
+export type DocumentInput = {
+  name: string
+  content: string
+  /**
+   * * `text` - text
+   */
+  document_type: "text"
+  [k: string]: unknown
+}
+
+export type DocumentOutput = {
+  repository_id: number
+  document_id: number
+  name: string
+  /**
+   * * `text` - text
+   */
+  document_type: "text"
+  /**
+   * * `PENDING` - Pending
+   * * `UPLOADED` - Uploaded
+   * * `PARSING` - Parsing
+   * * `CHUNKING` - Chunking
+   * * `WAITING_FOR_CHUNKS_COMPLETION` - Waiting for chunks completion
+   * * `PROCESSING` - Processing
+   * * `COMPLETED` - Completed
+   * * `FAILED` - Failed
+   */
+  status:
+    | "PENDING"
+    | "UPLOADED"
+    | "PARSING"
+    | "CHUNKING"
+    | "WAITING_FOR_CHUNKS_COMPLETION"
+    | "PROCESSING"
+    | "COMPLETED"
+    | "FAILED"
+  error: string
+  chunk_count: number
+  [k: string]: unknown
+}
+
+/**
+ * * `text` - text
+ */
+export type DocumentTypeEnum = "text"
 
 export type Embedding = {
   /**
@@ -306,6 +383,16 @@ export type EmbeddingsResponse = {
  * * `base64` - base64
  */
 export type EncodingFormatEnum = "float" | "base64"
+
+export type Enhancement = {
+  /**
+   * The IDs of the repositories to use.
+   */
+  ids?: number[]
+  limit?: number
+  similarity_threshold?: number
+  [k: string]: unknown
+}
 
 export type FineTuningInput = {
   /**
@@ -741,6 +828,26 @@ export type RetrieveFineTuningResponse = {
  * * `assistant` - assistant
  */
 export type RoleEnum = "user" | "assistant"
+
+/**
+ * * `PENDING` - Pending
+ * * `UPLOADED` - Uploaded
+ * * `PARSING` - Parsing
+ * * `CHUNKING` - Chunking
+ * * `WAITING_FOR_CHUNKS_COMPLETION` - Waiting for chunks completion
+ * * `PROCESSING` - Processing
+ * * `COMPLETED` - Completed
+ * * `FAILED` - Failed
+ */
+export type StatusEnum =
+  | "PENDING"
+  | "UPLOADED"
+  | "PARSING"
+  | "CHUNKING"
+  | "WAITING_FOR_CHUNKS_COMPLETION"
+  | "PROCESSING"
+  | "COMPLETED"
+  | "FAILED"
 
 export type UnprocessableEntityError = {
   message: string

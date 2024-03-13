@@ -6,11 +6,15 @@ import type { operations } from "$types/api"
 import type {
   CreateChatCompletionRequest,
   CreateChatCompletionResponse,
-  ChatCompletionStreamingCompletionData
+  ChatCompletionStreamingCompletionData,
+  DocumentChunk
 } from "$types/index"
 
 
-type CreateChatCompletionOut<T> = T extends true ? AsyncIterable<ChatCompletionStreamingCompletionData> & { trace_id: string | null } : CreateChatCompletionResponse
+type CreateChatCompletionOut<T> = T extends true ? AsyncIterable<ChatCompletionStreamingCompletionData> & { 
+  trace_id: string | null,
+  document_chunks: null | DocumentChunk[]
+} : CreateChatCompletionResponse
 type CreateChatCompletionRequestGeneric<T extends boolean> = Omit<CreateChatCompletionRequest, "stream"> & { stream: T }
 
 export default (client: Prem) => async<T extends boolean>(
@@ -37,7 +41,8 @@ export default (client: Prem) => async<T extends boolean>(
       if (event === "completion" && data !== null) {
         parsedEventEmitter.emit("data", data)
       } else if (event === "done") {
-        parsedEventEmitter.emit("trace", data)
+        parsedEventEmitter.emit("trace", data.traceId)
+        parsedEventEmitter.emit("document_chunks", data.documentChunks)
         parsedEventEmitter.emit("end")
       }
     })

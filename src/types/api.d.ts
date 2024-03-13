@@ -42,6 +42,9 @@ export interface paths {
   "/v1/models/{id}/": {
     get: operations["v1_models_retrieve"];
   };
+  "/v1/repository/{repository_id}/document": {
+    post: operations["v1_repository_document_create"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -94,6 +97,14 @@ export interface components {
       project_id: number;
       /** @description The ID of the session to use. It helps to track the chat history. */
       session_id?: string;
+      /** @description Options for Retrieval Augmented Generation (RAG). Will override launched model settings */
+      repositories?: {
+        /** @description The IDs of the repositories to use. */
+        ids?: number[];
+        limit?: number;
+        /** Format: double */
+        similarity_threshold?: number;
+      };
       /** @description A list of messages comprising the conversation so far. */
       messages: ({
           /**
@@ -121,8 +132,6 @@ export interface components {
       } | null;
       /** @description The maximum number of tokens to generate in the chat completion. */
       max_tokens?: number | null;
-      /** @description How many chat completion choices to generate for each input message. */
-      n?: number;
       /**
        * Format: double
        * @description Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far.
@@ -183,6 +192,16 @@ export interface components {
       provider_name: string;
       /** @description The ID of the provider that generated the completion. */
       provider_id: string;
+      /** @description Chunks used to improve the completion */
+      document_chunks?: {
+          repository_id?: number;
+          document_id?: number;
+          chunk_id?: number;
+          document_name?: string;
+          /** Format: double */
+          similarity_score?: number;
+          content?: string;
+        }[];
       /** @description The usage statistics for the completion. */
       usage: {
         prompt_tokens: number;
@@ -220,6 +239,54 @@ export interface components {
       /** Format: uuid */
       trace?: string | null;
     };
+    DocumentChunks: {
+      repository_id?: number;
+      document_id?: number;
+      chunk_id?: number;
+      document_name?: string;
+      /** Format: double */
+      similarity_score?: number;
+      content?: string;
+    };
+    DocumentInput: {
+      name: string;
+      content: string;
+      /**
+       * @description * `text` - text
+       * @enum {string}
+       */
+      document_type: "text";
+    };
+    DocumentOutput: {
+      repository_id: number;
+      document_id: number;
+      name: string;
+      /**
+       * @description * `text` - text
+       * @enum {string}
+       */
+      document_type: "text";
+      /**
+       * @description * `PENDING` - Pending
+       * * `UPLOADED` - Uploaded
+       * * `PARSING` - Parsing
+       * * `CHUNKING` - Chunking
+       * * `WAITING_FOR_CHUNKS_COMPLETION` - Waiting for chunks completion
+       * * `PROCESSING` - Processing
+       * * `COMPLETED` - Completed
+       * * `FAILED` - Failed
+       * @enum {string}
+       */
+      status: "PENDING" | "UPLOADED" | "PARSING" | "CHUNKING" | "WAITING_FOR_CHUNKS_COMPLETION" | "PROCESSING" | "COMPLETED" | "FAILED";
+      error: string | null;
+      /** @default 0 */
+      chunk_count: number;
+    };
+    /**
+     * @description * `text` - text
+     * @enum {string}
+     */
+    DocumentTypeEnum: "text";
     Embedding: {
       /** @description The index of the token in the input. */
       index: number;
@@ -263,6 +330,13 @@ export interface components {
      * @enum {string}
      */
     EncodingFormatEnum: "float" | "base64";
+    Enhancement: {
+      /** @description The IDs of the repositories to use. */
+      ids?: number[];
+      limit?: number;
+      /** Format: double */
+      similarity_threshold?: number;
+    };
     FineTuningInput: {
       /** @description The ID of the project to use. */
       project_id: number;
@@ -576,6 +650,18 @@ export interface components {
      * @enum {string}
      */
     RoleEnum: "user" | "assistant";
+    /**
+     * @description * `PENDING` - Pending
+     * * `UPLOADED` - Uploaded
+     * * `PARSING` - Parsing
+     * * `CHUNKING` - Chunking
+     * * `WAITING_FOR_CHUNKS_COMPLETION` - Waiting for chunks completion
+     * * `PROCESSING` - Processing
+     * * `COMPLETED` - Completed
+     * * `FAILED` - Failed
+     * @enum {string}
+     */
+    StatusEnum: "PENDING" | "UPLOADED" | "PARSING" | "CHUNKING" | "WAITING_FOR_CHUNKS_COMPLETION" | "PROCESSING" | "COMPLETED" | "FAILED";
     UnprocessableEntityError: {
       message: string;
       /**
@@ -646,6 +732,14 @@ export interface operations {
           project_id: number;
           /** @description The ID of the session to use. It helps to track the chat history. */
           session_id?: string;
+          /** @description Options for Retrieval Augmented Generation (RAG). Will override launched model settings */
+          repositories?: {
+            /** @description The IDs of the repositories to use. */
+            ids?: number[];
+            limit?: number;
+            /** Format: double */
+            similarity_threshold?: number;
+          };
           /** @description A list of messages comprising the conversation so far. */
           messages: ({
               /**
@@ -673,8 +767,6 @@ export interface operations {
           } | null;
           /** @description The maximum number of tokens to generate in the chat completion. */
           max_tokens?: number | null;
-          /** @description How many chat completion choices to generate for each input message. */
-          n?: number;
           /**
            * Format: double
            * @description Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far.
@@ -712,6 +804,14 @@ export interface operations {
           project_id: number;
           /** @description The ID of the session to use. It helps to track the chat history. */
           session_id?: string;
+          /** @description Options for Retrieval Augmented Generation (RAG). Will override launched model settings */
+          repositories?: {
+            /** @description The IDs of the repositories to use. */
+            ids?: number[];
+            limit?: number;
+            /** Format: double */
+            similarity_threshold?: number;
+          };
           /** @description A list of messages comprising the conversation so far. */
           messages: ({
               /**
@@ -739,8 +839,6 @@ export interface operations {
           } | null;
           /** @description The maximum number of tokens to generate in the chat completion. */
           max_tokens?: number | null;
-          /** @description How many chat completion choices to generate for each input message. */
-          n?: number;
           /**
            * Format: double
            * @description Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far.
@@ -778,6 +876,14 @@ export interface operations {
           project_id: number;
           /** @description The ID of the session to use. It helps to track the chat history. */
           session_id?: string;
+          /** @description Options for Retrieval Augmented Generation (RAG). Will override launched model settings */
+          repositories?: {
+            /** @description The IDs of the repositories to use. */
+            ids?: number[];
+            limit?: number;
+            /** Format: double */
+            similarity_threshold?: number;
+          };
           /** @description A list of messages comprising the conversation so far. */
           messages: ({
               /**
@@ -805,8 +911,6 @@ export interface operations {
           } | null;
           /** @description The maximum number of tokens to generate in the chat completion. */
           max_tokens?: number | null;
-          /** @description How many chat completion choices to generate for each input message. */
-          n?: number;
           /**
            * Format: double
            * @description Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far.
@@ -872,6 +976,16 @@ export interface operations {
             provider_name: string;
             /** @description The ID of the provider that generated the completion. */
             provider_id: string;
+            /** @description Chunks used to improve the completion */
+            document_chunks?: {
+                repository_id?: number;
+                document_id?: number;
+                chunk_id?: number;
+                document_name?: string;
+                /** Format: double */
+                similarity_score?: number;
+                content?: string;
+              }[];
             /** @description The usage statistics for the completion. */
             usage: {
               prompt_tokens: number;
@@ -1923,6 +2037,75 @@ export interface operations {
              */
             model_type?: "text2text" | "text2image" | "text2vector";
             model_provider?: ("openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
+          };
+        };
+      };
+    };
+  };
+  v1_repository_document_create: {
+    parameters: {
+      path: {
+        repository_id: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          name: string;
+          content: string;
+          /**
+           * @description * `text` - text
+           * @enum {string}
+           */
+          document_type: "text";
+        };
+        "application/x-www-form-urlencoded": {
+          name: string;
+          content: string;
+          /**
+           * @description * `text` - text
+           * @enum {string}
+           */
+          document_type: "text";
+        };
+        "multipart/form-data": {
+          name: string;
+          content: string;
+          /**
+           * @description * `text` - text
+           * @enum {string}
+           */
+          document_type: "text";
+        };
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": {
+            repository_id: number;
+            document_id: number;
+            name: string;
+            /**
+             * @description * `text` - text
+             * @enum {string}
+             */
+            document_type: "text";
+            /**
+             * @description * `PENDING` - Pending
+             * * `UPLOADED` - Uploaded
+             * * `PARSING` - Parsing
+             * * `CHUNKING` - Chunking
+             * * `WAITING_FOR_CHUNKS_COMPLETION` - Waiting for chunks completion
+             * * `PROCESSING` - Processing
+             * * `COMPLETED` - Completed
+             * * `FAILED` - Failed
+             * @enum {string}
+             */
+            status: "PENDING" | "UPLOADED" | "PARSING" | "CHUNKING" | "WAITING_FOR_CHUNKS_COMPLETION" | "PROCESSING" | "COMPLETED" | "FAILED";
+            error: string | null;
+            /** @default 0 */
+            chunk_count: number;
           };
         };
       };
