@@ -433,6 +433,18 @@ export interface components {
       /** @description The content of the message. */
       content: string;
     };
+    Model: {
+      id: number;
+      name: string;
+      /**
+       * @description * `text2text` - Text to Text
+       * * `text2image` - Text to Image
+       * * `text2vector` - Text to Vector
+       * @enum {string}
+       */
+      model_type?: "text2text" | "text2image" | "text2vector";
+      model_provider?: ("openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
+    };
     ModelNotFoundError: {
       message: string;
       /**
@@ -474,18 +486,6 @@ export interface components {
      * @enum {string}
      */
     ModelTypeEnum: "text2text" | "text2image" | "text2vector";
-    Models: {
-      id: number;
-      slug: string;
-      /**
-       * @description * `text2text` - Text to Text
-       * * `text2image` - Text to Image
-       * * `text2vector` - Text to Vector
-       * @enum {string}
-       */
-      model_type?: "text2text" | "text2image" | "text2vector";
-      model_provider?: ("openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
-    };
     NotFoundError: OneOf<[{
       message: string;
       /**
@@ -2002,7 +2002,7 @@ export interface operations {
         content: {
           "application/json": ({
               id: number;
-              slug: string;
+              name: string;
               /**
                * @description * `text2text` - Text to Text
                * * `text2image` - Text to Image
@@ -2028,7 +2028,7 @@ export interface operations {
         content: {
           "application/json": {
             id: number;
-            slug: string;
+            name: string;
             /**
              * @description * `text2text` - Text to Text
              * * `text2image` - Text to Image

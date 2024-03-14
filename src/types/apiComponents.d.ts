@@ -532,6 +532,40 @@ export type Message = {
   [k: string]: unknown
 }
 
+export type Model = {
+  id: number
+  name: string
+  /**
+   * * `text2text` - Text to Text
+   * * `text2image` - Text to Image
+   * * `text2vector` - Text to Vector
+   */
+  model_type?: "text2text" | "text2image" | "text2vector"
+  model_provider?:
+    | (
+        | "openai"
+        | "azure"
+        | "cohere"
+        | "anthropic"
+        | "cloudflare"
+        | "deepinfra"
+        | "lamini"
+        | "octoai"
+        | "replicate"
+        | "together"
+        | "fireworksai"
+        | "mistralai"
+        | "prem"
+        | "anyscale"
+        | "openrouter"
+        | "perplexity"
+        | "groq"
+      )
+    | ""
+    | null
+  [k: string]: unknown
+}
+
 export type ModelNotFoundError = {
   message: string
   /**
@@ -590,40 +624,6 @@ export type ModelProviderEnum =
  * * `text2vector` - Text to Vector
  */
 export type ModelTypeEnum = "text2text" | "text2image" | "text2vector"
-
-export type Models = {
-  id: number
-  slug: string
-  /**
-   * * `text2text` - Text to Text
-   * * `text2image` - Text to Image
-   * * `text2vector` - Text to Vector
-   */
-  model_type?: "text2text" | "text2image" | "text2vector"
-  model_provider?:
-    | (
-        | "openai"
-        | "azure"
-        | "cohere"
-        | "anthropic"
-        | "cloudflare"
-        | "deepinfra"
-        | "lamini"
-        | "octoai"
-        | "replicate"
-        | "together"
-        | "fireworksai"
-        | "mistralai"
-        | "prem"
-        | "anyscale"
-        | "openrouter"
-        | "perplexity"
-        | "groq"
-      )
-    | ""
-    | null
-  [k: string]: unknown
-}
 
 export type NotFoundError =
   | {
