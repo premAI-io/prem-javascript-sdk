@@ -11,7 +11,7 @@ import type {
 } from "$types/index"
 
 
-type CreateChatCompletionOut<T> = T extends true ? AsyncIterable<ChatCompletionStreamingCompletionData> & { 
+type CreateChatCompletionOut<T> = T extends true ? AsyncIterable<ChatCompletionStreamingCompletionData> & {
   trace_id: string | null,
   document_chunks: null | DocumentChunk[]
 } : CreateChatCompletionResponse
@@ -36,19 +36,48 @@ export default (client: Prem) => async<T extends boolean>(
 
     const parsedEventEmitter = new EventEmitter()
 
+    let buffer = ''
+
     rawStream.on("data", (chunk: Buffer) => {
-      const { data, event } = parseEventString(chunk.toString());
-      if (event === "completion" && data !== null) {
-        parsedEventEmitter.emit("data", data)
-      } else if (event === "done") {
-        parsedEventEmitter.emit("trace", data.traceId)
-        parsedEventEmitter.emit("document_chunks", data.documentChunks)
-        parsedEventEmitter.emit("end")
+      buffer += chunk.toString()
+      let splitPattern = /\n\nevent:/g
+      let events = buffer.split(splitPattern)
+
+      if (events.length > 1) {
+        events.slice(0, -1).forEach(eventString => {
+          eventString = eventString.startsWith('event:') ? eventString : 'event:' + eventString
+          const { data, event } = parseEventString(eventString)
+
+          if (event === "completion" && data !== null) {
+            parsedEventEmitter.emit("data", data)
+          } else if (event === "done") {
+            parsedEventEmitter.emit("trace", data.traceId)
+            parsedEventEmitter.emit("document_chunks", data.documentChunks)
+            parsedEventEmitter.emit("end")
+          }
+        })
+
+        buffer = events[events.length - 1]
       }
     })
 
+    // Add an 'end' listener to handle any remaining data in the buffer.
     rawStream.on("end", () => {
-      parsedEventEmitter.emit("end")
+      // Check if there is any remanent data that constitutes a complete event.
+      if (buffer.trim()) {
+        // Ensure the buffer is treated as a complete event for parsing.
+        if (!buffer.startsWith('event:')) {
+          buffer = 'event:' + buffer
+        }
+        const { data, event } = parseEventString(buffer)
+        if (event === "completion" && data !== null) {
+          parsedEventEmitter.emit("data", data)
+        } else if (event === "done") {
+          parsedEventEmitter.emit("trace", data.traceId)
+          parsedEventEmitter.emit("document_chunks", data.documentChunks)
+          parsedEventEmitter.emit("end")
+        }
+      }
     })
 
     const iterable = eventEmitterToAsyncIterable<ChatCompletionStreamingCompletionData>(parsedEventEmitter)
