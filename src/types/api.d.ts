@@ -10,11 +10,8 @@ type XOR<T, U> = (T | U) extends object ? (Without<T, U> & U) | (Without<U, T> &
 type OneOf<T extends any[]> = T extends [infer Only] ? Only : T extends [infer A, infer B, ...infer Rest] ? OneOf<[XOR<A, B>, ...Rest]> : never;
 
 export interface paths {
-  "/api/projects/{id}/generate-description/": {
-    get: operations["api_projects_generate_description_retrieve"];
-  };
   "/v1/chat/completions": {
-    /** @description Creates a model response for the given chat conversation. */
+    /** @description Creates a model response for the given chat conversation. Supports streaming with SSE, [documentation here](https://docs.premai.io/get-started/chat-completion-sse). */
     post: operations["v1_chat_completions_create"];
   };
   "/v1/data-points/": {
@@ -726,20 +723,7 @@ export type external = Record<string, never>;
 
 export interface operations {
 
-  api_projects_generate_description_retrieve: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** @description No response body */
-      200: {
-        content: never;
-      };
-    };
-  };
-  /** @description Creates a model response for the given chat conversation. */
+  /** @description Creates a model response for the given chat conversation. Supports streaming with SSE, [documentation here](https://docs.premai.io/get-started/chat-completion-sse). */
   v1_chat_completions_create: {
     requestBody: {
       content: {
