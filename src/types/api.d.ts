@@ -1197,14 +1197,19 @@ export interface operations {
       };
     };
     responses: {
-      201: {
+      200: {
         content: {
           "application/json": {
+            id: number;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            updated_at: string;
             input?: string | null;
             output?: string | null;
             positive: boolean;
+            /** Format: uuid */
             trace?: string | null;
-            project: number;
           };
         };
       };
@@ -1246,25 +1251,40 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": {
+          id: number;
+          /** Format: date-time */
+          created_at: string;
+          /** Format: date-time */
+          updated_at: string;
           input?: string | null;
           output?: string | null;
           positive: boolean;
+          /** Format: uuid */
           trace?: string | null;
-          project: number;
         };
         "application/x-www-form-urlencoded": {
+          id: number;
+          /** Format: date-time */
+          created_at: string;
+          /** Format: date-time */
+          updated_at: string;
           input?: string | null;
           output?: string | null;
           positive: boolean;
+          /** Format: uuid */
           trace?: string | null;
-          project: number;
         };
         "multipart/form-data": {
+          id: number;
+          /** Format: date-time */
+          created_at: string;
+          /** Format: date-time */
+          updated_at: string;
           input?: string | null;
           output?: string | null;
           positive: boolean;
+          /** Format: uuid */
           trace?: string | null;
-          project: number;
         };
       };
     };
@@ -1272,11 +1292,16 @@ export interface operations {
       200: {
         content: {
           "application/json": {
+            id: number;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            updated_at: string;
             input?: string | null;
             output?: string | null;
             positive: boolean;
+            /** Format: uuid */
             trace?: string | null;
-            project: number;
           };
         };
       };
