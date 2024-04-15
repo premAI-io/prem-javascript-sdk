@@ -252,20 +252,24 @@ export interface components {
       name: string;
       content: string;
       /**
-       * @description * `text` - text
+       * @description * `pdf` - PDF
+       * * `docx` - Word
+       * * `txt` - Text
        * @enum {string}
        */
-      document_type: "text";
+      document_type: "pdf" | "docx" | "txt";
     };
     DocumentOutput: {
       repository_id: number;
       document_id: number;
       name: string;
       /**
-       * @description * `text` - text
+       * @description * `pdf` - PDF
+       * * `docx` - Word
+       * * `txt` - Text
        * @enum {string}
        */
-      document_type: "text";
+      document_type: "pdf" | "docx" | "txt";
       /**
        * @description * `PENDING` - Pending
        * * `UPLOADED` - Uploaded
@@ -283,10 +287,12 @@ export interface components {
       chunk_count: number;
     };
     /**
-     * @description * `text` - text
+     * @description * `pdf` - PDF
+     * * `docx` - Word
+     * * `txt` - Text
      * @enum {string}
      */
-    DocumentTypeEnum: "text";
+    DocumentTypeEnum: "pdf" | "docx" | "txt";
     Embedding: {
       /** @description The index of the token in the input. */
       index: number;
@@ -1197,7 +1203,7 @@ export interface operations {
       };
     };
     responses: {
-      200: {
+      201: {
         content: {
           "application/json": {
             id: number;
@@ -2079,28 +2085,34 @@ export interface operations {
           name: string;
           content: string;
           /**
-           * @description * `text` - text
+           * @description * `pdf` - PDF
+           * * `docx` - Word
+           * * `txt` - Text
            * @enum {string}
            */
-          document_type: "text";
+          document_type: "pdf" | "docx" | "txt";
         };
         "application/x-www-form-urlencoded": {
           name: string;
           content: string;
           /**
-           * @description * `text` - text
+           * @description * `pdf` - PDF
+           * * `docx` - Word
+           * * `txt` - Text
            * @enum {string}
            */
-          document_type: "text";
+          document_type: "pdf" | "docx" | "txt";
         };
         "multipart/form-data": {
           name: string;
           content: string;
           /**
-           * @description * `text` - text
+           * @description * `pdf` - PDF
+           * * `docx` - Word
+           * * `txt` - Text
            * @enum {string}
            */
-          document_type: "text";
+          document_type: "pdf" | "docx" | "txt";
         };
       };
     };
@@ -2112,10 +2124,12 @@ export interface operations {
             document_id: number;
             name: string;
             /**
-             * @description * `text` - text
+             * @description * `pdf` - PDF
+             * * `docx` - Word
+             * * `txt` - Text
              * @enum {string}
              */
-            document_type: "text";
+            document_type: "pdf" | "docx" | "txt";
             /**
              * @description * `PENDING` - Pending
              * * `UPLOADED` - Uploaded

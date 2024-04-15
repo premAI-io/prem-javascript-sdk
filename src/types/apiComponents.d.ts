@@ -267,9 +267,11 @@ export type DocumentInput = {
   name: string
   content: string
   /**
-   * * `text` - text
+   * * `pdf` - PDF
+   * * `docx` - Word
+   * * `txt` - Text
    */
-  document_type: "text"
+  document_type: "pdf" | "docx" | "txt"
   [k: string]: unknown
 }
 
@@ -278,9 +280,11 @@ export type DocumentOutput = {
   document_id: number
   name: string
   /**
-   * * `text` - text
+   * * `pdf` - PDF
+   * * `docx` - Word
+   * * `txt` - Text
    */
-  document_type: "text"
+  document_type: "pdf" | "docx" | "txt"
   /**
    * * `PENDING` - Pending
    * * `UPLOADED` - Uploaded
@@ -306,9 +310,11 @@ export type DocumentOutput = {
 }
 
 /**
- * * `text` - text
+ * * `pdf` - PDF
+ * * `docx` - Word
+ * * `txt` - Text
  */
-export type DocumentTypeEnum = "text"
+export type DocumentTypeEnum = "pdf" | "docx" | "txt"
 
 export type Embedding = {
   /**
