@@ -551,6 +551,7 @@ export type Model = {
     | (
         | "openai"
         | "azure"
+        | "azure-mistral"
         | "cohere"
         | "anthropic"
         | "cloudflare"
@@ -589,6 +590,7 @@ export type ModelNotFoundErrorCodeEnum = "ModelNotFoundError"
 /**
  * * `openai` - OpenAI
  * * `azure` - Azure OpenAI
+ * * `azure-mistral` - Azure Mistral
  * * `cohere` - Cohere
  * * `anthropic` - Anthropic
  * * `cloudflare` - Cloudflare
@@ -608,6 +610,7 @@ export type ModelNotFoundErrorCodeEnum = "ModelNotFoundError"
 export type ModelProviderEnum =
   | "openai"
   | "azure"
+  | "azure-mistral"
   | "cohere"
   | "anthropic"
   | "cloudflare"

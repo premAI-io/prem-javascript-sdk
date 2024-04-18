@@ -449,7 +449,7 @@ export interface components {
        * @enum {string}
        */
       model_type?: "text2text" | "text2image" | "text2vector";
-      model_provider?: ("openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
+      model_provider?: ("openai" | "azure" | "azure-mistral" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
     };
     ModelNotFoundError: {
       message: string;
@@ -467,6 +467,7 @@ export interface components {
     /**
      * @description * `openai` - OpenAI
      * * `azure` - Azure OpenAI
+     * * `azure-mistral` - Azure Mistral
      * * `cohere` - Cohere
      * * `anthropic` - Anthropic
      * * `cloudflare` - Cloudflare
@@ -484,7 +485,7 @@ export interface components {
      * * `groq` - Groq
      * @enum {string}
      */
-    ModelProviderEnum: "openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq";
+    ModelProviderEnum: "openai" | "azure" | "azure-mistral" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq";
     /**
      * @description * `text2text` - Text to Text
      * * `text2image` - Text to Image
@@ -1224,7 +1225,7 @@ export interface operations {
   v1_data_points_retrieve: {
     parameters: {
       path: {
-        /** @description A unique integer value identifying this data point. */
+        /** @description A unique integer value identifying this DataPoint. */
         id: number;
       };
     };
@@ -1250,7 +1251,7 @@ export interface operations {
   v1_data_points_update: {
     parameters: {
       path: {
-        /** @description A unique integer value identifying this data point. */
+        /** @description A unique integer value identifying this DataPoint. */
         id: number;
       };
     };
@@ -1316,21 +1317,33 @@ export interface operations {
   v1_data_points_destroy: {
     parameters: {
       path: {
-        /** @description A unique integer value identifying this data point. */
+        /** @description A unique integer value identifying this DataPoint. */
         id: number;
       };
     };
     responses: {
-      /** @description No response body */
-      204: {
-        content: never;
+      200: {
+        content: {
+          "application/json": {
+            id: number;
+            /** Format: date-time */
+            created_at: string;
+            /** Format: date-time */
+            updated_at: string;
+            input?: string | null;
+            output?: string | null;
+            positive: boolean;
+            /** Format: uuid */
+            trace?: string | null;
+          };
+        };
       };
     };
   };
   v1_data_points_partial_update: {
     parameters: {
       path: {
-        /** @description A unique integer value identifying this data point. */
+        /** @description A unique integer value identifying this DataPoint. */
         id: number;
       };
     };
@@ -2041,7 +2054,7 @@ export interface operations {
                * @enum {string}
                */
               model_type?: "text2text" | "text2image" | "text2vector";
-              model_provider?: ("openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
+              model_provider?: ("openai" | "azure" | "azure-mistral" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
             })[];
         };
       };
@@ -2067,7 +2080,7 @@ export interface operations {
              * @enum {string}
              */
             model_type?: "text2text" | "text2image" | "text2vector";
-            model_provider?: ("openai" | "azure" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
+            model_provider?: ("openai" | "azure" | "azure-mistral" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
           };
         };
       };
