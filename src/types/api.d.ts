@@ -10,6 +10,56 @@ type XOR<T, U> = (T | U) extends object ? (Without<T, U> & U) | (Without<U, T> &
 type OneOf<T extends any[]> = T extends [infer Only] ? Only : T extends [infer A, infer B, ...infer Rest] ? OneOf<[XOR<A, B>, ...Rest]> : never;
 
 export interface paths {
+  "/projects/gym/admin/datasets/": {
+    /** @description List all finetuned models, filtered by the project id */
+    get: operations["projects_gym_admin_datasets_list"];
+    /** @description Manage datasets */
+    post: operations["projects_gym_admin_datasets_create"];
+  };
+  "/projects/gym/admin/datasets/{id}/": {
+    /** @description Manage datasets */
+    get: operations["projects_gym_admin_datasets_retrieve"];
+  };
+  "/projects/gym/admin/finetunedmodels/": {
+    /** @description List all finetuned models, filtered by the finetuning_request id */
+    get: operations["projects_gym_admin_finetunedmodels_list"];
+  };
+  "/projects/gym/admin/finetunedmodels/{id}/": {
+    /** @description Manage finetuned_models */
+    get: operations["projects_gym_admin_finetunedmodels_retrieve"];
+  };
+  "/projects/gym/admin/finetunedmodels/promote/": {
+    /** @description Promote a finetuned model to a model.This will set the alias for the model and set the finetuning_job as the current finetuning_job for the finetuning_request, making it available as the result for the finetuning. */
+    post: operations["projects_gym_admin_finetunedmodels_promote_create"];
+  };
+  "/projects/gym/admin/finetuningjobs/": {
+    /** @description List all finetuning_jobs filtered by the finetuning_request, given its id */
+    get: operations["projects_gym_admin_finetuningjobs_list"];
+    /** @description Create a new finetuning job given the finetuning_request id,tranining_dataset id (optional, default is the finetuning_request dataset), eventually the validation_dataset id and hyperparameters: num_epochs */
+    post: operations["projects_gym_admin_finetuningjobs_create"];
+  };
+  "/projects/gym/admin/finetuningjobs/{id}/": {
+    /** @description Manage finetuning_jobs */
+    get: operations["projects_gym_admin_finetuningjobs_retrieve"];
+  };
+  "/projects/gym/admin/finetuningmessages/": {
+    /** @description List all finetuning_messages related to a specific finetuning_request, given its id */
+    get: operations["projects_gym_admin_finetuningmessages_list"];
+    /** @description Create a new finetuning message given the finetuning_request id, its message and title */
+    post: operations["projects_gym_admin_finetuningmessages_create"];
+  };
+  "/projects/gym/admin/finetuningrequests/": {
+    /** @description List all finetuning_requests, eventually filtered by the project_id */
+    get: operations["projects_gym_admin_finetuningrequests_list"];
+  };
+  "/projects/gym/admin/finetuningrequests/{id}/": {
+    /** @description Retrieve a specific finetuning_request by its id */
+    get: operations["projects_gym_admin_finetuningrequests_retrieve"];
+  };
+  "/projects/gym/admin/finetuningrequests/set_started/": {
+    /** @description Set the state of a finetuning_request to 'finetuning' */
+    post: operations["projects_gym_admin_finetuningrequests_set_started_create"];
+  };
   "/v1/chat/completions": {
     /** @description Creates a model response for the given chat conversation. Supports streaming with SSE, [documentation here](https://docs.premai.io/get-started/chat-completion-sse). */
     post: operations["v1_chat_completions_create"];
@@ -239,6 +289,151 @@ export interface components {
       /** Format: uuid */
       trace?: string | null;
     };
+    DataPointCreateGymAdmin: {
+      id?: number;
+      /** Format: uuid */
+      trace?: string | null;
+      input?: string | null;
+      output?: string | null;
+      /** @default false */
+      positive?: boolean;
+    };
+    DataPointGymAdmin: {
+      id: number;
+    };
+    DataPointRetrieveGymAdmin: {
+      id: number;
+      input?: string | null;
+      output?: string | null;
+      positive: boolean;
+      /** Format: uuid */
+      trace?: string | null;
+      /** @default false */
+      override_input: string;
+      /** @default false */
+      override_output: string;
+    };
+    DataSetCreateGymAdmin: {
+      id: number;
+      project: number;
+      datapoints: ({
+          id?: number;
+          /** Format: uuid */
+          trace?: string | null;
+          input?: string | null;
+          output?: string | null;
+          /** @default false */
+          positive?: boolean;
+        })[];
+    };
+    DataSetFineTuningJobGymAdmin: {
+      id: number;
+      /**
+       * @description * `unknown` - Unknown
+       * * `queued` - Queued
+       * * `running` - Running
+       * * `succeeded` - Succeeded
+       * * `failed` - Failed
+       * * `cancelled` - Cancelled
+       * @enum {string}
+       */
+      status?: "unknown" | "queued" | "running" | "succeeded" | "failed" | "cancelled";
+    };
+    DataSetFineTuningRequest: {
+      id: number;
+      /**
+       * @description * `queued` - Queued
+       * * `finetuning` - Fine tuning
+       * * `done` - Done
+       * * `failed` - Failed
+       * @enum {string}
+       */
+      status?: "queued" | "finetuning" | "done" | "failed";
+    };
+    DataSetGymAdmin: {
+      id: number;
+      project: {
+        id: number;
+        name: string;
+        description?: string | null;
+      };
+      training_finetuning_requests: ({
+          id: number;
+          /**
+           * @description * `queued` - Queued
+           * * `finetuning` - Fine tuning
+           * * `done` - Done
+           * * `failed` - Failed
+           * @enum {string}
+           */
+          status?: "queued" | "finetuning" | "done" | "failed";
+        })[];
+      training_finetuningjobs: ({
+          id: number;
+          /**
+           * @description * `unknown` - Unknown
+           * * `queued` - Queued
+           * * `running` - Running
+           * * `succeeded` - Succeeded
+           * * `failed` - Failed
+           * * `cancelled` - Cancelled
+           * @enum {string}
+           */
+          status?: "unknown" | "queued" | "running" | "succeeded" | "failed" | "cancelled";
+        })[];
+      datapoints: {
+          id: number;
+        }[];
+    };
+    DataSetProject: {
+      id: number;
+      name: string;
+      description?: string | null;
+    };
+    DataSetRetrieveGymAdmin: {
+      id: number;
+      project: {
+        id: number;
+        name: string;
+        description?: string | null;
+      };
+      datapoints: ({
+          id: number;
+          input?: string | null;
+          output?: string | null;
+          positive: boolean;
+          /** Format: uuid */
+          trace?: string | null;
+          /** @default false */
+          override_input: string;
+          /** @default false */
+          override_output: string;
+        })[];
+      training_finetuning_requests: ({
+          id: number;
+          /**
+           * @description * `queued` - Queued
+           * * `finetuning` - Fine tuning
+           * * `done` - Done
+           * * `failed` - Failed
+           * @enum {string}
+           */
+          status?: "queued" | "finetuning" | "done" | "failed";
+        })[];
+      training_finetuningjobs: ({
+          id: number;
+          /**
+           * @description * `unknown` - Unknown
+           * * `queued` - Queued
+           * * `running` - Running
+           * * `succeeded` - Succeeded
+           * * `failed` - Failed
+           * * `cancelled` - Cancelled
+           * @enum {string}
+           */
+          status?: "unknown" | "queued" | "running" | "succeeded" | "failed" | "cancelled";
+        })[];
+    };
     DocumentChunks: {
       repository_id?: number;
       document_id?: number;
@@ -286,6 +481,18 @@ export interface components {
       /** @default 0 */
       chunk_count: number;
     };
+    /**
+     * @description * `PENDING` - Pending
+     * * `UPLOADED` - Uploaded
+     * * `PARSING` - Parsing
+     * * `CHUNKING` - Chunking
+     * * `WAITING_FOR_CHUNKS_COMPLETION` - Waiting for chunks completion
+     * * `PROCESSING` - Processing
+     * * `COMPLETED` - Completed
+     * * `FAILED` - Failed
+     * @enum {string}
+     */
+    DocumentOutputStatusEnum: "PENDING" | "UPLOADED" | "PARSING" | "CHUNKING" | "WAITING_FOR_CHUNKS_COMPLETION" | "PROCESSING" | "COMPLETED" | "FAILED";
     /**
      * @description * `pdf` - PDF
      * * `docx` - Word
@@ -343,6 +550,18 @@ export interface components {
       /** Format: double */
       similarity_threshold?: number;
     };
+    FineTunedModelGymAdmin: {
+      id: number;
+      slug: string;
+      alias?: string | null;
+      model_provider?: ("openai" | "azure" | "azure-mistral" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
+    };
+    FineTunedModelPromotion: {
+      /** @description Model ID to be promoted */
+      model: number;
+      /** @description Alias for the finetuned model */
+      alias?: string | null;
+    };
     FineTuningInput: {
       /** @description The ID of the project to use. */
       project_id: number;
@@ -368,6 +587,128 @@ export interface components {
        */
       num_epochs?: number;
     };
+    FineTuningJobCreateGymAdmin: {
+      id: number;
+      /** @description Training dataset id to be used for fine-tuning. If omitted, the dataset from the finetuning_request will be used. */
+      training_dataset?: number;
+      /** @description Validation dataset id to be used for fine-tuning */
+      validation_dataset?: number;
+      /** @description Fine-tuning request id to be used for fine-tuning */
+      fine_tuning_request: number;
+      /** @description Hyperparameters for fine-tuning job */
+      hyperparameters?: {
+        /**
+         * @description Number of epochs for fine-tuning
+         * @default 3
+         */
+        num_epochs?: number;
+      };
+      /** Format: date-time */
+      created_at: string;
+      /** Format: date-time */
+      updated_at: string;
+    };
+    FineTuningJobHyperparameters: {
+      /**
+       * @description Number of epochs for fine-tuning
+       * @default 3
+       */
+      num_epochs?: number;
+    };
+    FineTuningJobOutputGymAdmin: {
+      id: number;
+      job_id: string;
+      /** Format: date-time */
+      finished_at?: string | null;
+      /**
+       * @description * `unknown` - Unknown
+       * * `queued` - Queued
+       * * `running` - Running
+       * * `succeeded` - Succeeded
+       * * `failed` - Failed
+       * * `cancelled` - Cancelled
+       * @enum {string}
+       */
+      status?: "unknown" | "queued" | "running" | "succeeded" | "failed" | "cancelled";
+      fine_tuned_model?: number | null;
+      fine_tuning_request?: number | null;
+      training_dataset?: number | null;
+      validation_dataset?: number | null;
+    };
+    FineTuningMessageCreateGymAdmin: {
+      id: number;
+      fine_tuning_request: number;
+      title: string;
+      message: string;
+    };
+    FineTuningMessageOutputGymAdmin: {
+      id: number;
+      fine_tuning_request: number;
+      title: string;
+      message: string;
+      user_prompt?: string | null;
+    };
+    FineTuningRequest: {
+      id: number;
+      /**
+       * @description * `queued` - Queued
+       * * `finetuning` - Fine tuning
+       * * `done` - Done
+       * * `failed` - Failed
+       * @enum {string}
+       */
+      status?: "queued" | "finetuning" | "done" | "failed";
+      project: {
+        id: number;
+        name: string;
+        description?: string | null;
+      };
+      model: {
+        id: number;
+        slug: string;
+        alias?: string | null;
+        group?: string | null;
+        model_provider?: ("openai" | "azure" | "azure-mistral" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
+      };
+      dataset: number;
+      messages: ({
+          id: number;
+          title: string;
+          message: string;
+          user_prompt?: string | null;
+        })[];
+      current_message: {
+        id: number;
+        title: string;
+        message: string;
+        user_prompt?: string | null;
+      };
+      current_fine_tuning_job?: number | null;
+    };
+    FineTuningRequestChangeStateGymAdmin: {
+      /** @description Finetuning_request id to be updated */
+      fine_tuning_request: number;
+      /** @description Updated Fine-tuning request id */
+      id: number;
+    };
+    FineTuningRequestFineTuningMessage: {
+      id: number;
+      title: string;
+      message: string;
+      user_prompt?: string | null;
+    };
+    FineTuningRequestModel: {
+      id: number;
+      slug: string;
+      alias?: string | null;
+      group?: string | null;
+      model_provider?: ("openai" | "azure" | "azure-mistral" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
+    };
+    FineTuningRequestProject: {
+      id: number;
+      name: string;
+      description?: string | null;
+    };
     FineTuningResponse: {
       /** @description The ID of the fine-tuning job. */
       job_id: string;
@@ -383,7 +724,7 @@ export interface components {
       output?: string | null;
       positive: boolean;
       trace?: string | null;
-      project: number;
+      project_id: number;
     };
     InternalServerError: {
       message: string;
@@ -658,17 +999,23 @@ export interface components {
      */
     RoleEnum: "user" | "assistant";
     /**
-     * @description * `PENDING` - Pending
-     * * `UPLOADED` - Uploaded
-     * * `PARSING` - Parsing
-     * * `CHUNKING` - Chunking
-     * * `WAITING_FOR_CHUNKS_COMPLETION` - Waiting for chunks completion
-     * * `PROCESSING` - Processing
-     * * `COMPLETED` - Completed
-     * * `FAILED` - Failed
+     * @description * `unknown` - Unknown
+     * * `queued` - Queued
+     * * `running` - Running
+     * * `succeeded` - Succeeded
+     * * `failed` - Failed
+     * * `cancelled` - Cancelled
      * @enum {string}
      */
-    StatusEnum: "PENDING" | "UPLOADED" | "PARSING" | "CHUNKING" | "WAITING_FOR_CHUNKS_COMPLETION" | "PROCESSING" | "COMPLETED" | "FAILED";
+    StatusC4aEnum: "unknown" | "queued" | "running" | "succeeded" | "failed" | "cancelled";
+    /**
+     * @description * `queued` - Queued
+     * * `finetuning` - Fine tuning
+     * * `done` - Done
+     * * `failed` - Failed
+     * @enum {string}
+     */
+    StatusD09Enum: "queued" | "finetuning" | "done" | "failed";
     UnprocessableEntityError: {
       message: string;
       /**
@@ -730,6 +1077,620 @@ export type external = Record<string, never>;
 
 export interface operations {
 
+  /** @description List all finetuned models, filtered by the project id */
+  projects_gym_admin_datasets_list: {
+    parameters: {
+      query: {
+        project_id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": ({
+              id: number;
+              project: {
+                id: number;
+                name: string;
+                description?: string | null;
+              };
+              training_finetuning_requests: ({
+                  id: number;
+                  /**
+                   * @description * `queued` - Queued
+                   * * `finetuning` - Fine tuning
+                   * * `done` - Done
+                   * * `failed` - Failed
+                   * @enum {string}
+                   */
+                  status?: "queued" | "finetuning" | "done" | "failed";
+                })[];
+              training_finetuningjobs: ({
+                  id: number;
+                  /**
+                   * @description * `unknown` - Unknown
+                   * * `queued` - Queued
+                   * * `running` - Running
+                   * * `succeeded` - Succeeded
+                   * * `failed` - Failed
+                   * * `cancelled` - Cancelled
+                   * @enum {string}
+                   */
+                  status?: "unknown" | "queued" | "running" | "succeeded" | "failed" | "cancelled";
+                })[];
+              datapoints: {
+                  id: number;
+                }[];
+            })[];
+        };
+      };
+    };
+  };
+  /** @description Manage datasets */
+  projects_gym_admin_datasets_create: {
+    requestBody: {
+      content: {
+        "application/json": {
+          id: number;
+          project: number;
+          datapoints: ({
+              id?: number;
+              /** Format: uuid */
+              trace?: string | null;
+              input?: string | null;
+              output?: string | null;
+              /** @default false */
+              positive?: boolean;
+            })[];
+        };
+        "application/x-www-form-urlencoded": {
+          id: number;
+          project: number;
+          datapoints: ({
+              id?: number;
+              /** Format: uuid */
+              trace?: string | null;
+              input?: string | null;
+              output?: string | null;
+              /** @default false */
+              positive?: boolean;
+            })[];
+        };
+        "multipart/form-data": {
+          id: number;
+          project: number;
+          datapoints: ({
+              id?: number;
+              /** Format: uuid */
+              trace?: string | null;
+              input?: string | null;
+              output?: string | null;
+              /** @default false */
+              positive?: boolean;
+            })[];
+        };
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": {
+            id: number;
+            project: number;
+            datapoints: ({
+                id?: number;
+                /** Format: uuid */
+                trace?: string | null;
+                input?: string | null;
+                output?: string | null;
+                /** @default false */
+                positive?: boolean;
+              })[];
+          };
+        };
+      };
+    };
+  };
+  /** @description Manage datasets */
+  projects_gym_admin_datasets_retrieve: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this Dataset. */
+        id: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": {
+            id: number;
+            project: {
+              id: number;
+              name: string;
+              description?: string | null;
+            };
+            datapoints: ({
+                id: number;
+                input?: string | null;
+                output?: string | null;
+                positive: boolean;
+                /** Format: uuid */
+                trace?: string | null;
+                /** @default false */
+                override_input: string;
+                /** @default false */
+                override_output: string;
+              })[];
+            training_finetuning_requests: ({
+                id: number;
+                /**
+                 * @description * `queued` - Queued
+                 * * `finetuning` - Fine tuning
+                 * * `done` - Done
+                 * * `failed` - Failed
+                 * @enum {string}
+                 */
+                status?: "queued" | "finetuning" | "done" | "failed";
+              })[];
+            training_finetuningjobs: ({
+                id: number;
+                /**
+                 * @description * `unknown` - Unknown
+                 * * `queued` - Queued
+                 * * `running` - Running
+                 * * `succeeded` - Succeeded
+                 * * `failed` - Failed
+                 * * `cancelled` - Cancelled
+                 * @enum {string}
+                 */
+                status?: "unknown" | "queued" | "running" | "succeeded" | "failed" | "cancelled";
+              })[];
+          };
+        };
+      };
+    };
+  };
+  /** @description List all finetuned models, filtered by the finetuning_request id */
+  projects_gym_admin_finetunedmodels_list: {
+    parameters: {
+      query: {
+        fine_tuning_request_id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": ({
+              id: number;
+              slug: string;
+              alias?: string | null;
+              model_provider?: ("openai" | "azure" | "azure-mistral" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
+            })[];
+        };
+      };
+    };
+  };
+  /** @description Manage finetuned_models */
+  projects_gym_admin_finetunedmodels_retrieve: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this Model. */
+        id: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": {
+            id: number;
+            slug: string;
+            alias?: string | null;
+            model_provider?: ("openai" | "azure" | "azure-mistral" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
+          };
+        };
+      };
+    };
+  };
+  /** @description Promote a finetuned model to a model.This will set the alias for the model and set the finetuning_job as the current finetuning_job for the finetuning_request, making it available as the result for the finetuning. */
+  projects_gym_admin_finetunedmodels_promote_create: {
+    requestBody: {
+      content: {
+        "application/json": {
+          /** @description Model ID to be promoted */
+          model: number;
+          /** @description Alias for the finetuned model */
+          alias?: string | null;
+        };
+        "application/x-www-form-urlencoded": {
+          /** @description Model ID to be promoted */
+          model: number;
+          /** @description Alias for the finetuned model */
+          alias?: string | null;
+        };
+        "multipart/form-data": {
+          /** @description Model ID to be promoted */
+          model: number;
+          /** @description Alias for the finetuned model */
+          alias?: string | null;
+        };
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": {
+            id: number;
+            slug: string;
+            alias?: string | null;
+            model_provider?: ("openai" | "azure" | "azure-mistral" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
+          };
+        };
+      };
+    };
+  };
+  /** @description List all finetuning_jobs filtered by the finetuning_request, given its id */
+  projects_gym_admin_finetuningjobs_list: {
+    parameters: {
+      query: {
+        fine_tuning_request_id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": ({
+              id: number;
+              job_id: string;
+              /** Format: date-time */
+              finished_at?: string | null;
+              /**
+               * @description * `unknown` - Unknown
+               * * `queued` - Queued
+               * * `running` - Running
+               * * `succeeded` - Succeeded
+               * * `failed` - Failed
+               * * `cancelled` - Cancelled
+               * @enum {string}
+               */
+              status?: "unknown" | "queued" | "running" | "succeeded" | "failed" | "cancelled";
+              fine_tuned_model?: number | null;
+              fine_tuning_request?: number | null;
+              training_dataset?: number | null;
+              validation_dataset?: number | null;
+            })[];
+        };
+      };
+    };
+  };
+  /** @description Create a new finetuning job given the finetuning_request id,tranining_dataset id (optional, default is the finetuning_request dataset), eventually the validation_dataset id and hyperparameters: num_epochs */
+  projects_gym_admin_finetuningjobs_create: {
+    requestBody: {
+      content: {
+        "application/json": {
+          id: number;
+          /** @description Training dataset id to be used for fine-tuning. If omitted, the dataset from the finetuning_request will be used. */
+          training_dataset?: number;
+          /** @description Validation dataset id to be used for fine-tuning */
+          validation_dataset?: number;
+          /** @description Fine-tuning request id to be used for fine-tuning */
+          fine_tuning_request: number;
+          /** @description Hyperparameters for fine-tuning job */
+          hyperparameters?: {
+            /**
+             * @description Number of epochs for fine-tuning
+             * @default 3
+             */
+            num_epochs?: number;
+          };
+          /** Format: date-time */
+          created_at: string;
+          /** Format: date-time */
+          updated_at: string;
+        };
+        "application/x-www-form-urlencoded": {
+          id: number;
+          /** @description Training dataset id to be used for fine-tuning. If omitted, the dataset from the finetuning_request will be used. */
+          training_dataset?: number;
+          /** @description Validation dataset id to be used for fine-tuning */
+          validation_dataset?: number;
+          /** @description Fine-tuning request id to be used for fine-tuning */
+          fine_tuning_request: number;
+          /** @description Hyperparameters for fine-tuning job */
+          hyperparameters?: {
+            /**
+             * @description Number of epochs for fine-tuning
+             * @default 3
+             */
+            num_epochs?: number;
+          };
+          /** Format: date-time */
+          created_at: string;
+          /** Format: date-time */
+          updated_at: string;
+        };
+        "multipart/form-data": {
+          id: number;
+          /** @description Training dataset id to be used for fine-tuning. If omitted, the dataset from the finetuning_request will be used. */
+          training_dataset?: number;
+          /** @description Validation dataset id to be used for fine-tuning */
+          validation_dataset?: number;
+          /** @description Fine-tuning request id to be used for fine-tuning */
+          fine_tuning_request: number;
+          /** @description Hyperparameters for fine-tuning job */
+          hyperparameters?: {
+            /**
+             * @description Number of epochs for fine-tuning
+             * @default 3
+             */
+            num_epochs?: number;
+          };
+          /** Format: date-time */
+          created_at: string;
+          /** Format: date-time */
+          updated_at: string;
+        };
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": {
+            id: number;
+            job_id: string;
+            /** Format: date-time */
+            finished_at?: string | null;
+            /**
+             * @description * `unknown` - Unknown
+             * * `queued` - Queued
+             * * `running` - Running
+             * * `succeeded` - Succeeded
+             * * `failed` - Failed
+             * * `cancelled` - Cancelled
+             * @enum {string}
+             */
+            status?: "unknown" | "queued" | "running" | "succeeded" | "failed" | "cancelled";
+            fine_tuned_model?: number | null;
+            fine_tuning_request?: number | null;
+            training_dataset?: number | null;
+            validation_dataset?: number | null;
+          };
+        };
+      };
+    };
+  };
+  /** @description Manage finetuning_jobs */
+  projects_gym_admin_finetuningjobs_retrieve: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this FineTuningJob. */
+        id: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": {
+            id: number;
+            job_id: string;
+            /** Format: date-time */
+            finished_at?: string | null;
+            /**
+             * @description * `unknown` - Unknown
+             * * `queued` - Queued
+             * * `running` - Running
+             * * `succeeded` - Succeeded
+             * * `failed` - Failed
+             * * `cancelled` - Cancelled
+             * @enum {string}
+             */
+            status?: "unknown" | "queued" | "running" | "succeeded" | "failed" | "cancelled";
+            fine_tuned_model?: number | null;
+            fine_tuning_request?: number | null;
+            training_dataset?: number | null;
+            validation_dataset?: number | null;
+          };
+        };
+      };
+    };
+  };
+  /** @description List all finetuning_messages related to a specific finetuning_request, given its id */
+  projects_gym_admin_finetuningmessages_list: {
+    parameters: {
+      query: {
+        fine_tuning_request_id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": ({
+              id: number;
+              fine_tuning_request: number;
+              title: string;
+              message: string;
+              user_prompt?: string | null;
+            })[];
+        };
+      };
+    };
+  };
+  /** @description Create a new finetuning message given the finetuning_request id, its message and title */
+  projects_gym_admin_finetuningmessages_create: {
+    requestBody: {
+      content: {
+        "application/json": {
+          id: number;
+          fine_tuning_request: number;
+          title: string;
+          message: string;
+        };
+        "application/x-www-form-urlencoded": {
+          id: number;
+          fine_tuning_request: number;
+          title: string;
+          message: string;
+        };
+        "multipart/form-data": {
+          id: number;
+          fine_tuning_request: number;
+          title: string;
+          message: string;
+        };
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": {
+            id: number;
+            fine_tuning_request: number;
+            title: string;
+            message: string;
+          };
+        };
+      };
+    };
+  };
+  /** @description List all finetuning_requests, eventually filtered by the project_id */
+  projects_gym_admin_finetuningrequests_list: {
+    parameters: {
+      query: {
+        project_id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": ({
+              id: number;
+              /**
+               * @description * `queued` - Queued
+               * * `finetuning` - Fine tuning
+               * * `done` - Done
+               * * `failed` - Failed
+               * @enum {string}
+               */
+              status?: "queued" | "finetuning" | "done" | "failed";
+              project: {
+                id: number;
+                name: string;
+                description?: string | null;
+              };
+              model: {
+                id: number;
+                slug: string;
+                alias?: string | null;
+                group?: string | null;
+                model_provider?: ("openai" | "azure" | "azure-mistral" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
+              };
+              dataset: number;
+              messages: ({
+                  id: number;
+                  title: string;
+                  message: string;
+                  user_prompt?: string | null;
+                })[];
+              current_message: {
+                id: number;
+                title: string;
+                message: string;
+                user_prompt?: string | null;
+              };
+              current_fine_tuning_job?: number | null;
+            })[];
+        };
+      };
+    };
+  };
+  /** @description Retrieve a specific finetuning_request by its id */
+  projects_gym_admin_finetuningrequests_retrieve: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this fine tuning request. */
+        id: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": {
+            id: number;
+            /**
+             * @description * `queued` - Queued
+             * * `finetuning` - Fine tuning
+             * * `done` - Done
+             * * `failed` - Failed
+             * @enum {string}
+             */
+            status?: "queued" | "finetuning" | "done" | "failed";
+            project: {
+              id: number;
+              name: string;
+              description?: string | null;
+            };
+            model: {
+              id: number;
+              slug: string;
+              alias?: string | null;
+              group?: string | null;
+              model_provider?: ("openai" | "azure" | "azure-mistral" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
+            };
+            dataset: number;
+            messages: ({
+                id: number;
+                title: string;
+                message: string;
+                user_prompt?: string | null;
+              })[];
+            current_message: {
+              id: number;
+              title: string;
+              message: string;
+              user_prompt?: string | null;
+            };
+            current_fine_tuning_job?: number | null;
+          };
+        };
+      };
+    };
+  };
+  /** @description Set the state of a finetuning_request to 'finetuning' */
+  projects_gym_admin_finetuningrequests_set_started_create: {
+    requestBody: {
+      content: {
+        "application/json": {
+          /** @description Finetuning_request id to be updated */
+          fine_tuning_request: number;
+          /** @description Updated Fine-tuning request id */
+          id: number;
+        };
+        "application/x-www-form-urlencoded": {
+          /** @description Finetuning_request id to be updated */
+          fine_tuning_request: number;
+          /** @description Updated Fine-tuning request id */
+          id: number;
+        };
+        "multipart/form-data": {
+          /** @description Finetuning_request id to be updated */
+          fine_tuning_request: number;
+          /** @description Updated Fine-tuning request id */
+          id: number;
+        };
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": {
+            /** @description Finetuning_request id to be updated */
+            fine_tuning_request: number;
+            /** @description Updated Fine-tuning request id */
+            id: number;
+          };
+        };
+      };
+    };
+  };
   /** @description Creates a model response for the given chat conversation. Supports streaming with SSE, [documentation here](https://docs.premai.io/get-started/chat-completion-sse). */
   v1_chat_completions_create: {
     requestBody: {
@@ -1185,21 +2146,21 @@ export interface operations {
           output?: string | null;
           positive: boolean;
           trace?: string | null;
-          project: number;
+          project_id: number;
         };
         "application/x-www-form-urlencoded": {
           input?: string | null;
           output?: string | null;
           positive: boolean;
           trace?: string | null;
-          project: number;
+          project_id: number;
         };
         "multipart/form-data": {
           input?: string | null;
           output?: string | null;
           positive: boolean;
           trace?: string | null;
-          project: number;
+          project_id: number;
         };
       };
     };

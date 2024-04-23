@@ -253,6 +253,162 @@ export type DataPoint = {
   [k: string]: unknown
 }
 
+export type DataPointCreateGymAdmin = {
+  id?: number
+  trace?: string
+  input?: string
+  output?: string
+  positive?: boolean
+  [k: string]: unknown
+}
+
+export type DataPointGymAdmin = {
+  id: number
+  [k: string]: unknown
+}
+
+export type DataPointRetrieveGymAdmin = {
+  id: number
+  input?: string
+  output?: string
+  positive: boolean
+  trace?: string
+  override_input: boolean & string
+  override_output: boolean & string
+  [k: string]: unknown
+}
+
+export type DataSetCreateGymAdmin = {
+  id: number
+  project: number
+  datapoints: {
+    id?: number
+    trace?: string
+    input?: string
+    output?: string
+    positive?: boolean
+    [k: string]: unknown
+  }[]
+  [k: string]: unknown
+}
+
+export type DataSetFineTuningJobGymAdmin = {
+  id: number
+  /**
+   * * `unknown` - Unknown
+   * * `queued` - Queued
+   * * `running` - Running
+   * * `succeeded` - Succeeded
+   * * `failed` - Failed
+   * * `cancelled` - Cancelled
+   */
+  status?: "unknown" | "queued" | "running" | "succeeded" | "failed" | "cancelled"
+  [k: string]: unknown
+}
+
+export type DataSetFineTuningRequest = {
+  id: number
+  /**
+   * * `queued` - Queued
+   * * `finetuning` - Fine tuning
+   * * `done` - Done
+   * * `failed` - Failed
+   */
+  status?: "queued" | "finetuning" | "done" | "failed"
+  [k: string]: unknown
+}
+
+export type DataSetGymAdmin = {
+  id: number
+  project: {
+    id: number
+    name: string
+    description?: string
+    [k: string]: unknown
+  }
+  training_finetuning_requests: {
+    id: number
+    /**
+     * * `queued` - Queued
+     * * `finetuning` - Fine tuning
+     * * `done` - Done
+     * * `failed` - Failed
+     */
+    status?: "queued" | "finetuning" | "done" | "failed"
+    [k: string]: unknown
+  }[]
+  training_finetuningjobs: {
+    id: number
+    /**
+     * * `unknown` - Unknown
+     * * `queued` - Queued
+     * * `running` - Running
+     * * `succeeded` - Succeeded
+     * * `failed` - Failed
+     * * `cancelled` - Cancelled
+     */
+    status?: "unknown" | "queued" | "running" | "succeeded" | "failed" | "cancelled"
+    [k: string]: unknown
+  }[]
+  datapoints: {
+    id: number
+    [k: string]: unknown
+  }[]
+  [k: string]: unknown
+}
+
+export type DataSetProject = {
+  id: number
+  name: string
+  description?: string
+  [k: string]: unknown
+}
+
+export type DataSetRetrieveGymAdmin = {
+  id: number
+  project: {
+    id: number
+    name: string
+    description?: string
+    [k: string]: unknown
+  }
+  datapoints: {
+    id: number
+    input?: string
+    output?: string
+    positive: boolean
+    trace?: string
+    override_input: boolean & string
+    override_output: boolean & string
+    [k: string]: unknown
+  }[]
+  training_finetuning_requests: {
+    id: number
+    /**
+     * * `queued` - Queued
+     * * `finetuning` - Fine tuning
+     * * `done` - Done
+     * * `failed` - Failed
+     */
+    status?: "queued" | "finetuning" | "done" | "failed"
+    [k: string]: unknown
+  }[]
+  training_finetuningjobs: {
+    id: number
+    /**
+     * * `unknown` - Unknown
+     * * `queued` - Queued
+     * * `running` - Running
+     * * `succeeded` - Succeeded
+     * * `failed` - Failed
+     * * `cancelled` - Cancelled
+     */
+    status?: "unknown" | "queued" | "running" | "succeeded" | "failed" | "cancelled"
+    [k: string]: unknown
+  }[]
+  [k: string]: unknown
+}
+
 export type DocumentChunks = {
   repository_id?: number
   document_id?: number
@@ -308,6 +464,26 @@ export type DocumentOutput = {
   chunk_count: number
   [k: string]: unknown
 }
+
+/**
+ * * `PENDING` - Pending
+ * * `UPLOADED` - Uploaded
+ * * `PARSING` - Parsing
+ * * `CHUNKING` - Chunking
+ * * `WAITING_FOR_CHUNKS_COMPLETION` - Waiting for chunks completion
+ * * `PROCESSING` - Processing
+ * * `COMPLETED` - Completed
+ * * `FAILED` - Failed
+ */
+export type DocumentOutputStatusEnum =
+  | "PENDING"
+  | "UPLOADED"
+  | "PARSING"
+  | "CHUNKING"
+  | "WAITING_FOR_CHUNKS_COMPLETION"
+  | "PROCESSING"
+  | "COMPLETED"
+  | "FAILED"
 
 /**
  * * `pdf` - PDF
@@ -400,6 +576,48 @@ export type Enhancement = {
   [k: string]: unknown
 }
 
+export type FineTunedModelGymAdmin = {
+  id: number
+  slug: string
+  alias?: string
+  model_provider?:
+    | (
+        | "openai"
+        | "azure"
+        | "azure-mistral"
+        | "cohere"
+        | "anthropic"
+        | "cloudflare"
+        | "deepinfra"
+        | "lamini"
+        | "octoai"
+        | "replicate"
+        | "together"
+        | "fireworksai"
+        | "mistralai"
+        | "prem"
+        | "anyscale"
+        | "openrouter"
+        | "perplexity"
+        | "groq"
+      )
+    | ""
+    | null
+  [k: string]: unknown
+}
+
+export type FineTunedModelPromotion = {
+  /**
+   * Model ID to be promoted
+   */
+  model: number
+  /**
+   * Alias for the finetuned model
+   */
+  alias?: string
+  [k: string]: unknown
+}
+
 export type FineTuningInput = {
   /**
    * The ID of the project to use.
@@ -444,6 +662,202 @@ export type FineTuningInput = {
   [k: string]: unknown
 }
 
+export type FineTuningJobCreateGymAdmin = {
+  id: number
+  /**
+   * Training dataset id to be used for fine-tuning. If omitted, the dataset from the finetuning_request will be used.
+   */
+  training_dataset?: number
+  /**
+   * Validation dataset id to be used for fine-tuning
+   */
+  validation_dataset?: number
+  /**
+   * Fine-tuning request id to be used for fine-tuning
+   */
+  fine_tuning_request: number
+  /**
+   * Hyperparameters for fine-tuning job
+   */
+  hyperparameters?: {
+    /**
+     * Number of epochs for fine-tuning
+     */
+    num_epochs?: number
+    [k: string]: unknown
+  }
+  created_at: string
+  updated_at: string
+  [k: string]: unknown
+}
+
+export type FineTuningJobHyperparameters = {
+  /**
+   * Number of epochs for fine-tuning
+   */
+  num_epochs?: number
+  [k: string]: unknown
+}
+
+export type FineTuningJobOutputGymAdmin = {
+  id: number
+  job_id: string
+  finished_at?: string
+  /**
+   * * `unknown` - Unknown
+   * * `queued` - Queued
+   * * `running` - Running
+   * * `succeeded` - Succeeded
+   * * `failed` - Failed
+   * * `cancelled` - Cancelled
+   */
+  status?: "unknown" | "queued" | "running" | "succeeded" | "failed" | "cancelled"
+  fine_tuned_model?: number
+  fine_tuning_request?: number
+  training_dataset?: number
+  validation_dataset?: number
+  [k: string]: unknown
+}
+
+export type FineTuningMessageCreateGymAdmin = {
+  id: number
+  fine_tuning_request: number
+  title: string
+  message: string
+  [k: string]: unknown
+}
+
+export type FineTuningMessageOutputGymAdmin = {
+  id: number
+  fine_tuning_request: number
+  title: string
+  message: string
+  user_prompt?: string
+  [k: string]: unknown
+}
+
+export type FineTuningRequest = {
+  id: number
+  /**
+   * * `queued` - Queued
+   * * `finetuning` - Fine tuning
+   * * `done` - Done
+   * * `failed` - Failed
+   */
+  status?: "queued" | "finetuning" | "done" | "failed"
+  project: {
+    id: number
+    name: string
+    description?: string
+    [k: string]: unknown
+  }
+  model: {
+    id: number
+    slug: string
+    alias?: string
+    group?: string
+    model_provider?:
+      | (
+          | "openai"
+          | "azure"
+          | "azure-mistral"
+          | "cohere"
+          | "anthropic"
+          | "cloudflare"
+          | "deepinfra"
+          | "lamini"
+          | "octoai"
+          | "replicate"
+          | "together"
+          | "fireworksai"
+          | "mistralai"
+          | "prem"
+          | "anyscale"
+          | "openrouter"
+          | "perplexity"
+          | "groq"
+        )
+      | ""
+      | null
+    [k: string]: unknown
+  }
+  dataset: number
+  messages: {
+    id: number
+    title: string
+    message: string
+    user_prompt?: string
+    [k: string]: unknown
+  }[]
+  current_message: {
+    id: number
+    title: string
+    message: string
+    user_prompt?: string
+    [k: string]: unknown
+  }
+  current_fine_tuning_job?: number
+  [k: string]: unknown
+}
+
+export type FineTuningRequestChangeStateGymAdmin = {
+  /**
+   * Finetuning_request id to be updated
+   */
+  fine_tuning_request: number
+  /**
+   * Updated Fine-tuning request id
+   */
+  id: number
+  [k: string]: unknown
+}
+
+export type FineTuningRequestFineTuningMessage = {
+  id: number
+  title: string
+  message: string
+  user_prompt?: string
+  [k: string]: unknown
+}
+
+export type FineTuningRequestModel = {
+  id: number
+  slug: string
+  alias?: string
+  group?: string
+  model_provider?:
+    | (
+        | "openai"
+        | "azure"
+        | "azure-mistral"
+        | "cohere"
+        | "anthropic"
+        | "cloudflare"
+        | "deepinfra"
+        | "lamini"
+        | "octoai"
+        | "replicate"
+        | "together"
+        | "fireworksai"
+        | "mistralai"
+        | "prem"
+        | "anyscale"
+        | "openrouter"
+        | "perplexity"
+        | "groq"
+      )
+    | ""
+    | null
+  [k: string]: unknown
+}
+
+export type FineTuningRequestProject = {
+  id: number
+  name: string
+  description?: string
+  [k: string]: unknown
+}
+
 export type FineTuningResponse = {
   /**
    * The ID of the fine-tuning job.
@@ -469,7 +883,7 @@ export type InputDataPoint = {
   output?: string
   positive: boolean
   trace?: string
-  project: number
+  project_id: number
   [k: string]: unknown
 }
 
@@ -839,24 +1253,22 @@ export type RetrieveFineTuningResponse = {
 export type RoleEnum = "user" | "assistant"
 
 /**
- * * `PENDING` - Pending
- * * `UPLOADED` - Uploaded
- * * `PARSING` - Parsing
- * * `CHUNKING` - Chunking
- * * `WAITING_FOR_CHUNKS_COMPLETION` - Waiting for chunks completion
- * * `PROCESSING` - Processing
- * * `COMPLETED` - Completed
- * * `FAILED` - Failed
+ * * `unknown` - Unknown
+ * * `queued` - Queued
+ * * `running` - Running
+ * * `succeeded` - Succeeded
+ * * `failed` - Failed
+ * * `cancelled` - Cancelled
  */
-export type StatusEnum =
-  | "PENDING"
-  | "UPLOADED"
-  | "PARSING"
-  | "CHUNKING"
-  | "WAITING_FOR_CHUNKS_COMPLETION"
-  | "PROCESSING"
-  | "COMPLETED"
-  | "FAILED"
+export type StatusC4AEnum = "unknown" | "queued" | "running" | "succeeded" | "failed" | "cancelled"
+
+/**
+ * * `queued` - Queued
+ * * `finetuning` - Fine tuning
+ * * `done` - Done
+ * * `failed` - Failed
+ */
+export type StatusD09Enum = "queued" | "finetuning" | "done" | "failed"
 
 export type UnprocessableEntityError = {
   message: string
