@@ -253,14 +253,7 @@ export type DocumentChunks = {
 }
 
 export type DocumentInput = {
-  name: string
-  content: string
-  /**
-   * * `pdf` - PDF
-   * * `docx` - Word
-   * * `txt` - Text
-   */
-  document_type: "pdf" | "docx" | "txt"
+  file: string
   [k: string]: unknown
 }
 
@@ -420,70 +413,6 @@ export type FeedbackCreateFeedback = {
     content?: string
     [k: string]: unknown
   }[]
-  [k: string]: unknown
-}
-
-export type FineTuningInput = {
-  /**
-   * The ID of the project to use.
-   */
-  project_id: number
-  /**
-   * ID of the model to use. See the model endpoint compatibility table for details.
-   */
-  model?: string
-  /**
-   * The training file.
-   */
-  training_data: {
-    /**
-     * The input text.
-     */
-    input: string
-    /**
-     * The output text.
-     */
-    output: string
-    [k: string]: unknown
-  }[]
-  /**
-   * The training file.
-   */
-  validaton_data?: {
-    /**
-     * The input text.
-     */
-    input: string
-    /**
-     * The output text.
-     */
-    output: string
-    [k: string]: unknown
-  }[]
-  /**
-   * The number of epochs to train for.
-   */
-  num_epochs?: number
-  [k: string]: unknown
-}
-
-export type FineTuningResponse = {
-  /**
-   * The ID of the fine-tuning job.
-   */
-  job_id: string
-  [k: string]: unknown
-}
-
-export type FineTuningSample = {
-  /**
-   * The input text.
-   */
-  input: string
-  /**
-   * The output text.
-   */
-  output: string
   [k: string]: unknown
 }
 
@@ -829,46 +758,6 @@ export type ResponseChoice = {
   [k: string]: unknown
 }
 
-export type RetrieveFineTuningResponse = {
-  /**
-   * The ID of the fine-tuning job.
-   */
-  id: string
-  /**
-   * The ID of the fine-tuned model.
-   */
-  fine_tuned_model: string
-  /**
-   * The Unix timestamp (in seconds) of when the fine-tuning job was created.
-   */
-  created_at: number
-  /**
-   * The Unix timestamp (in seconds) of when the fine-tuning job was finished.
-   */
-  finished_at?: number
-  /**
-   * The status of the fine-tuning job.
-   */
-  status: string
-  /**
-   * The error message of the fine-tuning job.
-   */
-  error?: string
-  /**
-   * The name of the provider that generated the completion.
-   */
-  provider_name: string
-  /**
-   * The ID of the provider that generated the completion.
-   */
-  provider_id: string
-  /**
-   * The status code of the fine-tuning job.
-   */
-  status_code: number
-  [k: string]: unknown
-}
-
 /**
  * * `PENDING` - Pending
  * * `UPLOADED` - Uploaded
@@ -891,7 +780,7 @@ export type StatusEnum =
 
 export type TraceFeedback = {
   positive: boolean
-  used_datapoint_messages: string
+  used_datapoint_messages: boolean
   messages: {
     /**
      * * `user` - user
@@ -911,7 +800,7 @@ export type TraceList = {
   model_id: number
   feedback: {
     positive: boolean
-    used_datapoint_messages: string
+    used_datapoint_messages: boolean
     messages: {
       /**
        * * `user` - user
@@ -986,7 +875,7 @@ export type TraceRetrieve = {
   }[]
   feedback: {
     positive: boolean
-    used_datapoint_messages: string
+    used_datapoint_messages: boolean
     messages: {
       /**
        * * `user` - user

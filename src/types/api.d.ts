@@ -18,14 +18,6 @@ export interface paths {
     /** @description Creates embeddings for the given input. */
     post: operations["v1_embeddings_create"];
   };
-  "/v1/finetuning": {
-    /** @description Creates a finetuning job. */
-    post: operations["v1_finetuning_create"];
-  };
-  "/v1/finetuning/{job_id}": {
-    /** @description Retrieve a finetuning job. */
-    get: operations["v1_finetuning_retrieve"];
-  };
   "/v1/models/": {
     get: operations["v1_models_list"];
   };
@@ -237,15 +229,8 @@ export interface components {
       content?: string;
     };
     DocumentInput: {
-      name: string;
-      content: string;
-      /**
-       * @description * `pdf` - PDF
-       * * `docx` - Word
-       * * `txt` - Text
-       * @enum {string}
-       */
-      document_type: "pdf" | "docx" | "txt";
+      /** Format: uri */
+      file: string;
     };
     DocumentOutput: {
       repository_id: number;
@@ -362,41 +347,6 @@ export interface components {
           role?: "user" | "assistant" | "system";
           content?: string;
         })[];
-    };
-    FineTuningInput: {
-      /** @description The ID of the project to use. */
-      project_id: number;
-      /** @description ID of the model to use. See the model endpoint compatibility table for details. */
-      model?: string;
-      /** @description The training file. */
-      training_data: {
-          /** @description The input text. */
-          input: string;
-          /** @description The output text. */
-          output: string;
-        }[];
-      /** @description The training file. */
-      validaton_data?: {
-          /** @description The input text. */
-          input: string;
-          /** @description The output text. */
-          output: string;
-        }[];
-      /**
-       * @description The number of epochs to train for.
-       * @default 1
-       */
-      num_epochs?: number;
-    };
-    FineTuningResponse: {
-      /** @description The ID of the fine-tuning job. */
-      job_id: string;
-    };
-    FineTuningSample: {
-      /** @description The input text. */
-      input: string;
-      /** @description The output text. */
-      output: string;
     };
     InternalServerError: {
       message: string;
@@ -662,26 +612,6 @@ export interface components {
       /** @description The reason the chat completion finished, e.g., 'stop' or 'length'. */
       finish_reason: string;
     };
-    RetrieveFineTuningResponse: {
-      /** @description The ID of the fine-tuning job. */
-      id: string;
-      /** @description The ID of the fine-tuned model. */
-      fine_tuned_model: string;
-      /** @description The Unix timestamp (in seconds) of when the fine-tuning job was created. */
-      created_at: number;
-      /** @description The Unix timestamp (in seconds) of when the fine-tuning job was finished. */
-      finished_at?: number;
-      /** @description The status of the fine-tuning job. */
-      status: string;
-      /** @description The error message of the fine-tuning job. */
-      error?: string;
-      /** @description The name of the provider that generated the completion. */
-      provider_name: string;
-      /** @description The ID of the provider that generated the completion. */
-      provider_id: string;
-      /** @description The status code of the fine-tuning job. */
-      status_code: number;
-    };
     /**
      * @description * `PENDING` - Pending
      * * `UPLOADED` - Uploaded
@@ -696,7 +626,7 @@ export interface components {
     StatusEnum: "PENDING" | "UPLOADED" | "PARSING" | "CHUNKING" | "WAITING_FOR_CHUNKS_COMPLETION" | "PROCESSING" | "COMPLETED" | "FAILED";
     TraceFeedback: {
       positive: boolean;
-      used_datapoint_messages: string;
+      used_datapoint_messages: boolean;
       messages: ({
           /**
            * @description * `user` - user
@@ -715,7 +645,7 @@ export interface components {
       model_id: number;
       feedback: ({
         positive: boolean;
-        used_datapoint_messages: string;
+        used_datapoint_messages: boolean;
         messages: ({
             /**
              * @description * `user` - user
@@ -763,7 +693,7 @@ export interface components {
         })[];
       feedback: ({
         positive: boolean;
-        used_datapoint_messages: string;
+        used_datapoint_messages: boolean;
         messages: ({
             /**
              * @description * `user` - user
@@ -1486,428 +1416,6 @@ export interface operations {
       };
     };
   };
-  /** @description Creates a finetuning job. */
-  v1_finetuning_create: {
-    requestBody: {
-      content: {
-        "application/json": {
-          /** @description The ID of the project to use. */
-          project_id: number;
-          /** @description ID of the model to use. See the model endpoint compatibility table for details. */
-          model?: string;
-          /** @description The training file. */
-          training_data: {
-              /** @description The input text. */
-              input: string;
-              /** @description The output text. */
-              output: string;
-            }[];
-          /** @description The training file. */
-          validaton_data?: {
-              /** @description The input text. */
-              input: string;
-              /** @description The output text. */
-              output: string;
-            }[];
-          /**
-           * @description The number of epochs to train for.
-           * @default 1
-           */
-          num_epochs?: number;
-        };
-        "application/x-www-form-urlencoded": {
-          /** @description The ID of the project to use. */
-          project_id: number;
-          /** @description ID of the model to use. See the model endpoint compatibility table for details. */
-          model?: string;
-          /** @description The training file. */
-          training_data: {
-              /** @description The input text. */
-              input: string;
-              /** @description The output text. */
-              output: string;
-            }[];
-          /** @description The training file. */
-          validaton_data?: {
-              /** @description The input text. */
-              input: string;
-              /** @description The output text. */
-              output: string;
-            }[];
-          /**
-           * @description The number of epochs to train for.
-           * @default 1
-           */
-          num_epochs?: number;
-        };
-        "multipart/form-data": {
-          /** @description The ID of the project to use. */
-          project_id: number;
-          /** @description ID of the model to use. See the model endpoint compatibility table for details. */
-          model?: string;
-          /** @description The training file. */
-          training_data: {
-              /** @description The input text. */
-              input: string;
-              /** @description The output text. */
-              output: string;
-            }[];
-          /** @description The training file. */
-          validaton_data?: {
-              /** @description The input text. */
-              input: string;
-              /** @description The output text. */
-              output: string;
-            }[];
-          /**
-           * @description The number of epochs to train for.
-           * @default 1
-           */
-          num_epochs?: number;
-        };
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": {
-            /** @description The ID of the fine-tuning job. */
-            job_id: string;
-          };
-        };
-      };
-      400: {
-        content: {
-          "application/json": {
-            /** @description A description of the validation error. */
-            message: string;
-            /** @description Detailed information about the validation errors. */
-            details: {
-              [key: string]: {
-                /** @description Error messages for the field. */
-                error_messages: {
-                    [key: string]: unknown;
-                  }[];
-              };
-            };
-            /**
-             * @description * `ValidationError` - ValidationError
-             * @enum {string}
-             */
-            code: "ValidationError";
-          };
-        };
-      };
-      401: {
-        content: {
-          "application/json": {
-            message: string;
-            /**
-             * @description * `AuthenticationError` - AuthenticationError
-             * @enum {string}
-             */
-            code: "AuthenticationError";
-          };
-        };
-      };
-      403: {
-        content: {
-          "application/json": {
-            message: string;
-            /**
-             * @description * `PermissionDeniedError` - PermissionDeniedError
-             * @enum {string}
-             */
-            code: "PermissionDeniedError";
-          };
-        };
-      };
-      404: {
-        content: {
-          "application/json": OneOf<[{
-            message: string;
-            /**
-             * @description * `ProviderNotFoundError` - ProviderNotFoundError
-             * @enum {string}
-             */
-            code: "ProviderNotFoundError";
-          }, {
-            message: string;
-            /**
-             * @description * `ModelNotFoundError` - ModelNotFoundError
-             * @enum {string}
-             */
-            code: "ModelNotFoundError";
-          }]>;
-        };
-      };
-      409: {
-        content: {
-          "application/json": {
-            message: string;
-            /**
-             * @description * `ConflictError` - ConflictError
-             * @enum {string}
-             */
-            code: "ConflictError";
-          };
-        };
-      };
-      422: {
-        content: {
-          "application/json": {
-            message: string;
-            /**
-             * @description * `UnprocessableEntityError` - UnprocessableEntityError
-             * @enum {string}
-             */
-            code: "UnprocessableEntityError";
-          };
-        };
-      };
-      429: {
-        content: {
-          "application/json": {
-            message: string;
-            /**
-             * @description * `RateLimitError` - RateLimitError
-             * @enum {string}
-             */
-            code: "RateLimitError";
-          };
-        };
-      };
-      500: {
-        content: {
-          "application/json": {
-            message: string;
-            /**
-             * @description * `ProviderInternalServerError` - ProviderInternalServerError
-             * @enum {string}
-             */
-            code: "ProviderInternalServerError";
-          } | {
-            message: string;
-            /**
-             * @description * `APIResponseValidationError` - APIResponseValidationError
-             * @enum {string}
-             */
-            code: "APIResponseValidationError";
-          } | {
-            message: string;
-            /**
-             * @description * `ProviderAPIStatusError` - ProviderAPIStatusError
-             * @enum {string}
-             */
-            code: "ProviderAPIStatusError";
-          } | {
-            message: string;
-            /**
-             * @description * `ProviderAPITimeoutError` - ProviderAPITimeoutError
-             * @enum {string}
-             */
-            code: "ProviderAPITimeoutError";
-          } | {
-            message: string;
-            /**
-             * @description * `ProviderAPIConnectionError` - ProviderAPIConnectionError
-             * @enum {string}
-             */
-            code: "ProviderAPIConnectionError";
-          } | {
-            message: string;
-            /**
-             * @description * `CatchAllError` - CatchAllError
-             * @enum {string}
-             */
-            code: "CatchAllError";
-          };
-        };
-      };
-    };
-  };
-  /** @description Retrieve a finetuning job. */
-  v1_finetuning_retrieve: {
-    parameters: {
-      path: {
-        job_id: string;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": {
-            /** @description The ID of the fine-tuning job. */
-            id: string;
-            /** @description The ID of the fine-tuned model. */
-            fine_tuned_model: string;
-            /** @description The Unix timestamp (in seconds) of when the fine-tuning job was created. */
-            created_at: number;
-            /** @description The Unix timestamp (in seconds) of when the fine-tuning job was finished. */
-            finished_at?: number;
-            /** @description The status of the fine-tuning job. */
-            status: string;
-            /** @description The error message of the fine-tuning job. */
-            error?: string;
-            /** @description The name of the provider that generated the completion. */
-            provider_name: string;
-            /** @description The ID of the provider that generated the completion. */
-            provider_id: string;
-            /** @description The status code of the fine-tuning job. */
-            status_code: number;
-          };
-        };
-      };
-      400: {
-        content: {
-          "application/json": {
-            /** @description A description of the validation error. */
-            message: string;
-            /** @description Detailed information about the validation errors. */
-            details: {
-              [key: string]: {
-                /** @description Error messages for the field. */
-                error_messages: {
-                    [key: string]: unknown;
-                  }[];
-              };
-            };
-            /**
-             * @description * `ValidationError` - ValidationError
-             * @enum {string}
-             */
-            code: "ValidationError";
-          };
-        };
-      };
-      401: {
-        content: {
-          "application/json": {
-            message: string;
-            /**
-             * @description * `AuthenticationError` - AuthenticationError
-             * @enum {string}
-             */
-            code: "AuthenticationError";
-          };
-        };
-      };
-      403: {
-        content: {
-          "application/json": {
-            message: string;
-            /**
-             * @description * `PermissionDeniedError` - PermissionDeniedError
-             * @enum {string}
-             */
-            code: "PermissionDeniedError";
-          };
-        };
-      };
-      404: {
-        content: {
-          "application/json": OneOf<[{
-            message: string;
-            /**
-             * @description * `ProviderNotFoundError` - ProviderNotFoundError
-             * @enum {string}
-             */
-            code: "ProviderNotFoundError";
-          }, {
-            message: string;
-            /**
-             * @description * `ModelNotFoundError` - ModelNotFoundError
-             * @enum {string}
-             */
-            code: "ModelNotFoundError";
-          }]>;
-        };
-      };
-      409: {
-        content: {
-          "application/json": {
-            message: string;
-            /**
-             * @description * `ConflictError` - ConflictError
-             * @enum {string}
-             */
-            code: "ConflictError";
-          };
-        };
-      };
-      422: {
-        content: {
-          "application/json": {
-            message: string;
-            /**
-             * @description * `UnprocessableEntityError` - UnprocessableEntityError
-             * @enum {string}
-             */
-            code: "UnprocessableEntityError";
-          };
-        };
-      };
-      429: {
-        content: {
-          "application/json": {
-            message: string;
-            /**
-             * @description * `RateLimitError` - RateLimitError
-             * @enum {string}
-             */
-            code: "RateLimitError";
-          };
-        };
-      };
-      500: {
-        content: {
-          "application/json": {
-            message: string;
-            /**
-             * @description * `ProviderInternalServerError` - ProviderInternalServerError
-             * @enum {string}
-             */
-            code: "ProviderInternalServerError";
-          } | {
-            message: string;
-            /**
-             * @description * `APIResponseValidationError` - APIResponseValidationError
-             * @enum {string}
-             */
-            code: "APIResponseValidationError";
-          } | {
-            message: string;
-            /**
-             * @description * `ProviderAPIStatusError` - ProviderAPIStatusError
-             * @enum {string}
-             */
-            code: "ProviderAPIStatusError";
-          } | {
-            message: string;
-            /**
-             * @description * `ProviderAPITimeoutError` - ProviderAPITimeoutError
-             * @enum {string}
-             */
-            code: "ProviderAPITimeoutError";
-          } | {
-            message: string;
-            /**
-             * @description * `ProviderAPIConnectionError` - ProviderAPIConnectionError
-             * @enum {string}
-             */
-            code: "ProviderAPIConnectionError";
-          } | {
-            message: string;
-            /**
-             * @description * `CatchAllError` - CatchAllError
-             * @enum {string}
-             */
-            code: "CatchAllError";
-          };
-        };
-      };
-    };
-  };
   v1_models_list: {
     responses: {
       200: {
@@ -1964,38 +1472,9 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": {
-          name: string;
-          content: string;
-          /**
-           * @description * `pdf` - PDF
-           * * `docx` - Word
-           * * `txt` - Text
-           * @enum {string}
-           */
-          document_type: "pdf" | "docx" | "txt";
-        };
-        "application/x-www-form-urlencoded": {
-          name: string;
-          content: string;
-          /**
-           * @description * `pdf` - PDF
-           * * `docx` - Word
-           * * `txt` - Text
-           * @enum {string}
-           */
-          document_type: "pdf" | "docx" | "txt";
-        };
         "multipart/form-data": {
-          name: string;
-          content: string;
-          /**
-           * @description * `pdf` - PDF
-           * * `docx` - Word
-           * * `txt` - Text
-           * @enum {string}
-           */
-          document_type: "pdf" | "docx" | "txt";
+          /** Format: uri */
+          file: string;
         };
       };
     };
@@ -2134,7 +1613,7 @@ export interface operations {
               model_id: number;
               feedback: ({
                 positive: boolean;
-                used_datapoint_messages: string;
+                used_datapoint_messages: boolean;
                 messages: ({
                     /**
                      * @description * `user` - user
@@ -2196,7 +1675,7 @@ export interface operations {
               })[];
             feedback: ({
               positive: boolean;
-              used_datapoint_messages: string;
+              used_datapoint_messages: boolean;
               messages: ({
                   /**
                    * @description * `user` - user
