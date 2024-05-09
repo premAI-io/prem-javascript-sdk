@@ -1600,7 +1600,7 @@ export interface operations {
   v1_traces_list: {
     parameters: {
       query: {
-        project_id: string;
+        project_id: number;
       };
     };
     responses: {
