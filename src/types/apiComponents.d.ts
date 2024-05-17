@@ -84,7 +84,17 @@ export type ChatCompletionInput = {
     /**
      * The content of the message.
      */
-    content: string
+    content?: string
+    /**
+     * The ID of the template to use.
+     */
+    template_id?: string
+    /**
+     * The parameters (key: value) to use with the given template.
+     */
+    params?: {
+      [k: string]: unknown
+    }
     [k: string]: unknown
   }[]
   /**
@@ -96,37 +106,9 @@ export type ChatCompletionInput = {
    */
   system_prompt?: string
   /**
-   * Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency.
-   */
-  frequency_penalty?: number
-  /**
-   * JSON object that maps tokens to an associated bias value from -100 to 100.
-   */
-  logit_bias?: {
-    [k: string]: unknown
-  }
-  /**
    * The maximum number of tokens to generate in the chat completion.
    */
   max_tokens?: number
-  /**
-   * Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far.
-   */
-  presence_penalty?: number
-  /**
-   * An object specifying the format that the model must output.
-   */
-  response_format?: {
-    [k: string]: unknown
-  }
-  /**
-   * This feature is in Beta. If specified, our system will make a best effort to sample deterministically.
-   */
-  seed?: number
-  /**
-   * Up to 4 sequences where the API will stop generating further tokens.
-   */
-  stop?: string
   /**
    * If set, partial message deltas will be sent, like in ChatGPT.
    */
@@ -135,20 +117,6 @@ export type ChatCompletionInput = {
    * What sampling temperature to use, between 0 and 2.
    */
   temperature?: number
-  /**
-   * An alternative to sampling with temperature, called nucleus sampling.
-   */
-  top_p?: number
-  /**
-   * A list of tools the model may call. Currently, only functions are supported as a tool.
-   */
-  tools?: {
-    [k: string]: unknown
-  }[]
-  /**
-   * A unique identifier representing your end-user.
-   */
-  user?: string
   [k: string]: unknown
 }
 
@@ -175,7 +143,17 @@ export type ChatCompletionResponse = {
       /**
        * The content of the message.
        */
-      content: string
+      content?: string
+      /**
+       * The ID of the template to use.
+       */
+      template_id?: string
+      /**
+       * The parameters (key: value) to use with the given template.
+       */
+      params?: {
+        [k: string]: unknown
+      }
       [k: string]: unknown
     }
     /**
@@ -477,7 +455,17 @@ export type Message = {
   /**
    * The content of the message.
    */
-  content: string
+  content?: string
+  /**
+   * The ID of the template to use.
+   */
+  template_id?: string
+  /**
+   * The parameters (key: value) to use with the given template.
+   */
+  params?: {
+    [k: string]: unknown
+  }
   [k: string]: unknown
 }
 
@@ -748,7 +736,17 @@ export type ResponseChoice = {
     /**
      * The content of the message.
      */
-    content: string
+    content?: string
+    /**
+     * The ID of the template to use.
+     */
+    template_id?: string
+    /**
+     * The parameters (key: value) to use with the given template.
+     */
+    params?: {
+      [k: string]: unknown
+    }
     [k: string]: unknown
   }
   /**

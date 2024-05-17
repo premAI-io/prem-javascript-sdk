@@ -107,36 +107,23 @@ export interface components {
            */
           role: "user" | "assistant";
           /** @description The content of the message. */
-          content: string;
+          content?: string;
+          /**
+           * Format: uuid
+           * @description The ID of the template to use.
+           */
+          template_id?: string;
+          /** @description The parameters (key: value) to use with the given template. */
+          params?: {
+            [key: string]: unknown;
+          };
         })[];
       /** @description ID of the model to use. See the model endpoint compatibility table for details. */
       model?: string;
       /** @description The system prompt to use. */
       system_prompt?: string;
-      /**
-       * Format: double
-       * @description Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency.
-       */
-      frequency_penalty?: number;
-      /** @description JSON object that maps tokens to an associated bias value from -100 to 100. */
-      logit_bias?: {
-        [key: string]: unknown;
-      } | null;
       /** @description The maximum number of tokens to generate in the chat completion. */
       max_tokens?: number | null;
-      /**
-       * Format: double
-       * @description Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far.
-       */
-      presence_penalty?: number;
-      /** @description An object specifying the format that the model must output. */
-      response_format?: {
-        [key: string]: unknown;
-      } | null;
-      /** @description This feature is in Beta. If specified, our system will make a best effort to sample deterministically. */
-      seed?: number | null;
-      /** @description Up to 4 sequences where the API will stop generating further tokens. */
-      stop?: string | null;
       /** @description If set, partial message deltas will be sent, like in ChatGPT. */
       stream?: boolean;
       /**
@@ -144,17 +131,6 @@ export interface components {
        * @description What sampling temperature to use, between 0 and 2.
        */
       temperature?: number | null;
-      /**
-       * Format: double
-       * @description An alternative to sampling with temperature, called nucleus sampling.
-       */
-      top_p?: number | null;
-      /** @description A list of tools the model may call. Currently, only functions are supported as a tool. */
-      tools?: {
-          [key: string]: unknown;
-        }[];
-      /** @description A unique identifier representing your end-user. */
-      user?: string | null;
     };
     ChatCompletionResponse: {
       /** @description A list of chat completion choices. Can be more than one if n is greater than 1. */
@@ -171,7 +147,16 @@ export interface components {
              */
             role: "user" | "assistant";
             /** @description The content of the message. */
-            content: string;
+            content?: string;
+            /**
+             * Format: uuid
+             * @description The ID of the template to use.
+             */
+            template_id?: string;
+            /** @description The parameters (key: value) to use with the given template. */
+            params?: {
+              [key: string]: unknown;
+            };
           };
           /** @description The reason the chat completion finished, e.g., 'stop' or 'length'. */
           finish_reason: string;
@@ -400,7 +385,16 @@ export interface components {
        */
       role: "user" | "assistant";
       /** @description The content of the message. */
-      content: string;
+      content?: string;
+      /**
+       * Format: uuid
+       * @description The ID of the template to use.
+       */
+      template_id?: string;
+      /** @description The parameters (key: value) to use with the given template. */
+      params?: {
+        [key: string]: unknown;
+      };
     };
     /**
      * @description * `user` - user
@@ -607,7 +601,16 @@ export interface components {
          */
         role: "user" | "assistant";
         /** @description The content of the message. */
-        content: string;
+        content?: string;
+        /**
+         * Format: uuid
+         * @description The ID of the template to use.
+         */
+        template_id?: string;
+        /** @description The parameters (key: value) to use with the given template. */
+        params?: {
+          [key: string]: unknown;
+        };
       };
       /** @description The reason the chat completion finished, e.g., 'stop' or 'length'. */
       finish_reason: string;
@@ -804,36 +807,23 @@ export interface operations {
                */
               role: "user" | "assistant";
               /** @description The content of the message. */
-              content: string;
+              content?: string;
+              /**
+               * Format: uuid
+               * @description The ID of the template to use.
+               */
+              template_id?: string;
+              /** @description The parameters (key: value) to use with the given template. */
+              params?: {
+                [key: string]: unknown;
+              };
             })[];
           /** @description ID of the model to use. See the model endpoint compatibility table for details. */
           model?: string;
           /** @description The system prompt to use. */
           system_prompt?: string;
-          /**
-           * Format: double
-           * @description Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency.
-           */
-          frequency_penalty?: number;
-          /** @description JSON object that maps tokens to an associated bias value from -100 to 100. */
-          logit_bias?: {
-            [key: string]: unknown;
-          } | null;
           /** @description The maximum number of tokens to generate in the chat completion. */
           max_tokens?: number | null;
-          /**
-           * Format: double
-           * @description Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far.
-           */
-          presence_penalty?: number;
-          /** @description An object specifying the format that the model must output. */
-          response_format?: {
-            [key: string]: unknown;
-          } | null;
-          /** @description This feature is in Beta. If specified, our system will make a best effort to sample deterministically. */
-          seed?: number | null;
-          /** @description Up to 4 sequences where the API will stop generating further tokens. */
-          stop?: string | null;
           /** @description If set, partial message deltas will be sent, like in ChatGPT. */
           stream?: boolean;
           /**
@@ -841,17 +831,6 @@ export interface operations {
            * @description What sampling temperature to use, between 0 and 2.
            */
           temperature?: number | null;
-          /**
-           * Format: double
-           * @description An alternative to sampling with temperature, called nucleus sampling.
-           */
-          top_p?: number | null;
-          /** @description A list of tools the model may call. Currently, only functions are supported as a tool. */
-          tools?: {
-              [key: string]: unknown;
-            }[];
-          /** @description A unique identifier representing your end-user. */
-          user?: string | null;
         };
         "application/x-www-form-urlencoded": {
           /** @description The ID of the project to use. */
@@ -876,36 +855,23 @@ export interface operations {
                */
               role: "user" | "assistant";
               /** @description The content of the message. */
-              content: string;
+              content?: string;
+              /**
+               * Format: uuid
+               * @description The ID of the template to use.
+               */
+              template_id?: string;
+              /** @description The parameters (key: value) to use with the given template. */
+              params?: {
+                [key: string]: unknown;
+              };
             })[];
           /** @description ID of the model to use. See the model endpoint compatibility table for details. */
           model?: string;
           /** @description The system prompt to use. */
           system_prompt?: string;
-          /**
-           * Format: double
-           * @description Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency.
-           */
-          frequency_penalty?: number;
-          /** @description JSON object that maps tokens to an associated bias value from -100 to 100. */
-          logit_bias?: {
-            [key: string]: unknown;
-          } | null;
           /** @description The maximum number of tokens to generate in the chat completion. */
           max_tokens?: number | null;
-          /**
-           * Format: double
-           * @description Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far.
-           */
-          presence_penalty?: number;
-          /** @description An object specifying the format that the model must output. */
-          response_format?: {
-            [key: string]: unknown;
-          } | null;
-          /** @description This feature is in Beta. If specified, our system will make a best effort to sample deterministically. */
-          seed?: number | null;
-          /** @description Up to 4 sequences where the API will stop generating further tokens. */
-          stop?: string | null;
           /** @description If set, partial message deltas will be sent, like in ChatGPT. */
           stream?: boolean;
           /**
@@ -913,17 +879,6 @@ export interface operations {
            * @description What sampling temperature to use, between 0 and 2.
            */
           temperature?: number | null;
-          /**
-           * Format: double
-           * @description An alternative to sampling with temperature, called nucleus sampling.
-           */
-          top_p?: number | null;
-          /** @description A list of tools the model may call. Currently, only functions are supported as a tool. */
-          tools?: {
-              [key: string]: unknown;
-            }[];
-          /** @description A unique identifier representing your end-user. */
-          user?: string | null;
         };
         "multipart/form-data": {
           /** @description The ID of the project to use. */
@@ -948,36 +903,23 @@ export interface operations {
                */
               role: "user" | "assistant";
               /** @description The content of the message. */
-              content: string;
+              content?: string;
+              /**
+               * Format: uuid
+               * @description The ID of the template to use.
+               */
+              template_id?: string;
+              /** @description The parameters (key: value) to use with the given template. */
+              params?: {
+                [key: string]: unknown;
+              };
             })[];
           /** @description ID of the model to use. See the model endpoint compatibility table for details. */
           model?: string;
           /** @description The system prompt to use. */
           system_prompt?: string;
-          /**
-           * Format: double
-           * @description Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency.
-           */
-          frequency_penalty?: number;
-          /** @description JSON object that maps tokens to an associated bias value from -100 to 100. */
-          logit_bias?: {
-            [key: string]: unknown;
-          } | null;
           /** @description The maximum number of tokens to generate in the chat completion. */
           max_tokens?: number | null;
-          /**
-           * Format: double
-           * @description Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far.
-           */
-          presence_penalty?: number;
-          /** @description An object specifying the format that the model must output. */
-          response_format?: {
-            [key: string]: unknown;
-          } | null;
-          /** @description This feature is in Beta. If specified, our system will make a best effort to sample deterministically. */
-          seed?: number | null;
-          /** @description Up to 4 sequences where the API will stop generating further tokens. */
-          stop?: string | null;
           /** @description If set, partial message deltas will be sent, like in ChatGPT. */
           stream?: boolean;
           /**
@@ -985,17 +927,6 @@ export interface operations {
            * @description What sampling temperature to use, between 0 and 2.
            */
           temperature?: number | null;
-          /**
-           * Format: double
-           * @description An alternative to sampling with temperature, called nucleus sampling.
-           */
-          top_p?: number | null;
-          /** @description A list of tools the model may call. Currently, only functions are supported as a tool. */
-          tools?: {
-              [key: string]: unknown;
-            }[];
-          /** @description A unique identifier representing your end-user. */
-          user?: string | null;
         };
       };
     };
@@ -1017,7 +948,16 @@ export interface operations {
                    */
                   role: "user" | "assistant";
                   /** @description The content of the message. */
-                  content: string;
+                  content?: string;
+                  /**
+                   * Format: uuid
+                   * @description The ID of the template to use.
+                   */
+                  template_id?: string;
+                  /** @description The parameters (key: value) to use with the given template. */
+                  params?: {
+                    [key: string]: unknown;
+                  };
                 };
                 /** @description The reason the chat completion finished, e.g., 'stop' or 'length'. */
                 finish_reason: string;
