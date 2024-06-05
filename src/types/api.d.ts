@@ -24,6 +24,9 @@ export interface paths {
   "/v1/models/{id}/": {
     get: operations["v1_models_retrieve"];
   };
+  "/v1/repositories/": {
+    post: operations["v1_repositories_create"];
+  };
   "/v1/repository/{repository_id}/document": {
     post: operations["v1_repository_document_create"];
   };
@@ -426,9 +429,10 @@ export interface components {
        * @description * `text2text` - Text to Text
        * * `text2image` - Text to Image
        * * `text2vector` - Text to Vector
+       * * `autopilot` - Autopilot
        * @enum {string}
        */
-      model_type?: "text2text" | "text2image" | "text2vector";
+      model_type?: "text2text" | "text2image" | "text2vector" | "autopilot";
       model_provider?: ("openai" | "azure" | "azure-mistral" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
       deprecated?: boolean;
     };
@@ -471,9 +475,10 @@ export interface components {
      * @description * `text2text` - Text to Text
      * * `text2image` - Text to Image
      * * `text2vector` - Text to Vector
+     * * `autopilot` - Autopilot
      * @enum {string}
      */
-    ModelTypeEnum: "text2text" | "text2image" | "text2vector";
+    ModelTypeEnum: "text2text" | "text2image" | "text2vector" | "autopilot";
     NotFoundError: OneOf<[{
       message: string;
       /**
@@ -588,6 +593,12 @@ export interface components {
      * @enum {string}
      */
     RateLimitErrorCodeEnum: "RateLimitError";
+    Repository: {
+      id: number;
+      name: string;
+      description?: string | null;
+      organization: string;
+    };
     ResponseChoice: {
       /** @description The index of the choice in the list of choices. */
       index: number;
@@ -677,9 +688,10 @@ export interface components {
          * @description * `text2text` - Text to Text
          * * `text2image` - Text to Image
          * * `text2vector` - Text to Vector
+         * * `autopilot` - Autopilot
          * @enum {string}
          */
-        model_type?: "text2text" | "text2image" | "text2vector";
+        model_type?: "text2text" | "text2image" | "text2vector" | "autopilot";
         model_provider?: ("openai" | "azure" | "azure-mistral" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
         deprecated?: boolean;
       };
@@ -1367,9 +1379,10 @@ export interface operations {
                * @description * `text2text` - Text to Text
                * * `text2image` - Text to Image
                * * `text2vector` - Text to Vector
+               * * `autopilot` - Autopilot
                * @enum {string}
                */
-              model_type?: "text2text" | "text2image" | "text2vector";
+              model_type?: "text2text" | "text2image" | "text2vector" | "autopilot";
               model_provider?: ("openai" | "azure" | "azure-mistral" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
               deprecated?: boolean;
             })[];
@@ -1394,11 +1407,48 @@ export interface operations {
              * @description * `text2text` - Text to Text
              * * `text2image` - Text to Image
              * * `text2vector` - Text to Vector
+             * * `autopilot` - Autopilot
              * @enum {string}
              */
-            model_type?: "text2text" | "text2image" | "text2vector";
+            model_type?: "text2text" | "text2image" | "text2vector" | "autopilot";
             model_provider?: ("openai" | "azure" | "azure-mistral" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
             deprecated?: boolean;
+          };
+        };
+      };
+    };
+  };
+  v1_repositories_create: {
+    requestBody: {
+      content: {
+        "application/json": {
+          id: number;
+          name: string;
+          description?: string | null;
+          organization: string;
+        };
+        "application/x-www-form-urlencoded": {
+          id: number;
+          name: string;
+          description?: string | null;
+          organization: string;
+        };
+        "multipart/form-data": {
+          id: number;
+          name: string;
+          description?: string | null;
+          organization: string;
+        };
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": {
+            id: number;
+            name: string;
+            description?: string | null;
+            organization: string;
           };
         };
       };
@@ -1596,9 +1646,10 @@ export interface operations {
                * @description * `text2text` - Text to Text
                * * `text2image` - Text to Image
                * * `text2vector` - Text to Vector
+               * * `autopilot` - Autopilot
                * @enum {string}
                */
-              model_type?: "text2text" | "text2image" | "text2vector";
+              model_type?: "text2text" | "text2image" | "text2vector" | "autopilot";
               model_provider?: ("openai" | "azure" | "azure-mistral" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
               deprecated?: boolean;
             };

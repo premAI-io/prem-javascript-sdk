@@ -500,8 +500,9 @@ export type Model = {
    * * `text2text` - Text to Text
    * * `text2image` - Text to Image
    * * `text2vector` - Text to Vector
+   * * `autopilot` - Autopilot
    */
-  model_type?: "text2text" | "text2image" | "text2vector"
+  model_type?: "text2text" | "text2image" | "text2vector" | "autopilot"
   model_provider?:
     | (
         | "openai"
@@ -587,8 +588,9 @@ export type ModelProviderEnum =
  * * `text2text` - Text to Text
  * * `text2image` - Text to Image
  * * `text2vector` - Text to Vector
+ * * `autopilot` - Autopilot
  */
-export type ModelTypeEnum = "text2text" | "text2image" | "text2vector"
+export type ModelTypeEnum = "text2text" | "text2image" | "text2vector" | "autopilot"
 
 export type NotFoundError =
   | {
@@ -717,6 +719,14 @@ export type RateLimitError = {
  */
 export type RateLimitErrorCodeEnum = "RateLimitError"
 
+export type Repository = {
+  id: number
+  name: string
+  description?: string
+  organization: string
+  [k: string]: unknown
+}
+
 export type ResponseChoice = {
   /**
    * The index of the choice in the list of choices.
@@ -832,8 +842,9 @@ export type TraceRetrieve = {
      * * `text2text` - Text to Text
      * * `text2image` - Text to Image
      * * `text2vector` - Text to Vector
+     * * `autopilot` - Autopilot
      */
-    model_type?: "text2text" | "text2image" | "text2vector"
+    model_type?: "text2text" | "text2image" | "text2vector" | "autopilot"
     model_provider?:
       | (
           | "openai"
