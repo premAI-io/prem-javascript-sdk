@@ -134,6 +134,28 @@ export interface components {
        * @description What sampling temperature to use, between 0 and 2.
        */
       temperature?: number | null;
+      /** @description The tools to use in the completion. */
+      tools?: {
+          /**
+           * @description * `function` - function
+           * @enum {string}
+           */
+          type: "function";
+          function: {
+            name: string;
+            description?: string;
+            parameters: {
+              type: string;
+              properties: {
+                [key: string]: {
+                  type: string;
+                  description: string;
+                };
+              };
+              required: string[];
+            };
+          };
+        }[] | null;
     };
     ChatCompletionResponse: {
       /** @description A list of chat completion choices. Can be more than one if n is greater than 1. */
@@ -163,6 +185,25 @@ export interface components {
           };
           /** @description The reason the chat completion finished, e.g., 'stop' or 'length'. */
           finish_reason: string;
+          /** @description The tool calls made. */
+          tool_calls?: {
+              /**
+               * Format: uuid
+               * @description The ID of the tool call.
+               */
+              id: string;
+              /** @description The function called. */
+              function: {
+                /** @description The name of the function to be called. */
+                name: string;
+                /** @description The arguments passed to the function. */
+                arguments?: {
+                  [key: string]: unknown;
+                };
+              };
+              /** @description The type of tool call. */
+              type: string;
+            }[] | null;
         })[];
       /** @description The Unix timestamp (in seconds) of when the chat completion was created. Each chunk has the same timestamp. */
       created: number;
@@ -336,6 +377,20 @@ export interface components {
           content?: string;
         })[];
     };
+    Function: {
+      name: string;
+      description?: string;
+      parameters: {
+        type: string;
+        properties: {
+          [key: string]: {
+            type: string;
+            description: string;
+          };
+        };
+        required: string[];
+      };
+    };
     InternalServerError: {
       message: string;
       /**
@@ -496,6 +551,28 @@ export interface components {
     }]>;
     /** @enum {unknown} */
     NullEnum: "";
+    OutputFunction: {
+      /** @description The name of the function to be called. */
+      name: string;
+      /** @description The arguments passed to the function. */
+      arguments?: {
+        [key: string]: unknown;
+      };
+    };
+    ParameterProperties: {
+      type: string;
+      description: string;
+    };
+    Parameters: {
+      type: string;
+      properties: {
+        [key: string]: {
+          type: string;
+          description: string;
+        };
+      };
+      required: string[];
+    };
     PermissionDeniedError: {
       message: string;
       /**
@@ -625,6 +702,25 @@ export interface components {
       };
       /** @description The reason the chat completion finished, e.g., 'stop' or 'length'. */
       finish_reason: string;
+      /** @description The tool calls made. */
+      tool_calls?: {
+          /**
+           * Format: uuid
+           * @description The ID of the tool call.
+           */
+          id: string;
+          /** @description The function called. */
+          function: {
+            /** @description The name of the function to be called. */
+            name: string;
+            /** @description The arguments passed to the function. */
+            arguments?: {
+              [key: string]: unknown;
+            };
+          };
+          /** @description The type of tool call. */
+          type: string;
+        }[] | null;
     };
     /**
      * @description * `PENDING` - Pending
@@ -638,6 +734,45 @@ export interface components {
      * @enum {string}
      */
     StatusEnum: "PENDING" | "UPLOADED" | "PARSING" | "CHUNKING" | "WAITING_FOR_CHUNKS_COMPLETION" | "PROCESSING" | "COMPLETED" | "FAILED";
+    Tool: {
+      /**
+       * @description * `function` - function
+       * @enum {string}
+       */
+      type: "function";
+      function: {
+        name: string;
+        description?: string;
+        parameters: {
+          type: string;
+          properties: {
+            [key: string]: {
+              type: string;
+              description: string;
+            };
+          };
+          required: string[];
+        };
+      };
+    };
+    ToolCall: {
+      /**
+       * Format: uuid
+       * @description The ID of the tool call.
+       */
+      id: string;
+      /** @description The function called. */
+      function: {
+        /** @description The name of the function to be called. */
+        name: string;
+        /** @description The arguments passed to the function. */
+        arguments?: {
+          [key: string]: unknown;
+        };
+      };
+      /** @description The type of tool call. */
+      type: string;
+    };
     TraceFeedback: {
       positive: boolean;
       used_datapoint_messages: boolean;
@@ -731,6 +866,11 @@ export interface components {
       document_id: number;
       content?: string | null;
     };
+    /**
+     * @description * `function` - function
+     * @enum {string}
+     */
+    TypeEnum: "function";
     UnprocessableEntityError: {
       message: string;
       /**
@@ -843,6 +983,28 @@ export interface operations {
            * @description What sampling temperature to use, between 0 and 2.
            */
           temperature?: number | null;
+          /** @description The tools to use in the completion. */
+          tools?: {
+              /**
+               * @description * `function` - function
+               * @enum {string}
+               */
+              type: "function";
+              function: {
+                name: string;
+                description?: string;
+                parameters: {
+                  type: string;
+                  properties: {
+                    [key: string]: {
+                      type: string;
+                      description: string;
+                    };
+                  };
+                  required: string[];
+                };
+              };
+            }[] | null;
         };
         "application/x-www-form-urlencoded": {
           /** @description The ID of the project to use. */
@@ -891,6 +1053,28 @@ export interface operations {
            * @description What sampling temperature to use, between 0 and 2.
            */
           temperature?: number | null;
+          /** @description The tools to use in the completion. */
+          tools?: {
+              /**
+               * @description * `function` - function
+               * @enum {string}
+               */
+              type: "function";
+              function: {
+                name: string;
+                description?: string;
+                parameters: {
+                  type: string;
+                  properties: {
+                    [key: string]: {
+                      type: string;
+                      description: string;
+                    };
+                  };
+                  required: string[];
+                };
+              };
+            }[] | null;
         };
         "multipart/form-data": {
           /** @description The ID of the project to use. */
@@ -939,6 +1123,28 @@ export interface operations {
            * @description What sampling temperature to use, between 0 and 2.
            */
           temperature?: number | null;
+          /** @description The tools to use in the completion. */
+          tools?: {
+              /**
+               * @description * `function` - function
+               * @enum {string}
+               */
+              type: "function";
+              function: {
+                name: string;
+                description?: string;
+                parameters: {
+                  type: string;
+                  properties: {
+                    [key: string]: {
+                      type: string;
+                      description: string;
+                    };
+                  };
+                  required: string[];
+                };
+              };
+            }[] | null;
         };
       };
     };
@@ -973,6 +1179,25 @@ export interface operations {
                 };
                 /** @description The reason the chat completion finished, e.g., 'stop' or 'length'. */
                 finish_reason: string;
+                /** @description The tool calls made. */
+                tool_calls?: {
+                    /**
+                     * Format: uuid
+                     * @description The ID of the tool call.
+                     */
+                    id: string;
+                    /** @description The function called. */
+                    function: {
+                      /** @description The name of the function to be called. */
+                      name: string;
+                      /** @description The arguments passed to the function. */
+                      arguments?: {
+                        [key: string]: unknown;
+                      };
+                    };
+                    /** @description The type of tool call. */
+                    type: string;
+                  }[] | null;
               })[];
             /** @description The Unix timestamp (in seconds) of when the chat completion was created. Each chunk has the same timestamp. */
             created: number;

@@ -117,6 +117,33 @@ export type ChatCompletionInput = {
    * What sampling temperature to use, between 0 and 2.
    */
   temperature?: number
+  /**
+   * The tools to use in the completion.
+   */
+  tools?: {
+    /**
+     * * `function` - function
+     */
+    type: "function"
+    function: {
+      name: string
+      description?: string
+      parameters: {
+        type: string
+        properties: {
+          [k: string]: {
+            type: string
+            description: string
+            [k: string]: unknown
+          }
+        }
+        required: string[]
+        [k: string]: unknown
+      }
+      [k: string]: unknown
+    }
+    [k: string]: unknown
+  }[]
   [k: string]: unknown
 }
 
@@ -160,6 +187,36 @@ export type ChatCompletionResponse = {
      * The reason the chat completion finished, e.g., 'stop' or 'length'.
      */
     finish_reason: string
+    /**
+     * The tool calls made.
+     */
+    tool_calls?: {
+      /**
+       * The ID of the tool call.
+       */
+      id: string
+      /**
+       * The function called.
+       */
+      function: {
+        /**
+         * The name of the function to be called.
+         */
+        name: string
+        /**
+         * The arguments passed to the function.
+         */
+        arguments?: {
+          [k: string]: unknown
+        }
+        [k: string]: unknown
+      }
+      /**
+       * The type of tool call.
+       */
+      type: string
+      [k: string]: unknown
+    }[]
     [k: string]: unknown
   }[]
   /**
@@ -394,6 +451,24 @@ export type FeedbackCreateFeedback = {
   [k: string]: unknown
 }
 
+export type Function = {
+  name: string
+  description?: string
+  parameters: {
+    type: string
+    properties: {
+      [k: string]: {
+        type: string
+        description: string
+        [k: string]: unknown
+      }
+    }
+    required: string[]
+    [k: string]: unknown
+  }
+  [k: string]: unknown
+}
+
 export type InternalServerError =
   | {
       message: string
@@ -612,6 +687,39 @@ export type NotFoundError =
 
 export type NullEnum = null
 
+export type OutputFunction = {
+  /**
+   * The name of the function to be called.
+   */
+  name: string
+  /**
+   * The arguments passed to the function.
+   */
+  arguments?: {
+    [k: string]: unknown
+  }
+  [k: string]: unknown
+}
+
+export type ParameterProperties = {
+  type: string
+  description: string
+  [k: string]: unknown
+}
+
+export type Parameters = {
+  type: string
+  properties: {
+    [k: string]: {
+      type: string
+      description: string
+      [k: string]: unknown
+    }
+  }
+  required: string[]
+  [k: string]: unknown
+}
+
 export type PermissionDeniedError = {
   message: string
   /**
@@ -763,6 +871,36 @@ export type ResponseChoice = {
    * The reason the chat completion finished, e.g., 'stop' or 'length'.
    */
   finish_reason: string
+  /**
+   * The tool calls made.
+   */
+  tool_calls?: {
+    /**
+     * The ID of the tool call.
+     */
+    id: string
+    /**
+     * The function called.
+     */
+    function: {
+      /**
+       * The name of the function to be called.
+       */
+      name: string
+      /**
+       * The arguments passed to the function.
+       */
+      arguments?: {
+        [k: string]: unknown
+      }
+      [k: string]: unknown
+    }
+    /**
+     * The type of tool call.
+     */
+    type: string
+    [k: string]: unknown
+  }[]
   [k: string]: unknown
 }
 
@@ -785,6 +923,59 @@ export type StatusEnum =
   | "PROCESSING"
   | "COMPLETED"
   | "FAILED"
+
+export type Tool = {
+  /**
+   * * `function` - function
+   */
+  type: "function"
+  function: {
+    name: string
+    description?: string
+    parameters: {
+      type: string
+      properties: {
+        [k: string]: {
+          type: string
+          description: string
+          [k: string]: unknown
+        }
+      }
+      required: string[]
+      [k: string]: unknown
+    }
+    [k: string]: unknown
+  }
+  [k: string]: unknown
+}
+
+export type ToolCall = {
+  /**
+   * The ID of the tool call.
+   */
+  id: string
+  /**
+   * The function called.
+   */
+  function: {
+    /**
+     * The name of the function to be called.
+     */
+    name: string
+    /**
+     * The arguments passed to the function.
+     */
+    arguments?: {
+      [k: string]: unknown
+    }
+    [k: string]: unknown
+  }
+  /**
+   * The type of tool call.
+   */
+  type: string
+  [k: string]: unknown
+}
 
 export type TraceFeedback = {
   positive: boolean
@@ -912,6 +1103,11 @@ export type TraceRetrieveDocumentChunk = {
   content?: string
   [k: string]: unknown
 }
+
+/**
+ * * `function` - function
+ */
+export type TypeEnum = "function"
 
 export type UnprocessableEntityError = {
   message: string
