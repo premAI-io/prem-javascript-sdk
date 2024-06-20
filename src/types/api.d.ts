@@ -132,8 +132,9 @@ export interface components {
       /**
        * Format: double
        * @description What sampling temperature to use, between 0 and 2.
+       * @default 1
        */
-      temperature?: number | null;
+      temperature?: number;
       /** @description The tools to use in the completion. */
       tools?: {
           /**
@@ -981,8 +982,9 @@ export interface operations {
           /**
            * Format: double
            * @description What sampling temperature to use, between 0 and 2.
+           * @default 1
            */
-          temperature?: number | null;
+          temperature?: number;
           /** @description The tools to use in the completion. */
           tools?: {
               /**
@@ -1051,8 +1053,9 @@ export interface operations {
           /**
            * Format: double
            * @description What sampling temperature to use, between 0 and 2.
+           * @default 1
            */
-          temperature?: number | null;
+          temperature?: number;
           /** @description The tools to use in the completion. */
           tools?: {
               /**
@@ -1121,8 +1124,9 @@ export interface operations {
           /**
            * Format: double
            * @description What sampling temperature to use, between 0 and 2.
+           * @default 1
            */
-          temperature?: number | null;
+          temperature?: number;
           /** @description The tools to use in the completion. */
           tools?: {
               /**
