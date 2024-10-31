@@ -157,6 +157,10 @@ export interface components {
             };
           };
         }[] | null;
+      /** @description The format of the response. Can be a JSON schema or a simple `json_object` type */
+      response_format?: {
+        [key: string]: unknown;
+      } | null;
     };
     ChatCompletionResponse: {
       /** @description A list of chat completion choices. Can be more than one if n is greater than 1. */
@@ -1007,6 +1011,10 @@ export interface operations {
                 };
               };
             }[] | null;
+          /** @description The format of the response. Can be a JSON schema or a simple `json_object` type */
+          response_format?: {
+            [key: string]: unknown;
+          } | null;
         };
         "application/x-www-form-urlencoded": {
           /** @description The ID of the project to use. */
@@ -1078,6 +1086,10 @@ export interface operations {
                 };
               };
             }[] | null;
+          /** @description The format of the response. Can be a JSON schema or a simple `json_object` type */
+          response_format?: {
+            [key: string]: unknown;
+          } | null;
         };
         "multipart/form-data": {
           /** @description The ID of the project to use. */
@@ -1149,6 +1161,10 @@ export interface operations {
                 };
               };
             }[] | null;
+          /** @description The format of the response. Can be a JSON schema or a simple `json_object` type */
+          response_format?: {
+            [key: string]: unknown;
+          } | null;
         };
       };
     };

@@ -144,6 +144,12 @@ export type ChatCompletionInput = {
     }
     [k: string]: unknown
   }[]
+  /**
+   * The format of the response. Can be a JSON schema or a simple `json_object` type
+   */
+  response_format?: {
+    [k: string]: unknown
+  }
   [k: string]: unknown
 }
 
