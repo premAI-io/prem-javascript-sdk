@@ -10,6 +10,12 @@ type XOR<T, U> = (T | U) extends object ? (Without<T, U> & U) | (Without<U, T> &
 type OneOf<T extends any[]> = T extends [infer Only] ? Only : T extends [infer A, infer B, ...infer Rest] ? OneOf<[XOR<A, B>, ...Rest]> : never;
 
 export interface paths {
+  "/api/repositories/repositories/": {
+    post: operations["api_repositories_repositories_create"];
+  };
+  "/api/repositories/repository/{repository_id}/document": {
+    post: operations["api_repositories_repository_document_create"];
+  };
   "/v1/chat/completions": {
     /** @description Creates a model response for the given chat conversation. Supports streaming with SSE, [documentation here](https://docs.premai.io/get-started/chat-completion-sse). */
     post: operations["v1_chat_completions_create"];
@@ -23,12 +29,6 @@ export interface paths {
   };
   "/v1/models/{id}/": {
     get: operations["v1_models_retrieve"];
-  };
-  "/v1/repositories/": {
-    post: operations["v1_repositories_create"];
-  };
-  "/v1/repository/{repository_id}/document": {
-    post: operations["v1_repository_document_create"];
   };
   "/v1/set_trace_feedback": {
     /** @description Set trace feedback */
@@ -280,15 +280,12 @@ export interface components {
       /**
        * @description * `PENDING` - Pending
        * * `UPLOADED` - Uploaded
-       * * `PARSING` - Parsing
-       * * `CHUNKING` - Chunking
-       * * `WAITING_FOR_CHUNKS_COMPLETION` - Waiting for chunks completion
-       * * `PROCESSING` - Processing
+       * * `INDEXING` - Indexing
        * * `COMPLETED` - Completed
        * * `FAILED` - Failed
        * @enum {string}
        */
-      status: "PENDING" | "UPLOADED" | "PARSING" | "CHUNKING" | "WAITING_FOR_CHUNKS_COMPLETION" | "PROCESSING" | "COMPLETED" | "FAILED";
+      status: "PENDING" | "UPLOADED" | "INDEXING" | "COMPLETED" | "FAILED";
       error: string | null;
       /** @default 0 */
       chunk_count: number;
@@ -489,11 +486,10 @@ export interface components {
        * @description * `text2text` - Text to Text
        * * `text2image` - Text to Image
        * * `text2vector` - Text to Vector
-       * * `autopilot` - Autopilot
        * @enum {string}
        */
-      model_type?: "text2text" | "text2image" | "text2vector" | "autopilot";
-      model_provider?: ("openai" | "azure" | "azure-mistral" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
+      model_type?: "text2text" | "text2image" | "text2vector";
+      model_provider?: ("openai" | "azure" | "anthropic" | "prem" | "groq") | "" | null;
       deprecated?: boolean;
     };
     ModelNotFoundError: {
@@ -512,33 +508,19 @@ export interface components {
     /**
      * @description * `openai` - OpenAI
      * * `azure` - Azure OpenAI
-     * * `azure-mistral` - Azure Mistral
-     * * `cohere` - Cohere
      * * `anthropic` - Anthropic
-     * * `cloudflare` - Cloudflare
-     * * `deepinfra` - Deep Infra
-     * * `lamini` - Lamini
-     * * `octoai` - Octo AI
-     * * `replicate` - Replicate
-     * * `together` - Together
-     * * `fireworksai` - Fireworks AI
-     * * `mistralai` - Mistral AI
      * * `prem` - Prem AI
-     * * `anyscale` - Anyscale
-     * * `openrouter` - Open Router
-     * * `perplexity` - Perplexity
      * * `groq` - Groq
      * @enum {string}
      */
-    ModelProviderEnum: "openai" | "azure" | "azure-mistral" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq";
+    ModelProviderEnum: "openai" | "azure" | "anthropic" | "prem" | "groq";
     /**
      * @description * `text2text` - Text to Text
      * * `text2image` - Text to Image
      * * `text2vector` - Text to Vector
-     * * `autopilot` - Autopilot
      * @enum {string}
      */
-    ModelTypeEnum: "text2text" | "text2image" | "text2vector" | "autopilot";
+    ModelTypeEnum: "text2text" | "text2image" | "text2vector";
     NotFoundError: OneOf<[{
       message: string;
       /**
@@ -730,15 +712,12 @@ export interface components {
     /**
      * @description * `PENDING` - Pending
      * * `UPLOADED` - Uploaded
-     * * `PARSING` - Parsing
-     * * `CHUNKING` - Chunking
-     * * `WAITING_FOR_CHUNKS_COMPLETION` - Waiting for chunks completion
-     * * `PROCESSING` - Processing
+     * * `INDEXING` - Indexing
      * * `COMPLETED` - Completed
      * * `FAILED` - Failed
      * @enum {string}
      */
-    StatusEnum: "PENDING" | "UPLOADED" | "PARSING" | "CHUNKING" | "WAITING_FOR_CHUNKS_COMPLETION" | "PROCESSING" | "COMPLETED" | "FAILED";
+    StatusEnum: "PENDING" | "UPLOADED" | "INDEXING" | "COMPLETED" | "FAILED";
     Tool: {
       /**
        * @description * `function` - function
@@ -828,11 +807,10 @@ export interface components {
          * @description * `text2text` - Text to Text
          * * `text2image` - Text to Image
          * * `text2vector` - Text to Vector
-         * * `autopilot` - Autopilot
          * @enum {string}
          */
-        model_type?: "text2text" | "text2image" | "text2vector" | "autopilot";
-        model_provider?: ("openai" | "azure" | "azure-mistral" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
+        model_type?: "text2text" | "text2image" | "text2vector";
+        model_provider?: ("openai" | "azure" | "anthropic" | "prem" | "groq") | "" | null;
         deprecated?: boolean;
       };
       session_id?: string | null;
@@ -937,6 +915,87 @@ export type external = Record<string, never>;
 
 export interface operations {
 
+  api_repositories_repositories_create: {
+    requestBody: {
+      content: {
+        "application/json": {
+          id: number;
+          name: string;
+          description?: string | null;
+          organization: string;
+        };
+        "application/x-www-form-urlencoded": {
+          id: number;
+          name: string;
+          description?: string | null;
+          organization: string;
+        };
+        "multipart/form-data": {
+          id: number;
+          name: string;
+          description?: string | null;
+          organization: string;
+        };
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": {
+            id: number;
+            name: string;
+            description?: string | null;
+            organization: string;
+          };
+        };
+      };
+    };
+  };
+  api_repositories_repository_document_create: {
+    parameters: {
+      path: {
+        repository_id: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "multipart/form-data": {
+          /** Format: uri */
+          file: string;
+        };
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": {
+            repository_id: number;
+            document_id: number;
+            name: string;
+            /**
+             * @description * `pdf` - PDF
+             * * `docx` - Word
+             * * `txt` - Text
+             * @enum {string}
+             */
+            document_type: "pdf" | "docx" | "txt";
+            /**
+             * @description * `PENDING` - Pending
+             * * `UPLOADED` - Uploaded
+             * * `INDEXING` - Indexing
+             * * `COMPLETED` - Completed
+             * * `FAILED` - Failed
+             * @enum {string}
+             */
+            status: "PENDING" | "UPLOADED" | "INDEXING" | "COMPLETED" | "FAILED";
+            error: string | null;
+            /** @default 0 */
+            chunk_count: number;
+          };
+        };
+      };
+    };
+  };
   /** @description Creates a model response for the given chat conversation. Supports streaming with SSE, [documentation here](https://docs.premai.io/get-started/chat-completion-sse). */
   v1_chat_completions_create: {
     requestBody: {
@@ -1624,11 +1683,10 @@ export interface operations {
                * @description * `text2text` - Text to Text
                * * `text2image` - Text to Image
                * * `text2vector` - Text to Vector
-               * * `autopilot` - Autopilot
                * @enum {string}
                */
-              model_type?: "text2text" | "text2image" | "text2vector" | "autopilot";
-              model_provider?: ("openai" | "azure" | "azure-mistral" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
+              model_type?: "text2text" | "text2image" | "text2vector";
+              model_provider?: ("openai" | "azure" | "anthropic" | "prem" | "groq") | "" | null;
               deprecated?: boolean;
             })[];
         };
@@ -1652,96 +1710,11 @@ export interface operations {
              * @description * `text2text` - Text to Text
              * * `text2image` - Text to Image
              * * `text2vector` - Text to Vector
-             * * `autopilot` - Autopilot
              * @enum {string}
              */
-            model_type?: "text2text" | "text2image" | "text2vector" | "autopilot";
-            model_provider?: ("openai" | "azure" | "azure-mistral" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
+            model_type?: "text2text" | "text2image" | "text2vector";
+            model_provider?: ("openai" | "azure" | "anthropic" | "prem" | "groq") | "" | null;
             deprecated?: boolean;
-          };
-        };
-      };
-    };
-  };
-  v1_repositories_create: {
-    requestBody: {
-      content: {
-        "application/json": {
-          id: number;
-          name: string;
-          description?: string | null;
-          organization: string;
-        };
-        "application/x-www-form-urlencoded": {
-          id: number;
-          name: string;
-          description?: string | null;
-          organization: string;
-        };
-        "multipart/form-data": {
-          id: number;
-          name: string;
-          description?: string | null;
-          organization: string;
-        };
-      };
-    };
-    responses: {
-      201: {
-        content: {
-          "application/json": {
-            id: number;
-            name: string;
-            description?: string | null;
-            organization: string;
-          };
-        };
-      };
-    };
-  };
-  v1_repository_document_create: {
-    parameters: {
-      path: {
-        repository_id: number;
-      };
-    };
-    requestBody: {
-      content: {
-        "multipart/form-data": {
-          /** Format: uri */
-          file: string;
-        };
-      };
-    };
-    responses: {
-      201: {
-        content: {
-          "application/json": {
-            repository_id: number;
-            document_id: number;
-            name: string;
-            /**
-             * @description * `pdf` - PDF
-             * * `docx` - Word
-             * * `txt` - Text
-             * @enum {string}
-             */
-            document_type: "pdf" | "docx" | "txt";
-            /**
-             * @description * `PENDING` - Pending
-             * * `UPLOADED` - Uploaded
-             * * `PARSING` - Parsing
-             * * `CHUNKING` - Chunking
-             * * `WAITING_FOR_CHUNKS_COMPLETION` - Waiting for chunks completion
-             * * `PROCESSING` - Processing
-             * * `COMPLETED` - Completed
-             * * `FAILED` - Failed
-             * @enum {string}
-             */
-            status: "PENDING" | "UPLOADED" | "PARSING" | "CHUNKING" | "WAITING_FOR_CHUNKS_COMPLETION" | "PROCESSING" | "COMPLETED" | "FAILED";
-            error: string | null;
-            /** @default 0 */
-            chunk_count: number;
           };
         };
       };
@@ -1891,11 +1864,10 @@ export interface operations {
                * @description * `text2text` - Text to Text
                * * `text2image` - Text to Image
                * * `text2vector` - Text to Vector
-               * * `autopilot` - Autopilot
                * @enum {string}
                */
-              model_type?: "text2text" | "text2image" | "text2vector" | "autopilot";
-              model_provider?: ("openai" | "azure" | "azure-mistral" | "cohere" | "anthropic" | "cloudflare" | "deepinfra" | "lamini" | "octoai" | "replicate" | "together" | "fireworksai" | "mistralai" | "prem" | "anyscale" | "openrouter" | "perplexity" | "groq") | "" | null;
+              model_type?: "text2text" | "text2image" | "text2vector";
+              model_provider?: ("openai" | "azure" | "anthropic" | "prem" | "groq") | "" | null;
               deprecated?: boolean;
             };
             session_id?: string | null;

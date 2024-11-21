@@ -311,22 +311,11 @@ export type DocumentOutput = {
   /**
    * * `PENDING` - Pending
    * * `UPLOADED` - Uploaded
-   * * `PARSING` - Parsing
-   * * `CHUNKING` - Chunking
-   * * `WAITING_FOR_CHUNKS_COMPLETION` - Waiting for chunks completion
-   * * `PROCESSING` - Processing
+   * * `INDEXING` - Indexing
    * * `COMPLETED` - Completed
    * * `FAILED` - Failed
    */
-  status:
-    | "PENDING"
-    | "UPLOADED"
-    | "PARSING"
-    | "CHUNKING"
-    | "WAITING_FOR_CHUNKS_COMPLETION"
-    | "PROCESSING"
-    | "COMPLETED"
-    | "FAILED"
+  status: "PENDING" | "UPLOADED" | "INDEXING" | "COMPLETED" | "FAILED"
   error: string
   chunk_count: number
   [k: string]: unknown
@@ -581,32 +570,9 @@ export type Model = {
    * * `text2text` - Text to Text
    * * `text2image` - Text to Image
    * * `text2vector` - Text to Vector
-   * * `autopilot` - Autopilot
    */
-  model_type?: "text2text" | "text2image" | "text2vector" | "autopilot"
-  model_provider?:
-    | (
-        | "openai"
-        | "azure"
-        | "azure-mistral"
-        | "cohere"
-        | "anthropic"
-        | "cloudflare"
-        | "deepinfra"
-        | "lamini"
-        | "octoai"
-        | "replicate"
-        | "together"
-        | "fireworksai"
-        | "mistralai"
-        | "prem"
-        | "anyscale"
-        | "openrouter"
-        | "perplexity"
-        | "groq"
-      )
-    | ""
-    | null
+  model_type?: "text2text" | "text2image" | "text2vector"
+  model_provider?: ("openai" | "azure" | "anthropic" | "prem" | "groq") | "" | null
   deprecated?: boolean
   [k: string]: unknown
 }
@@ -628,50 +594,18 @@ export type ModelNotFoundErrorCodeEnum = "ModelNotFoundError"
 /**
  * * `openai` - OpenAI
  * * `azure` - Azure OpenAI
- * * `azure-mistral` - Azure Mistral
- * * `cohere` - Cohere
  * * `anthropic` - Anthropic
- * * `cloudflare` - Cloudflare
- * * `deepinfra` - Deep Infra
- * * `lamini` - Lamini
- * * `octoai` - Octo AI
- * * `replicate` - Replicate
- * * `together` - Together
- * * `fireworksai` - Fireworks AI
- * * `mistralai` - Mistral AI
  * * `prem` - Prem AI
- * * `anyscale` - Anyscale
- * * `openrouter` - Open Router
- * * `perplexity` - Perplexity
  * * `groq` - Groq
  */
-export type ModelProviderEnum =
-  | "openai"
-  | "azure"
-  | "azure-mistral"
-  | "cohere"
-  | "anthropic"
-  | "cloudflare"
-  | "deepinfra"
-  | "lamini"
-  | "octoai"
-  | "replicate"
-  | "together"
-  | "fireworksai"
-  | "mistralai"
-  | "prem"
-  | "anyscale"
-  | "openrouter"
-  | "perplexity"
-  | "groq"
+export type ModelProviderEnum = "openai" | "azure" | "anthropic" | "prem" | "groq"
 
 /**
  * * `text2text` - Text to Text
  * * `text2image` - Text to Image
  * * `text2vector` - Text to Vector
- * * `autopilot` - Autopilot
  */
-export type ModelTypeEnum = "text2text" | "text2image" | "text2vector" | "autopilot"
+export type ModelTypeEnum = "text2text" | "text2image" | "text2vector"
 
 export type NotFoundError =
   | {
@@ -913,22 +847,11 @@ export type ResponseChoice = {
 /**
  * * `PENDING` - Pending
  * * `UPLOADED` - Uploaded
- * * `PARSING` - Parsing
- * * `CHUNKING` - Chunking
- * * `WAITING_FOR_CHUNKS_COMPLETION` - Waiting for chunks completion
- * * `PROCESSING` - Processing
+ * * `INDEXING` - Indexing
  * * `COMPLETED` - Completed
  * * `FAILED` - Failed
  */
-export type StatusEnum =
-  | "PENDING"
-  | "UPLOADED"
-  | "PARSING"
-  | "CHUNKING"
-  | "WAITING_FOR_CHUNKS_COMPLETION"
-  | "PROCESSING"
-  | "COMPLETED"
-  | "FAILED"
+export type StatusEnum = "PENDING" | "UPLOADED" | "INDEXING" | "COMPLETED" | "FAILED"
 
 export type Tool = {
   /**
@@ -1039,32 +962,9 @@ export type TraceRetrieve = {
      * * `text2text` - Text to Text
      * * `text2image` - Text to Image
      * * `text2vector` - Text to Vector
-     * * `autopilot` - Autopilot
      */
-    model_type?: "text2text" | "text2image" | "text2vector" | "autopilot"
-    model_provider?:
-      | (
-          | "openai"
-          | "azure"
-          | "azure-mistral"
-          | "cohere"
-          | "anthropic"
-          | "cloudflare"
-          | "deepinfra"
-          | "lamini"
-          | "octoai"
-          | "replicate"
-          | "together"
-          | "fireworksai"
-          | "mistralai"
-          | "prem"
-          | "anyscale"
-          | "openrouter"
-          | "perplexity"
-          | "groq"
-        )
-      | ""
-      | null
+    model_type?: "text2text" | "text2image" | "text2vector"
+    model_provider?: ("openai" | "azure" | "anthropic" | "prem" | "groq") | "" | null
     deprecated?: boolean
     [k: string]: unknown
   }
