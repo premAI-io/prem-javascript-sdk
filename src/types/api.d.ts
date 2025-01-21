@@ -30,6 +30,9 @@ export interface paths {
   "/v1/models/{id}/": {
     get: operations["v1_models_retrieve"];
   };
+  "/v1/ping": {
+    get: operations["v1_ping_retrieve"];
+  };
   "/v1/set_trace_feedback": {
     /** @description Set trace feedback */
     post: operations["v1_set_trace_feedback_create"];
@@ -110,7 +113,14 @@ export interface components {
            */
           role: "user" | "assistant";
           /** @description The content of the message. */
-          content?: string;
+          content?: OneOf<[string, ({
+              /** @enum {string} */
+              type: "text" | "image_url";
+              text?: string;
+              image_url?: {
+                url: string;
+              };
+            })[]]>;
           /**
            * Format: uuid
            * @description The ID of the template to use.
@@ -177,7 +187,14 @@ export interface components {
              */
             role: "user" | "assistant";
             /** @description The content of the message. */
-            content?: string;
+            content?: OneOf<[string, ({
+                /** @enum {string} */
+                type: "text" | "image_url";
+                text?: string;
+                image_url?: {
+                  url: string;
+                };
+              })[]]>;
             /**
              * Format: uuid
              * @description The ID of the template to use.
@@ -445,7 +462,14 @@ export interface components {
        */
       role: "user" | "assistant";
       /** @description The content of the message. */
-      content?: string;
+      content?: OneOf<[string, ({
+          /** @enum {string} */
+          type: "text" | "image_url";
+          text?: string;
+          image_url?: {
+            url: string;
+          };
+        })[]]>;
       /**
        * Format: uuid
        * @description The ID of the template to use.
@@ -676,7 +700,14 @@ export interface components {
          */
         role: "user" | "assistant";
         /** @description The content of the message. */
-        content?: string;
+        content?: OneOf<[string, ({
+            /** @enum {string} */
+            type: "text" | "image_url";
+            text?: string;
+            image_url?: {
+              url: string;
+            };
+          })[]]>;
         /**
          * Format: uuid
          * @description The ID of the template to use.
@@ -1023,7 +1054,14 @@ export interface operations {
                */
               role: "user" | "assistant";
               /** @description The content of the message. */
-              content?: string;
+              content?: OneOf<[string, ({
+                  /** @enum {string} */
+                  type: "text" | "image_url";
+                  text?: string;
+                  image_url?: {
+                    url: string;
+                  };
+                })[]]>;
               /**
                * Format: uuid
                * @description The ID of the template to use.
@@ -1098,7 +1136,14 @@ export interface operations {
                */
               role: "user" | "assistant";
               /** @description The content of the message. */
-              content?: string;
+              content?: OneOf<[string, ({
+                  /** @enum {string} */
+                  type: "text" | "image_url";
+                  text?: string;
+                  image_url?: {
+                    url: string;
+                  };
+                })[]]>;
               /**
                * Format: uuid
                * @description The ID of the template to use.
@@ -1173,7 +1218,14 @@ export interface operations {
                */
               role: "user" | "assistant";
               /** @description The content of the message. */
-              content?: string;
+              content?: OneOf<[string, ({
+                  /** @enum {string} */
+                  type: "text" | "image_url";
+                  text?: string;
+                  image_url?: {
+                    url: string;
+                  };
+                })[]]>;
               /**
                * Format: uuid
                * @description The ID of the template to use.
@@ -1245,7 +1297,14 @@ export interface operations {
                    */
                   role: "user" | "assistant";
                   /** @description The content of the message. */
-                  content?: string;
+                  content?: OneOf<[string, ({
+                      /** @enum {string} */
+                      type: "text" | "image_url";
+                      text?: string;
+                      image_url?: {
+                        url: string;
+                      };
+                    })[]]>;
                   /**
                    * Format: uuid
                    * @description The ID of the template to use.
@@ -1717,6 +1776,14 @@ export interface operations {
             deprecated?: boolean;
           };
         };
+      };
+    };
+  };
+  v1_ping_retrieve: {
+    responses: {
+      /** @description No response body */
+      200: {
+        content: never;
       };
     };
   };

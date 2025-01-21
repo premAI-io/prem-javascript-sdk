@@ -84,7 +84,17 @@ export type ChatCompletionInput = {
     /**
      * The content of the message.
      */
-    content?: string
+    content?:
+      | string
+      | {
+          type: "text" | "image_url"
+          text?: string
+          image_url?: {
+            url: string
+            [k: string]: unknown
+          }
+          [k: string]: unknown
+        }[]
     /**
      * The ID of the template to use.
      */
@@ -176,7 +186,17 @@ export type ChatCompletionResponse = {
       /**
        * The content of the message.
        */
-      content?: string
+      content?:
+        | string
+        | {
+            type: "text" | "image_url"
+            text?: string
+            image_url?: {
+              url: string
+              [k: string]: unknown
+            }
+            [k: string]: unknown
+          }[]
       /**
        * The ID of the template to use.
        */
@@ -525,7 +545,17 @@ export type Message = {
   /**
    * The content of the message.
    */
-  content?: string
+  content?:
+    | string
+    | {
+        type: "text" | "image_url"
+        text?: string
+        image_url?: {
+          url: string
+          [k: string]: unknown
+        }
+        [k: string]: unknown
+      }[]
   /**
    * The ID of the template to use.
    */
@@ -794,7 +824,17 @@ export type ResponseChoice = {
     /**
      * The content of the message.
      */
-    content?: string
+    content?:
+      | string
+      | {
+          type: "text" | "image_url"
+          text?: string
+          image_url?: {
+            url: string
+            [k: string]: unknown
+          }
+          [k: string]: unknown
+        }[]
     /**
      * The ID of the template to use.
      */
