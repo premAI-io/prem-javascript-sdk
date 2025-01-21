@@ -6,7 +6,6 @@ import repositorydocumentModule from "$modules/repository.document"
 import chatcompletionsModule from "$modules/chat.completions"
 import embeddingsModule from "$modules/embeddings"
 import modelsModule from "$modules/models"
-import v1Module from "$modules/v1"
 import feedbacksModule from "$modules/feedbacks"
 import tracesModule from "$modules/traces"
 
@@ -19,7 +18,6 @@ export default class Prem {
 	chat = { completions: new chatcompletionsModule(this) }
 	embeddings = new embeddingsModule(this)
 	models = new modelsModule(this)
-	v1 = new v1Module(this)
 	feedbacks = new feedbacksModule(this)
 	traces = new tracesModule(this)
 
