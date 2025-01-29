@@ -5,6 +5,7 @@ import repositoriesModule from "$modules/repositories"
 import repositorydocumentModule from "$modules/repository.document"
 import chatcompletionsModule from "$modules/chat.completions"
 import embeddingsModule from "$modules/embeddings"
+import v1Module from "$modules/v1"
 import modelsModule from "$modules/models"
 import feedbacksModule from "$modules/feedbacks"
 import tracesModule from "$modules/traces"
@@ -17,6 +18,7 @@ export default class Prem {
 	repository = { document: new repositorydocumentModule(this) }
 	chat = { completions: new chatcompletionsModule(this) }
 	embeddings = new embeddingsModule(this)
+	v1 = new v1Module(this)
 	models = new modelsModule(this)
 	feedbacks = new feedbacksModule(this)
 	traces = new tracesModule(this)

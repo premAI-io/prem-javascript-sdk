@@ -24,6 +24,9 @@ export interface paths {
     /** @description Creates embeddings for the given input. */
     post: operations["v1_embeddings_create"];
   };
+  "/v1/get_dataset": {
+    get: operations["v1_get_dataset_retrieve"];
+  };
   "/v1/models/": {
     get: operations["v1_models_list"];
   };
@@ -1725,6 +1728,14 @@ export interface operations {
             code: "CatchAllError";
           };
         };
+      };
+    };
+  };
+  v1_get_dataset_retrieve: {
+    responses: {
+      /** @description No response body */
+      200: {
+        content: never;
       };
     };
   };
