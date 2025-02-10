@@ -807,6 +807,16 @@ export interface components {
       trace_id: string;
       project_id: number;
       model_id: number;
+      messages?: ({
+          /**
+           * @description * `user` - user
+           * * `assistant` - assistant
+           * * `system` - system
+           * @enum {string}
+           */
+          role?: "user" | "assistant" | "system";
+          content?: string;
+        })[];
       feedback: ({
         positive: boolean;
         used_datapoint_messages: boolean;
@@ -1875,7 +1885,16 @@ export interface operations {
   v1_traces_list: {
     parameters: {
       query: {
+        admin_filter?: "ADMIN_ONLY";
+        date_filter?: "last_day" | "last_hour" | "last_month" | "last_week" | "last_year";
+        /** @description Format: YYYY/MM/DD */
+        from_date?: string;
         project_id: number;
+        search?: string;
+        /** @description Sort field (-field for descending) */
+        sort?: string;
+        /** @description Format: YYYY/MM/DD */
+        to_date?: string;
       };
     };
     responses: {
@@ -1886,6 +1905,16 @@ export interface operations {
               trace_id: string;
               project_id: number;
               model_id: number;
+              messages?: ({
+                  /**
+                   * @description * `user` - user
+                   * * `assistant` - assistant
+                   * * `system` - system
+                   * @enum {string}
+                   */
+                  role?: "user" | "assistant" | "system";
+                  content?: string;
+                })[];
               feedback: ({
                 positive: boolean;
                 used_datapoint_messages: boolean;

@@ -966,6 +966,16 @@ export type TraceList = {
   trace_id: string
   project_id: number
   model_id: number
+  messages?: {
+    /**
+     * * `user` - user
+     * * `assistant` - assistant
+     * * `system` - system
+     */
+    role?: "user" | "assistant" | "system"
+    content?: string
+    [k: string]: unknown
+  }[]
   feedback: {
     positive: boolean
     used_datapoint_messages: boolean
