@@ -4,6 +4,7 @@ import { PremBaseConfig } from "$types/index"
 import repositoriesModule from "$modules/repositories"
 import repositorydocumentModule from "$modules/repository.document"
 import chatcompletionsModule from "$modules/chat.completions"
+import finetuningModule from "$modules/finetuning"
 import embeddingsModule from "$modules/embeddings"
 import v1Module from "$modules/v1"
 import modelsModule from "$modules/models"
@@ -17,6 +18,7 @@ export default class Prem {
   repositories = new repositoriesModule(this)
 	repository = { document: new repositorydocumentModule(this) }
 	chat = { completions: new chatcompletionsModule(this) }
+	finetuning = new finetuningModule(this)
 	embeddings = new embeddingsModule(this)
 	v1 = new v1Module(this)
 	models = new modelsModule(this)
