@@ -317,6 +317,18 @@ export type Datapoint = {
   [k: string]: unknown
 }
 
+export type DeleteFinetuningJobRequest = {
+  /**
+   * The ID of the project
+   */
+  project_id: number
+  /**
+   * The ID of the finetuning job to delete
+   */
+  fine_tuning_job_id: number
+  [k: string]: unknown
+}
+
 export type DocumentChunks = {
   repository_id?: number
   document_id?: number
@@ -940,7 +952,7 @@ export type Model = {
    * * `text2vector` - Text to Vector
    */
   model_type?: "text2text" | "text2image" | "text2vector"
-  model_provider?: ("openai" | "azure" | "anthropic" | "prem" | "groq") | "" | null
+  model_provider?: ("openai" | "azure" | "anthropic" | "prem" | "groq" | "proxy-prem-ai") | "" | null
   deprecated?: boolean
   [k: string]: unknown
 }
@@ -965,8 +977,9 @@ export type ModelNotFoundErrorCodeEnum = "ModelNotFoundError"
  * * `anthropic` - Anthropic
  * * `prem` - Prem AI
  * * `groq` - Groq
+ * * `proxy-prem-ai` - Proxy Prem AI
  */
-export type ModelProviderEnum = "openai" | "azure" | "anthropic" | "prem" | "groq"
+export type ModelProviderEnum = "openai" | "azure" | "anthropic" | "prem" | "groq" | "proxy-prem-ai"
 
 /**
  * * `text2text` - Text to Text
@@ -1352,7 +1365,7 @@ export type TraceRetrieve = {
      * * `text2vector` - Text to Vector
      */
     model_type?: "text2text" | "text2image" | "text2vector"
-    model_provider?: ("openai" | "azure" | "anthropic" | "prem" | "groq") | "" | null
+    model_provider?: ("openai" | "azure" | "anthropic" | "prem" | "groq" | "proxy-prem-ai") | "" | null
     deprecated?: boolean
     [k: string]: unknown
   }

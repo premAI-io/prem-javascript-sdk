@@ -24,6 +24,10 @@ export interface paths {
     /** @description Creates a finetuning job for the given project and model. */
     post: operations["v1_create_finetuning_job_create"];
   };
+  "/v1/delete_finetuning_job": {
+    /** @description Delete a finetuning job */
+    post: operations["v1_delete_finetuning_job_create"];
+  };
   "/v1/embeddings": {
     /** @description Creates embeddings for the given input. */
     post: operations["v1_embeddings_create"];
@@ -297,6 +301,12 @@ export interface components {
           role?: "user" | "assistant" | "system";
           content?: string;
         })[];
+    };
+    DeleteFinetuningJobRequest: {
+      /** @description The ID of the project */
+      project_id: number;
+      /** @description The ID of the finetuning job to delete */
+      fine_tuning_job_id: number;
     };
     DocumentChunks: {
       repository_id?: number;
@@ -782,7 +792,7 @@ export interface components {
        * @enum {string}
        */
       model_type?: "text2text" | "text2image" | "text2vector";
-      model_provider?: ("openai" | "azure" | "anthropic" | "prem" | "groq") | "" | null;
+      model_provider?: ("openai" | "azure" | "anthropic" | "prem" | "groq" | "proxy-prem-ai") | "" | null;
       deprecated?: boolean;
     };
     ModelNotFoundError: {
@@ -804,9 +814,10 @@ export interface components {
      * * `anthropic` - Anthropic
      * * `prem` - Prem AI
      * * `groq` - Groq
+     * * `proxy-prem-ai` - Proxy Prem AI
      * @enum {string}
      */
-    ModelProviderEnum: "openai" | "azure" | "anthropic" | "prem" | "groq";
+    ModelProviderEnum: "openai" | "azure" | "anthropic" | "prem" | "groq" | "proxy-prem-ai";
     /**
      * @description * `text2text` - Text to Text
      * * `text2image` - Text to Image
@@ -1120,7 +1131,7 @@ export interface components {
          * @enum {string}
          */
         model_type?: "text2text" | "text2image" | "text2vector";
-        model_provider?: ("openai" | "azure" | "anthropic" | "prem" | "groq") | "" | null;
+        model_provider?: ("openai" | "azure" | "anthropic" | "prem" | "groq" | "proxy-prem-ai") | "" | null;
         deprecated?: boolean;
       };
       session_id?: string | null;
@@ -1972,6 +1983,37 @@ export interface operations {
       };
     };
   };
+  /** @description Delete a finetuning job */
+  v1_delete_finetuning_job_create: {
+    requestBody: {
+      content: {
+        "application/json": {
+          /** @description The ID of the project */
+          project_id: number;
+          /** @description The ID of the finetuning job to delete */
+          fine_tuning_job_id: number;
+        };
+        "application/x-www-form-urlencoded": {
+          /** @description The ID of the project */
+          project_id: number;
+          /** @description The ID of the finetuning job to delete */
+          fine_tuning_job_id: number;
+        };
+        "multipart/form-data": {
+          /** @description The ID of the project */
+          project_id: number;
+          /** @description The ID of the finetuning job to delete */
+          fine_tuning_job_id: number;
+        };
+      };
+    };
+    responses: {
+      /** @description No response body */
+      200: {
+        content: never;
+      };
+    };
+  };
   /** @description Creates embeddings for the given input. */
   v1_embeddings_create: {
     requestBody: {
@@ -2455,7 +2497,7 @@ export interface operations {
                * @enum {string}
                */
               model_type?: "text2text" | "text2image" | "text2vector";
-              model_provider?: ("openai" | "azure" | "anthropic" | "prem" | "groq") | "" | null;
+              model_provider?: ("openai" | "azure" | "anthropic" | "prem" | "groq" | "proxy-prem-ai") | "" | null;
               deprecated?: boolean;
             })[];
         };
@@ -2482,7 +2524,7 @@ export interface operations {
              * @enum {string}
              */
             model_type?: "text2text" | "text2image" | "text2vector";
-            model_provider?: ("openai" | "azure" | "anthropic" | "prem" | "groq") | "" | null;
+            model_provider?: ("openai" | "azure" | "anthropic" | "prem" | "groq" | "proxy-prem-ai") | "" | null;
             deprecated?: boolean;
           };
         };
@@ -2647,7 +2689,7 @@ export interface operations {
                * @enum {string}
                */
               model_type?: "text2text" | "text2image" | "text2vector";
-              model_provider?: ("openai" | "azure" | "anthropic" | "prem" | "groq") | "" | null;
+              model_provider?: ("openai" | "azure" | "anthropic" | "prem" | "groq" | "proxy-prem-ai") | "" | null;
               deprecated?: boolean;
             };
             session_id?: string | null;
