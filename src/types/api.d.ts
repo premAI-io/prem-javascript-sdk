@@ -28,6 +28,10 @@ export interface paths {
     /** @description Delete a finetuning job */
     post: operations["v1_delete_finetuning_job_create"];
   };
+  "/v1/download_finetuned_model": {
+    /** @description Download a finetuned model */
+    post: operations["v1_download_finetuned_model_create"];
+  };
   "/v1/embeddings": {
     /** @description Creates embeddings for the given input. */
     post: operations["v1_embeddings_create"];
@@ -352,6 +356,12 @@ export interface components {
      * @enum {string}
      */
     DocumentTypeEnum: "pdf" | "docx" | "txt";
+    DownloadFinetunedModelRequest: {
+      /** @description The ID of the project */
+      project_id: number;
+      /** @description The ID of the finetuned job to download */
+      fine_tuning_job_id: number;
+    };
     Embedding: {
       /** @description The index of the token in the input. */
       index: number;
@@ -2003,6 +2013,37 @@ export interface operations {
           /** @description The ID of the project */
           project_id: number;
           /** @description The ID of the finetuning job to delete */
+          fine_tuning_job_id: number;
+        };
+      };
+    };
+    responses: {
+      /** @description No response body */
+      200: {
+        content: never;
+      };
+    };
+  };
+  /** @description Download a finetuned model */
+  v1_download_finetuned_model_create: {
+    requestBody: {
+      content: {
+        "application/json": {
+          /** @description The ID of the project */
+          project_id: number;
+          /** @description The ID of the finetuned job to download */
+          fine_tuning_job_id: number;
+        };
+        "application/x-www-form-urlencoded": {
+          /** @description The ID of the project */
+          project_id: number;
+          /** @description The ID of the finetuned job to download */
+          fine_tuning_job_id: number;
+        };
+        "multipart/form-data": {
+          /** @description The ID of the project */
+          project_id: number;
+          /** @description The ID of the finetuned job to download */
           fine_tuning_job_id: number;
         };
       };

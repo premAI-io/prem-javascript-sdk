@@ -374,6 +374,18 @@ export type DocumentOutput = {
  */
 export type DocumentTypeEnum = "pdf" | "docx" | "txt"
 
+export type DownloadFinetunedModelRequest = {
+  /**
+   * The ID of the project
+   */
+  project_id: number
+  /**
+   * The ID of the finetuned job to download
+   */
+  fine_tuning_job_id: number
+  [k: string]: unknown
+}
+
 export type Embedding = {
   /**
    * The index of the token in the input.
