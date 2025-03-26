@@ -503,28 +503,6 @@ export type FeedbackCreateFeedback = {
   [k: string]: unknown
 }
 
-export type FineTunedModelTryRequest = {
-  /**
-   * The ID of the finetuned model to try
-   */
-  model_id: number
-  /**
-   * System prompt to use for the model
-   */
-  system_prompt?: string
-  /**
-   * The ID of the project
-   */
-  project_id: number
-  [k: string]: unknown
-}
-
-export type FineTunedModelTryResponse = {
-  success: string
-  playground_url: string
-  [k: string]: unknown
-}
-
 export type FineTuningJobCreate = {
   /**
    * The id of the project to use for finetuning
@@ -608,12 +586,6 @@ export type FineTuningJobCreateResponse = {
   [k: string]: unknown
 }
 
-export type FineTuningJobDetailsRequest = {
-  project_id: number
-  fine_tuning_job_id: number
-  [k: string]: unknown
-}
-
 export type FineTuningJobHyperparameters = {
   /**
    * Batch size for fine-tuning
@@ -627,89 +599,6 @@ export type FineTuningJobHyperparameters = {
    * Number of epochs for fine-tuning
    */
   num_epochs: number
-  [k: string]: unknown
-}
-
-export type FineTuningJobResponse = {
-  name: string
-  baseModel: string
-  status: string
-  originalDataset: {
-    messages: {
-      /**
-       * * `user` - user
-       * * `assistant` - assistant
-       * * `system` - system
-       */
-      role?: "user" | "assistant" | "system"
-      content?: string
-      [k: string]: unknown
-    }[]
-    [k: string]: unknown
-  }[]
-  augmentedDataset: {
-    messages: {
-      /**
-       * * `user` - user
-       * * `assistant` - assistant
-       * * `system` - system
-       */
-      role?: "user" | "assistant" | "system"
-      content?: string
-      [k: string]: unknown
-    }[]
-    [k: string]: unknown
-  }[]
-  numTopics: number
-  numAugmentedDatapoints: number
-  createdAt: string
-  evaluationScores?: {
-    [k: string]: unknown
-  }
-  finetunedModelId: number
-  id: number
-  providerJobId: string
-  hyperparameters: {
-    /**
-     * Batch size for fine-tuning
-     */
-    batch_size: number
-    /**
-     * Scaling factor for the learning rate. A smaller learning rate may be useful to avoid overfitting.
-     */
-    learning_rate_multiplier: number
-    /**
-     * Number of epochs for fine-tuning
-     */
-    num_epochs: number
-    [k: string]: unknown
-  }
-  syntheticDatagenerationParameters: {
-    /**
-     * Whether to run synthetic datageneration
-     */
-    run_synthetic_datageneration: boolean
-    /**
-     * Minimum number of datapoints required for fine-tuning
-     */
-    min_num_datapoints_for_ft: number
-    /**
-     * Temperature for synthetic datageneration
-     */
-    temperature: number
-    /**
-     * Positive instructions for synthetic datageneration, what the datapoints should be about
-     */
-    positive_instructions: string
-    /**
-     * Negative instructions for synthetic datageneration, what the datapoints should not be about
-     */
-    negative_instructions: string
-    [k: string]: unknown
-  }
-  error?: {
-    [k: string]: unknown
-  }
   [k: string]: unknown
 }
 
@@ -752,97 +641,6 @@ export type Function = {
     required: string[]
     [k: string]: unknown
   }
-  [k: string]: unknown
-}
-
-export type InitPageDataRequest = {
-  project_id: number
-  [k: string]: unknown
-}
-
-export type InitPageDataResponse = {
-  ftJobs: {
-    name: string
-    baseModel: string
-    status: string
-    originalDataset: {
-      messages: {
-        /**
-         * * `user` - user
-         * * `assistant` - assistant
-         * * `system` - system
-         */
-        role?: "user" | "assistant" | "system"
-        content?: string
-        [k: string]: unknown
-      }[]
-      [k: string]: unknown
-    }[]
-    augmentedDataset: {
-      messages: {
-        /**
-         * * `user` - user
-         * * `assistant` - assistant
-         * * `system` - system
-         */
-        role?: "user" | "assistant" | "system"
-        content?: string
-        [k: string]: unknown
-      }[]
-      [k: string]: unknown
-    }[]
-    numTopics: number
-    numAugmentedDatapoints: number
-    createdAt: string
-    evaluationScores?: {
-      [k: string]: unknown
-    }
-    finetunedModelId: number
-    id: number
-    providerJobId: string
-    hyperparameters: {
-      /**
-       * Batch size for fine-tuning
-       */
-      batch_size: number
-      /**
-       * Scaling factor for the learning rate. A smaller learning rate may be useful to avoid overfitting.
-       */
-      learning_rate_multiplier: number
-      /**
-       * Number of epochs for fine-tuning
-       */
-      num_epochs: number
-      [k: string]: unknown
-    }
-    syntheticDatagenerationParameters: {
-      /**
-       * Whether to run synthetic datageneration
-       */
-      run_synthetic_datageneration: boolean
-      /**
-       * Minimum number of datapoints required for fine-tuning
-       */
-      min_num_datapoints_for_ft: number
-      /**
-       * Temperature for synthetic datageneration
-       */
-      temperature: number
-      /**
-       * Positive instructions for synthetic datageneration, what the datapoints should be about
-       */
-      positive_instructions: string
-      /**
-       * Negative instructions for synthetic datageneration, what the datapoints should not be about
-       */
-      negative_instructions: string
-      [k: string]: unknown
-    }
-    error?: {
-      [k: string]: unknown
-    }
-    [k: string]: unknown
-  }[]
   [k: string]: unknown
 }
 

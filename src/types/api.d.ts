@@ -36,20 +36,8 @@ export interface paths {
     /** @description Creates embeddings for the given input. */
     post: operations["v1_embeddings_create"];
   };
-  "/v1/finetuned_model_try": {
-    /** @description Try out a finetuned model by creating a new playground */
-    post: operations["v1_finetuned_model_try_create"];
-  };
-  "/v1/finetuning_job_details": {
-    /** @description Get details for a fine-tuning job */
-    post: operations["v1_finetuning_job_details_create"];
-  };
   "/v1/get_dataset": {
     get: operations["v1_get_dataset_retrieve"];
-  };
-  "/v1/init_page_data": {
-    /** @description Get initialization data for a project page */
-    post: operations["v1_init_page_data_create"];
   };
   "/v1/models/": {
     get: operations["v1_models_list"];
@@ -442,21 +430,6 @@ export interface components {
           content?: string;
         })[];
     };
-    FineTunedModelTryRequest: {
-      /** @description The ID of the finetuned model to try */
-      model_id: number;
-      /**
-       * @description System prompt to use for the model
-       * @default You are a helpful assistant.
-       */
-      system_prompt?: string;
-      /** @description The ID of the project */
-      project_id: number;
-    };
-    FineTunedModelTryResponse: {
-      success: string;
-      playground_url: string;
-    };
     FineTuningJobCreate: {
       /** @description The id of the project to use for finetuning */
       project_id: number;
@@ -514,10 +487,6 @@ export interface components {
       job_id: number;
       job_status: string;
     };
-    FineTuningJobDetailsRequest: {
-      project_id: number;
-      fine_tuning_job_id: number;
-    };
     FineTuningJobHyperparameters: {
       /** @description Batch size for fine-tuning */
       batch_size: number;
@@ -528,74 +497,6 @@ export interface components {
       learning_rate_multiplier: number;
       /** @description Number of epochs for fine-tuning */
       num_epochs: number;
-    };
-    FineTuningJobResponse: {
-      name: string;
-      baseModel: string;
-      status: string;
-      originalDataset: ({
-          messages: ({
-              /**
-               * @description * `user` - user
-               * * `assistant` - assistant
-               * * `system` - system
-               * @enum {string}
-               */
-              role?: "user" | "assistant" | "system";
-              content?: string;
-            })[];
-        })[];
-      augmentedDataset: ({
-          messages: ({
-              /**
-               * @description * `user` - user
-               * * `assistant` - assistant
-               * * `system` - system
-               * @enum {string}
-               */
-              role?: "user" | "assistant" | "system";
-              content?: string;
-            })[];
-        })[];
-      numTopics: number;
-      numAugmentedDatapoints: number;
-      /** Format: date-time */
-      createdAt: string;
-      evaluationScores?: {
-        [key: string]: unknown;
-      };
-      finetunedModelId: number;
-      id: number;
-      providerJobId: string;
-      hyperparameters: {
-        /** @description Batch size for fine-tuning */
-        batch_size: number;
-        /**
-         * Format: double
-         * @description Scaling factor for the learning rate. A smaller learning rate may be useful to avoid overfitting.
-         */
-        learning_rate_multiplier: number;
-        /** @description Number of epochs for fine-tuning */
-        num_epochs: number;
-      };
-      syntheticDatagenerationParameters: {
-        /** @description Whether to run synthetic datageneration */
-        run_synthetic_datageneration: boolean;
-        /** @description Minimum number of datapoints required for fine-tuning */
-        min_num_datapoints_for_ft: number;
-        /**
-         * Format: double
-         * @description Temperature for synthetic datageneration
-         */
-        temperature: number;
-        /** @description Positive instructions for synthetic datageneration, what the datapoints should be about */
-        positive_instructions: string;
-        /** @description Negative instructions for synthetic datageneration, what the datapoints should not be about */
-        negative_instructions: string;
-      };
-      error?: {
-        [key: string]: unknown;
-      };
     };
     FineTuningJobSyntheticDatagenerationParameters: {
       /** @description Whether to run synthetic datageneration */
@@ -625,79 +526,6 @@ export interface components {
         };
         required: string[];
       };
-    };
-    InitPageDataRequest: {
-      project_id: number;
-    };
-    InitPageDataResponse: {
-      ftJobs: ({
-          name: string;
-          baseModel: string;
-          status: string;
-          originalDataset: ({
-              messages: ({
-                  /**
-                   * @description * `user` - user
-                   * * `assistant` - assistant
-                   * * `system` - system
-                   * @enum {string}
-                   */
-                  role?: "user" | "assistant" | "system";
-                  content?: string;
-                })[];
-            })[];
-          augmentedDataset: ({
-              messages: ({
-                  /**
-                   * @description * `user` - user
-                   * * `assistant` - assistant
-                   * * `system` - system
-                   * @enum {string}
-                   */
-                  role?: "user" | "assistant" | "system";
-                  content?: string;
-                })[];
-            })[];
-          numTopics: number;
-          numAugmentedDatapoints: number;
-          /** Format: date-time */
-          createdAt: string;
-          evaluationScores?: {
-            [key: string]: unknown;
-          };
-          finetunedModelId: number;
-          id: number;
-          providerJobId: string;
-          hyperparameters: {
-            /** @description Batch size for fine-tuning */
-            batch_size: number;
-            /**
-             * Format: double
-             * @description Scaling factor for the learning rate. A smaller learning rate may be useful to avoid overfitting.
-             */
-            learning_rate_multiplier: number;
-            /** @description Number of epochs for fine-tuning */
-            num_epochs: number;
-          };
-          syntheticDatagenerationParameters: {
-            /** @description Whether to run synthetic datageneration */
-            run_synthetic_datageneration: boolean;
-            /** @description Minimum number of datapoints required for fine-tuning */
-            min_num_datapoints_for_ft: number;
-            /**
-             * Format: double
-             * @description Temperature for synthetic datageneration
-             */
-            temperature: number;
-            /** @description Positive instructions for synthetic datageneration, what the datapoints should be about */
-            positive_instructions: string;
-            /** @description Negative instructions for synthetic datageneration, what the datapoints should not be about */
-            negative_instructions: string;
-          };
-          error?: {
-            [key: string]: unknown;
-          };
-        })[];
     };
     InternalServerError: {
       message: string;
@@ -2267,260 +2095,11 @@ export interface operations {
       };
     };
   };
-  /** @description Try out a finetuned model by creating a new playground */
-  v1_finetuned_model_try_create: {
-    requestBody: {
-      content: {
-        "application/json": {
-          /** @description The ID of the finetuned model to try */
-          model_id: number;
-          /**
-           * @description System prompt to use for the model
-           * @default You are a helpful assistant.
-           */
-          system_prompt?: string;
-          /** @description The ID of the project */
-          project_id: number;
-        };
-        "application/x-www-form-urlencoded": {
-          /** @description The ID of the finetuned model to try */
-          model_id: number;
-          /**
-           * @description System prompt to use for the model
-           * @default You are a helpful assistant.
-           */
-          system_prompt?: string;
-          /** @description The ID of the project */
-          project_id: number;
-        };
-        "multipart/form-data": {
-          /** @description The ID of the finetuned model to try */
-          model_id: number;
-          /**
-           * @description System prompt to use for the model
-           * @default You are a helpful assistant.
-           */
-          system_prompt?: string;
-          /** @description The ID of the project */
-          project_id: number;
-        };
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": {
-            success: string;
-            playground_url: string;
-          };
-        };
-      };
-      404: {
-        content: {
-          "application/json": {
-            error?: string;
-          };
-        };
-      };
-    };
-  };
-  /** @description Get details for a fine-tuning job */
-  v1_finetuning_job_details_create: {
-    requestBody: {
-      content: {
-        "application/json": {
-          project_id: number;
-          fine_tuning_job_id: number;
-        };
-        "application/x-www-form-urlencoded": {
-          project_id: number;
-          fine_tuning_job_id: number;
-        };
-        "multipart/form-data": {
-          project_id: number;
-          fine_tuning_job_id: number;
-        };
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": {
-            name: string;
-            baseModel: string;
-            status: string;
-            originalDataset: ({
-                messages: ({
-                    /**
-                     * @description * `user` - user
-                     * * `assistant` - assistant
-                     * * `system` - system
-                     * @enum {string}
-                     */
-                    role?: "user" | "assistant" | "system";
-                    content?: string;
-                  })[];
-              })[];
-            augmentedDataset: ({
-                messages: ({
-                    /**
-                     * @description * `user` - user
-                     * * `assistant` - assistant
-                     * * `system` - system
-                     * @enum {string}
-                     */
-                    role?: "user" | "assistant" | "system";
-                    content?: string;
-                  })[];
-              })[];
-            numTopics: number;
-            numAugmentedDatapoints: number;
-            /** Format: date-time */
-            createdAt: string;
-            evaluationScores?: {
-              [key: string]: unknown;
-            };
-            finetunedModelId: number;
-            id: number;
-            providerJobId: string;
-            hyperparameters: {
-              /** @description Batch size for fine-tuning */
-              batch_size: number;
-              /**
-               * Format: double
-               * @description Scaling factor for the learning rate. A smaller learning rate may be useful to avoid overfitting.
-               */
-              learning_rate_multiplier: number;
-              /** @description Number of epochs for fine-tuning */
-              num_epochs: number;
-            };
-            syntheticDatagenerationParameters: {
-              /** @description Whether to run synthetic datageneration */
-              run_synthetic_datageneration: boolean;
-              /** @description Minimum number of datapoints required for fine-tuning */
-              min_num_datapoints_for_ft: number;
-              /**
-               * Format: double
-               * @description Temperature for synthetic datageneration
-               */
-              temperature: number;
-              /** @description Positive instructions for synthetic datageneration, what the datapoints should be about */
-              positive_instructions: string;
-              /** @description Negative instructions for synthetic datageneration, what the datapoints should not be about */
-              negative_instructions: string;
-            };
-            error?: {
-              [key: string]: unknown;
-            };
-          };
-        };
-      };
-      404: {
-        content: {
-          "application/json": {
-            error?: string;
-          };
-        };
-      };
-    };
-  };
   v1_get_dataset_retrieve: {
     responses: {
       /** @description No response body */
       200: {
         content: never;
-      };
-    };
-  };
-  /** @description Get initialization data for a project page */
-  v1_init_page_data_create: {
-    requestBody: {
-      content: {
-        "application/json": {
-          project_id: number;
-        };
-        "application/x-www-form-urlencoded": {
-          project_id: number;
-        };
-        "multipart/form-data": {
-          project_id: number;
-        };
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": {
-            ftJobs: ({
-                name: string;
-                baseModel: string;
-                status: string;
-                originalDataset: ({
-                    messages: ({
-                        /**
-                         * @description * `user` - user
-                         * * `assistant` - assistant
-                         * * `system` - system
-                         * @enum {string}
-                         */
-                        role?: "user" | "assistant" | "system";
-                        content?: string;
-                      })[];
-                  })[];
-                augmentedDataset: ({
-                    messages: ({
-                        /**
-                         * @description * `user` - user
-                         * * `assistant` - assistant
-                         * * `system` - system
-                         * @enum {string}
-                         */
-                        role?: "user" | "assistant" | "system";
-                        content?: string;
-                      })[];
-                  })[];
-                numTopics: number;
-                numAugmentedDatapoints: number;
-                /** Format: date-time */
-                createdAt: string;
-                evaluationScores?: {
-                  [key: string]: unknown;
-                };
-                finetunedModelId: number;
-                id: number;
-                providerJobId: string;
-                hyperparameters: {
-                  /** @description Batch size for fine-tuning */
-                  batch_size: number;
-                  /**
-                   * Format: double
-                   * @description Scaling factor for the learning rate. A smaller learning rate may be useful to avoid overfitting.
-                   */
-                  learning_rate_multiplier: number;
-                  /** @description Number of epochs for fine-tuning */
-                  num_epochs: number;
-                };
-                syntheticDatagenerationParameters: {
-                  /** @description Whether to run synthetic datageneration */
-                  run_synthetic_datageneration: boolean;
-                  /** @description Minimum number of datapoints required for fine-tuning */
-                  min_num_datapoints_for_ft: number;
-                  /**
-                   * Format: double
-                   * @description Temperature for synthetic datageneration
-                   */
-                  temperature: number;
-                  /** @description Positive instructions for synthetic datageneration, what the datapoints should be about */
-                  positive_instructions: string;
-                  /** @description Negative instructions for synthetic datageneration, what the datapoints should not be about */
-                  negative_instructions: string;
-                };
-                error?: {
-                  [key: string]: unknown;
-                };
-              })[];
-          };
-        };
       };
     };
   };
